@@ -1,0 +1,50 @@
+# ─── Secrets — never commit ───────────────────────────────
+# .env holds the production Atlas connection string, JWT secrets, the Gemini
+# API key and SMTP/Razorpay credentials. firebase-service-account.json holds a
+# private key. Committing either would leak production access.
+.env
+.env.*
+!.env.example
+firebase-service-account.json
+*-service-account.json
+*.pem
+*.key
+
+# ─── Dependencies ─────────────────────────────────────────
+node_modules/
+website/node_modules/
+
+# ─── Build output ─────────────────────────────────────────
+website/dist/
+dist/
+build/
+
+# ─── Runtime / generated ──────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+dump.rdb
+
+# Uploaded files (patient documents, x-rays, logos, resumes — PHI/PII).
+# These belong on a persistent volume or object storage, not in git.
+uploads/
+
+# Migration snapshots and prune records written by scripts/
+scripts/backups/
+
+# ─── Coverage / test artefacts ────────────────────────────
+coverage/
+.nyc_output/
+
+# ─── Editor / OS ──────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# ─── Deployment ───────────────────────────────────────────
+.vercel
+srs-deploy/.vercel

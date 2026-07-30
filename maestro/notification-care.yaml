@@ -1,0 +1,119 @@
+appId: com.bestoclinic.app
+---
+# ══════════════════════════════════════════════════════════════
+#  Maestro Flow: Care Reminder Notification
+# ══════════════════════════════════════════════════════════════
+# Tests the interactive push notification for care task reminders.
+# Patient receives medication/care reminders and taps "Done" or "Skip".
+#
+# Prerequisites:
+#   1. Backend running with notification workers enabled
+#   2. E2E script has completed a consultation with care tasks
+#   3. Patient is registered for FCM push on this device
+#
+# Usage:
+#   maestro test maestro/notification-care.yaml
+#   maestro record maestro/notification-care.yaml --output recordings/care-reminder.mp4
+# ──────────────────────────────────────────────────────────────
+
+# Step 1: Launch the app
+- launchApp:
+    clearState: false
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# Step 2: Login if needed
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn:
+          text: "you@example.com"
+      - eraseText: 30
+      - inputText: "patient-test@jathardental.in"
+      - tapOn:
+          text: "Enter your password"
+      - inputText: "Staff@2025"
+      - tapOn:
+          text: "Sign In"
+      - waitForAnimationToEnd:
+          timeout: 10000
+
+# Step 3: Navigate to Health tab
+- tapOn:
+    text: "Health"
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+- screenshot: "01-health-tab-loaded"
+
+# Step 4: Navigate to Care Tasks
+- tapOn:
+    text: "Care Tasks"
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+- screenshot: "02-care-tasks-list"
+
+# Step 5: Check current tasks are visible
+- runFlow:
+    when:
+      visible: "Active"
+    commands:
+      - tapOn:
+          text: "Active"
+      - waitForAnimationToEnd:
+          timeout: 2000
+      - screenshot: "03-active-care-tasks"
+
+# Step 6: Go back and wait for care reminder push notification
+- back
+- back
+
+- waitForAnimationToEnd:
+    timeout: 2000
+
+# Wait for care reminder notification
+- extendedWaitUntil:
+    visible: "Care Reminder"
+    timeout: 180000  # Wait up to 3 minutes
+
+- screenshot: "04-care-notification-arrived"
+
+# Step 7: Tap "Done" on the care reminder
+- tapOn:
+    text: "Done"
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+- screenshot: "05-care-reminder-done"
+
+# Step 8: Navigate back to Health > Care Tasks to verify update
+- tapOn:
+    text: "Health"
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+- tapOn:
+    text: "Care Tasks"
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# Step 9: Verify Today view shows completed task
+- runFlow:
+    when:
+      visible: "Today"
+    commands:
+      - tapOn:
+          text: "Today"
+      - waitForAnimationToEnd:
+          timeout: 2000
+      - screenshot: "06-care-tasks-today-updated"
+
+- screenshot: "07-care-tasks-final-state"

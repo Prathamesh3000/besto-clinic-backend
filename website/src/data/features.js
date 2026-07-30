@@ -1,0 +1,208 @@
+import {
+  CalendarCheck,
+  Users,
+  Video,
+  Building2,
+  Receipt,
+  Shield,
+  Clock,
+  BarChart3,
+  Smartphone,
+  Globe,
+  Lock,
+  HeartPulse,
+} from 'lucide-react';
+
+export const featureHighlights = [
+  {
+    icon: CalendarCheck,
+    title: 'Smart Scheduling',
+    description: 'Intelligent appointment management with automated reminders, drag-and-drop calendar, and real-time availability.',
+  },
+  {
+    icon: Users,
+    title: 'Patient Management',
+    description: 'Comprehensive digital patient records, treatment history, and communication tools in one place.',
+  },
+  {
+    icon: Receipt,
+    title: 'Billing & Insurance',
+    description: 'Streamlined invoicing, insurance claim processing, and payment tracking with automated reconciliation.',
+  },
+  {
+    icon: Building2,
+    title: 'Multi-Branch',
+    description: 'Manage multiple clinic locations from a single dashboard with centralized reporting and staff management.',
+  },
+  {
+    icon: Shield,
+    title: 'HIPAA Compliant',
+    description: 'Enterprise-grade security with end-to-end encryption, audit logs, and full regulatory compliance.',
+  },
+  {
+    icon: BarChart3,
+    title: 'Analytics & Reports',
+    description: 'Real-time dashboards with revenue tracking, patient insights, and performance metrics.',
+  },
+];
+
+export const featureDetails = [
+  {
+    id: 'appointments',
+    category: 'Clinical',
+    icon: CalendarCheck,
+    title: 'Appointment Management',
+    subtitle: 'Never miss a patient again',
+    description: 'Our intelligent scheduling system handles complex appointment workflows with ease. From single-chair practices to multi-location enterprises, manage your entire calendar from one unified interface.',
+    benefits: [
+      'Drag-and-drop calendar with color-coded appointments',
+      'Automated SMS & email reminders reduce no-shows by 40%',
+      'Online booking portal for patients',
+      'Recurring appointment scheduling',
+      'Waitlist management with auto-fill',
+      'Chair-side time tracking and utilization reports',
+    ],
+  },
+  {
+    id: 'smart-queue',
+    category: 'Clinical',
+    icon: Clock,
+    title: 'Smart Queue System',
+    subtitle: 'Optimize patient flow',
+    description: 'Reduce wait times and improve patient satisfaction with our intelligent queue management. Real-time tracking keeps your team synchronized and patients informed.',
+    benefits: [
+      'Real-time patient queue with status updates',
+      'Average wait time analytics',
+      'Priority-based queue management',
+      'Patient self-check-in via mobile',
+      'SMS notifications when it\'s their turn',
+      'Queue performance dashboards',
+    ],
+  },
+  {
+    id: 'telemedicine',
+    category: 'Clinical',
+    icon: Video,
+    title: 'Telemedicine',
+    subtitle: 'Expand your reach beyond the clinic',
+    description: 'Offer virtual consultations with built-in video conferencing, screen sharing, and secure file transfer. Reach patients wherever they are.',
+    benefits: [
+      'HD video consultations with screen sharing',
+      'Virtual waiting room with queue position',
+      'In-session notes and treatment planning',
+      'Prescription management during calls',
+      'Session recording with patient consent',
+      'Integrated billing for virtual visits',
+    ],
+  },
+  {
+    id: 'multi-branch',
+    category: 'Operations',
+    icon: Building2,
+    title: 'Multi-Branch Management',
+    subtitle: 'One platform, all locations',
+    description: 'Centralize operations across all your clinic locations. Unified dashboards, cross-location patient records, and consolidated reporting make multi-site management effortless.',
+    benefits: [
+      'Centralized dashboard for all branches',
+      'Cross-location patient record access',
+      'Branch-level performance comparison',
+      'Staff transfer and scheduling across locations',
+      'Consolidated financial reporting',
+      'Location-specific configurations and branding',
+    ],
+  },
+  {
+    id: 'payroll',
+    category: 'Operations',
+    icon: Users,
+    title: 'Payroll & HR',
+    subtitle: 'Manage your most valuable asset',
+    description: 'Streamline staff management with integrated payroll processing, attendance tracking, leave management, and performance reviews — all within your clinic software.',
+    benefits: [
+      'Automated payroll calculation and processing',
+      'Attendance tracking with biometric integration',
+      'Leave management and approval workflows',
+      'Commission and bonus calculations',
+      'Employee document management',
+      'Performance review scheduling',
+    ],
+  },
+  {
+    id: 'billing',
+    category: 'Operations',
+    icon: Receipt,
+    title: 'Insurance & Billing',
+    subtitle: 'Get paid faster, accurately',
+    description: 'Simplify your revenue cycle with automated claim submission, real-time eligibility verification, and comprehensive payment tracking.',
+    benefits: [
+      'Automated insurance claim submission',
+      'Real-time eligibility verification',
+      'Payment plan management',
+      'Multi-currency and tax support',
+      'Automated payment reminders',
+      'Detailed financial reporting and analytics',
+    ],
+  },
+  {
+    id: 'privacy',
+    category: 'Security',
+    icon: Lock,
+    title: 'Data Privacy & Security',
+    subtitle: 'Your data, protected',
+    description: 'Built from the ground up with security-first architecture. Every piece of patient data is encrypted, audited, and compliant with healthcare regulations worldwide.',
+    benefits: [
+      'End-to-end AES-256 encryption',
+      'HIPAA, GDPR, and SOC 2 compliant',
+      'Role-based access control (RBAC)',
+      'Complete audit trail logging',
+      'Automated daily backups with point-in-time recovery',
+      'Two-factor authentication for all users',
+    ],
+  },
+  {
+    id: 'multi-tenant',
+    category: 'Security',
+    icon: Globe,
+    title: 'Multi-Tenant Isolation',
+    subtitle: 'Enterprise-grade architecture',
+    description: 'Each clinic operates in a completely isolated environment. Your data never mixes with another clinic\'s — guaranteed database-level separation with dedicated encryption keys.',
+    benefits: [
+      'Dedicated database per clinic (true isolation)',
+      'Per-tenant encryption keys',
+      'Independent backup and restore',
+      'Custom domain and branding per tenant',
+      'Isolated performance — no noisy neighbors',
+      'Tenant-specific compliance configurations',
+    ],
+  },
+];
+
+export const featureCategories = [
+  { key: 'all', label: 'All Features' },
+  { key: 'Clinical', label: 'Clinical' },
+  { key: 'Operations', label: 'Operations' },
+  { key: 'Security', label: 'Security & Compliance' },
+];
+
+export const whyChooseUs = [
+  {
+    icon: HeartPulse,
+    title: 'Built for Dental',
+    description: 'Purpose-built for dental practices, not retrofitted from generic software.',
+  },
+  {
+    icon: Globe,
+    title: 'Cloud-Native',
+    description: 'Access your practice from anywhere. No installations, no servers to maintain.',
+  },
+  {
+    icon: Smartphone,
+    title: 'Mobile-First',
+    description: 'Full-featured mobile experience for dentists and patients on the go.',
+  },
+  {
+    icon: Shield,
+    title: 'Enterprise Security',
+    description: 'Bank-grade security with HIPAA compliance and SOC 2 certification.',
+  },
+];

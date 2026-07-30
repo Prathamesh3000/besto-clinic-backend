@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BestoClinic — Platform Overview</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{overflow:hidden}
+body{font-family:'Inter',system-ui,sans-serif;color:#0f172a;background:#0a1628;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif}
+
+/* ── Deck ── */
+.deck{position:relative;width:100vw;height:100vh}
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:48px 64px;opacity:0;transform:translateX(50px);pointer-events:none;transition:opacity .45s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1);overflow:hidden}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto;z-index:2}
+.slide.prev{opacity:0;transform:translateX(-50px)}
+.inner{width:100%;max-width:1140px;z-index:2;position:relative}
+
+/* ── Nav ── */
+.dots{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100}
+.dots button{width:8px;height:8px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:transparent;cursor:pointer;transition:.3s;padding:0}
+.dots button.on{background:#14b8a6;border-color:#14b8a6;transform:scale(1.4)}
+.counter{position:fixed;bottom:26px;right:36px;font:600 12px 'Plus Jakarta Sans',sans-serif;color:rgba(255,255,255,.25);z-index:100;letter-spacing:1.5px}
+.arr{position:fixed;top:50%;transform:translateY(-50%);z-index:100;width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,.06);backdrop-filter:blur(6px);color:rgba(255,255,255,.5);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.arr:hover{background:rgba(20,184,166,.2);color:#fff;transform:translateY(-50%) scale(1.1)}
+.arr.l{left:16px}.arr.r{right:16px}
+
+/* ── Backgrounds ── */
+.bg-hero{background:linear-gradient(135deg,#0d9488 0%,#0a1628 100%)}
+.bg-w{background:#fff}
+.bg-c{background:#fefcf9}
+.bg-n{background:#0a1628}
+.bg-cta{background:linear-gradient(135deg,#0f766e,#0a1628)}
+.bg-ta{background:linear-gradient(135deg,#f0fdfa,#ccfbf1 50%,#f0fdfa)}
+.bg-mint{background:linear-gradient(180deg,#f0fdfa 0%,#fff 100%)}
+
+/* ── Type ── */
+.tw{color:#fff}.tn{color:#0f172a}.tm{color:rgba(15,23,42,.5)}.twm{color:rgba(255,255,255,.55)}
+.lbl{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:14px}
+.lbl-t{background:rgba(20,184,166,.1);color:#0d9488}
+.lbl-w{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+.ttl{font-size:38px;font-weight:800;line-height:1.12;margin-bottom:10px;letter-spacing:-.5px}
+.sub{font-size:15px;line-height:1.65;max-width:620px}
+
+/* ── Misc ── */
+.divider{width:50px;height:3px;border-radius:2px;background:linear-gradient(90deg,#14b8a6,#2dd4bf);margin:14px 0}
+.logo{height:48px;margin-bottom:20px}
+.trust{display:flex;gap:16px;margin-top:28px;flex-wrap:wrap}
+.tb{display:flex;align-items:center;gap:7px;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
+.tb .d{width:7px;height:7px;border-radius:50%;background:#2dd4bf}
+.cta-row{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 26px;border-radius:13px;font:700 14px 'Plus Jakarta Sans',sans-serif;text-decoration:none;cursor:pointer;border:none;transition:.2s}
+.btn-p{background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;box-shadow:0 4px 16px rgba(20,184,166,.25)}
+.btn-p:hover{box-shadow:0 8px 24px rgba(20,184,166,.35);transform:translateY(-2px)}
+.btn-o{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.25)}
+.btn-o:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.4)}
+.glow{position:absolute;border-radius:50%;filter:blur(80px);opacity:.2;pointer-events:none}
+
+/* ══════════════════════════════════════════════════════════
+   MOCKUP SYSTEM — Realistic UI recreations
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Browser Chrome ── */
+.browser{background:#fff;border:1px solid rgba(237,229,219,.55);border-radius:16px;box-shadow:0 8px 40px rgba(15,23,42,.07);overflow:hidden}
+.browser-bar{display:flex;align-items:center;gap:6px;padding:10px 16px;background:#fefcf9;border-bottom:1px solid rgba(237,229,219,.4)}
+.browser-dot{width:9px;height:9px;border-radius:50%}
+.browser-url{margin-left:12px;background:#fff;border:1px solid rgba(237,229,219,.4);border-radius:6px;padding:3px 12px;font-size:10px;color:rgba(15,23,42,.3);flex:1;max-width:320px}
+
+/* ── Dashboard Layout ── */
+.mock-layout{display:flex;min-height:320px}
+.mock-sidebar{width:180px;background:#fff;border-right:1px solid rgba(237,229,219,.4);padding:12px 8px;flex-shrink:0}
+.mock-main{flex:1;background:#fefcf9;padding:16px 20px;overflow:hidden}
+.mock-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+
+/* ── Sidebar Nav ── */
+.sb-logo{display:flex;align-items:center;gap:6px;padding:4px 8px;margin-bottom:12px}
+.sb-logo-icon{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#14b8a6,#0d9488);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800}
+.sb-logo-text{font-size:10px;font-weight:700;color:#0f172a}
+.sb-group{margin-bottom:8px}
+.sb-group-label{font-size:8px;font-weight:700;color:rgba(15,23,42,.2);text-transform:uppercase;letter-spacing:1px;padding:0 8px;margin-bottom:3px}
+.sb-item{display:flex;align-items:center;gap:6px;padding:4px 8px;border-radius:8px;font-size:9px;font-weight:500;color:rgba(15,23,42,.45);margin-bottom:1px;white-space:nowrap}
+.sb-item.active{background:rgba(20,184,166,.08);color:#0d9488;font-weight:600}
+.sb-icon{width:14px;height:14px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:7px;flex-shrink:0}
+
+/* ── Stat Cards ── */
+.stat-row{display:flex;gap:10px;margin-bottom:14px}
+.stat-card{flex:1;background:#fff;border:1px solid rgba(237,229,219,.4);border-radius:10px;padding:10px 12px}
+.stat-icon{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;font-size:11px}
+.stat-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;line-height:1}
+.stat-lbl{font-size:8px;color:rgba(15,23,42,.35);margin-top:2px}
+
+/* ── Tables ── */
+.tbl{width:100%;border-collapse:separate;border-spacing:0}
+.tbl th{font-size:8px;font-weight:600;color:rgba(15,23,42,.3);text-transform:uppercase;letter-spacing:.5px;text-align:left;padding:6px 8px;border-bottom:1px solid rgba(237,229,219,.4)}
+.tbl td{font-size:9px;color:rgba(15,23,42,.6);padding:6px 8px;border-bottom:1px solid rgba(237,229,219,.2);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+
+/* ── Avatars ── */
+.av{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:7px;font-weight:700;flex-shrink:0;vertical-align:middle;margin-right:5px}
+
+/* ── Status Badges ── */
+.badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:8px;font-weight:600;white-space:nowrap}
+.b-green{background:#ecfdf5;color:#059669}
+.b-blue{background:#eff6ff;color:#2563eb}
+.b-amber{background:#fffbeb;color:#d97706}
+.b-red{background:#fef2f2;color:#dc2626}
+.b-purple{background:#faf5ff;color:#7c3aed}
+.b-teal{background:#f0fdfa;color:#0d9488}
+.b-gray{background:#f1f5f9;color:#64748b}
+
+/* ── Buttons (mock) ── */
+.m-btn{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:7px;font-size:8px;font-weight:600;border:none;cursor:default}
+.m-btn-primary{background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff}
+.m-btn-outline{background:#fff;color:rgba(15,23,42,.5);border:1px solid rgba(237,229,219,.5)}
+
+/* ── Tabs (mock) ── */
+.m-tabs{display:flex;gap:2px;background:#f5f2ef;border-radius:8px;padding:2px;margin-bottom:12px;width:fit-content}
+.m-tab{padding:4px 10px;border-radius:6px;font-size:8px;font-weight:600;color:rgba(15,23,42,.35)}
+.m-tab.on{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+/* ── Search Bar ── */
+.m-search{display:flex;align-items:center;gap:5px;background:#fff;border:1px solid rgba(237,229,219,.4);border-radius:8px;padding:5px 10px;margin-bottom:10px;font-size:9px;color:rgba(15,23,42,.25)}
+
+/* ── Queue Items ── */
+.q-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;margin-bottom:5px;font-size:9px;font-weight:500;background:#fff;border:1px solid rgba(237,229,219,.35)}
+.q-item.emergency{border-left:3px solid #ef4444;background:#fef2f2}
+.q-item.in-progress{border-left:3px solid #14b8a6}
+
+/* ── Room Tiles ── */
+.room-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.room-tile{border-radius:8px;padding:8px;text-align:center;border:1px solid rgba(237,229,219,.4)}
+.room-name{font-size:8px;font-weight:700;margin-bottom:3px}
+.room-status{font-size:7px;font-weight:600;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:3px}
+
+/* ── Chart Mock ── */
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:80px;padding:0 4px}
+.chart-bar{flex:1;border-radius:4px 4px 0 0;min-width:10px;position:relative}
+.chart-bar span{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:7px;color:rgba(15,23,42,.25);white-space:nowrap}
+.chart-area{height:80px;background:linear-gradient(180deg,rgba(20,184,166,.15),rgba(20,184,166,.02));border-radius:8px;position:relative;overflow:hidden}
+.chart-line{position:absolute;bottom:0;left:0;right:0;height:100%}
+
+/* ── Chatbot Mock ── */
+.chatbot-frame{width:260px;background:#fff;border:1px solid rgba(237,229,219,.5);border-radius:18px;box-shadow:0 8px 32px rgba(15,23,42,.08);overflow:hidden}
+.chatbot-header{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid rgba(237,229,219,.3);background:linear-gradient(90deg,#f0fdfa,#fff)}
+.chat-msg{padding:10px 14px}
+.chat-bubble{padding:8px 12px;border-radius:12px;font-size:10px;line-height:1.5;margin-bottom:6px;max-width:85%}
+.chat-bot{background:#f0fdfa;color:#0f172a;border-bottom-left-radius:4px}
+.chat-user{background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+
+/* ── Split ── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+
+/* ── Feature Cards ── */
+.feat-card{background:#fff;border:1px solid rgba(237,229,219,.5);border-radius:14px;padding:18px;margin-bottom:12px}
+.feat-card h3{font-size:15px;font-weight:700;margin-bottom:5px}
+.feat-card p{font-size:12px;color:rgba(15,23,42,.45);line-height:1.6}
+.feat-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:18px}
+
+/* ── Dark Cards ── */
+.cd{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:24px;transition:.2s}
+.cd:hover{background:rgba(255,255,255,.08)}
+.cd h3{font-size:16px;font-weight:700;color:#fff;margin-bottom:6px}
+.cd p{font-size:13px;color:rgba(255,255,255,.4);line-height:1.6}
+.ci-n{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.07);color:#5eead4;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:20px}
+
+/* ── Highlight Box ── */
+.hbox{border-radius:12px;padding:12px 16px;font-size:12px;font-weight:600;margin-top:14px}
+.hbox-t{background:#f0fdfa;color:#0d9488;border:1px solid rgba(20,184,166,.12)}
+.hbox-n{background:rgba(94,234,212,.06);color:#5eead4;border:1px solid rgba(94,234,212,.12)}
+
+/* ── Pulse animation ── */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pulse{animation:pulse 2s infinite}
+
+/* ── Print ── */
+@media print{
+  html{overflow:visible}body{background:#fff}
+  .deck{position:static;width:auto;height:auto}
+  .slide{position:relative;opacity:1!important;transform:none!important;pointer-events:auto;page-break-after:always;page-break-inside:avoid;width:100%;height:100vh;padding:36px 56px}
+  .dots,.arr,.counter{display:none!important}
+  .glow{display:none}
+}
+@page{size:landscape;margin:0}
+
+/* ── Responsive ── */
+@media(max-width:900px){.slide{padding:32px 24px}.ttl{font-size:28px}.split{grid-template-columns:1fr}.mock-sidebar{width:140px}.stat-row{flex-wrap:wrap}}
+@media(max-width:600px){.slide{padding:24px 16px}.ttl{font-size:22px}.arr{display:none}.split{grid-template-columns:1fr}.mock-sidebar{display:none}.room-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- ══════════════════════════════════════════════════════════
+     S1 — TITLE
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-hero active" data-slide="0">
+  <div class="glow" style="width:400px;height:400px;top:-120px;right:-80px;background:#14b8a6"></div>
+  <div class="glow" style="width:300px;height:300px;bottom:-100px;left:-60px;background:#3b82f6;opacity:.12"></div>
+  <div class="inner" style="text-align:center">
+    <img src="../platform_admin/logo/Besto Clinic Logo with name.svg" alt="BestoClinic" class="logo" style="height:52px">
+    <div class="divider" style="margin:14px auto"></div>
+    <span class="lbl lbl-w">Complete Clinic Management Platform</span>
+    <h1 class="ttl tw" style="max-width:820px;margin:0 auto 14px">Everything Your Clinic Needs.<br>One Platform.</h1>
+    <p class="sub twm" style="margin:0 auto">
+      Scheduling, billing, patient records, multi-branch monitoring, AI dental scanning, telemedicine, and analytics — all from a single dashboard.
+    </p>
+    <div class="trust" style="justify-content:center;margin-top:32px">
+      <div class="tb"><span class="d"></span>Multi-Branch</div>
+      <div class="tb"><span class="d"></span>AI Dental Scanner</div>
+      <div class="tb"><span class="d"></span>Built-in Telemedicine</div>
+      <div class="tb"><span class="d"></span>Smart Queue System</div>
+      <div class="tb"><span class="d"></span>Real-Time Analytics</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S2 — DASHBOARD (Your Command Center)
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-c" data-slide="1">
+  <div class="inner">
+    <span class="lbl lbl-t">Command Center</span>
+    <h2 class="ttl tn">Your Clinic at a Glance</h2>
+    <p class="sub tm" style="margin-bottom:16px">Log in and instantly see what matters — today's patients, active doctors, revenue, and pending tasks. Everything updates in real time.</p>
+
+    <div class="browser">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ef4444"></div>
+        <div class="browser-dot" style="background:#f59e0b"></div>
+        <div class="browser-dot" style="background:#10b981"></div>
+        <div class="browser-url">bestoclinic.com/clinic</div>
+      </div>
+      <div class="mock-layout" style="min-height:290px">
+        <!-- Sidebar -->
+        <div class="mock-sidebar">
+          <div class="sb-logo">
+            <div class="sb-logo-icon">B</div>
+            <div class="sb-logo-text">SmileCare Dental</div>
+          </div>
+          <div class="sb-group">
+            <div class="sb-group-label">Overview</div>
+            <div class="sb-item active"><div class="sb-icon">&#9632;</div> Dashboard</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Branch Monitor</div>
+          </div>
+          <div class="sb-group">
+            <div class="sb-group-label">Management</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Branches</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Departments</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Doctors</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Staff</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Patients</div>
+          </div>
+          <div class="sb-group">
+            <div class="sb-group-label">Operations</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Appointments</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Queue</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Prescriptions</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Inventory</div>
+          </div>
+          <div class="sb-group">
+            <div class="sb-group-label">Finance</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Billing</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Insurance</div>
+            <div class="sb-item"><div class="sb-icon">&#9632;</div> Payroll</div>
+          </div>
+        </div>
+        <!-- Main Content -->
+        <div class="mock-main">
+          <div class="mock-topbar">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#0f172a">Good morning, Dr. Admin</div>
+              <div style="font-size:8px;color:rgba(15,23,42,.35)">Here's what's happening at your clinic today</div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <div class="m-btn m-btn-primary">+ New Appointment</div>
+              <div class="m-btn m-btn-outline">View Patients</div>
+            </div>
+          </div>
+          <!-- Stats -->
+          <div class="stat-row">
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#f0fdfa;color:#0d9488">&#9824;</div>
+              <div class="stat-val" style="color:#0d9488">1,247</div>
+              <div class="stat-lbl">Total Patients</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#ecfdf5;color:#10b981">&#9830;</div>
+              <div class="stat-val" style="color:#10b981">84</div>
+              <div class="stat-lbl">Today's Appointments</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#faf5ff;color:#a855f7">&#9827;</div>
+              <div class="stat-val" style="color:#a855f7">12</div>
+              <div class="stat-lbl">Active Doctors</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#fffbeb;color:#f59e0b">&#9829;</div>
+              <div class="stat-val" style="color:#f59e0b">&#8377;4.2L</div>
+              <div class="stat-lbl">Revenue (MTD)</div>
+            </div>
+          </div>
+          <!-- Quick Actions -->
+          <div style="display:flex;gap:6px;margin-bottom:14px">
+            <div style="flex:1;background:linear-gradient(135deg,#14b8a6,#0d9488);border-radius:8px;padding:8px 10px;text-align:center">
+              <div style="font-size:9px;font-weight:700;color:#fff">New Appointment</div>
+            </div>
+            <div style="flex:1;background:linear-gradient(135deg,#10b981,#059669);border-radius:8px;padding:8px 10px;text-align:center">
+              <div style="font-size:9px;font-weight:700;color:#fff">Add Patient</div>
+            </div>
+            <div style="flex:1;background:linear-gradient(135deg,#a855f7,#7c3aed);border-radius:8px;padding:8px 10px;text-align:center">
+              <div style="font-size:9px;font-weight:700;color:#fff">Create Invoice</div>
+            </div>
+            <div style="flex:1;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:8px;padding:8px 10px;text-align:center">
+              <div style="font-size:9px;font-weight:700;color:#fff">View Queue</div>
+            </div>
+          </div>
+          <!-- Recent Appointments Table -->
+          <div style="background:#fff;border:1px solid rgba(237,229,219,.35);border-radius:10px;padding:8px">
+            <div style="font-size:9px;font-weight:700;color:rgba(15,23,42,.4);padding:4px 8px;margin-bottom:4px">RECENT APPOINTMENTS</div>
+            <table class="tbl">
+              <tr><th>Patient</th><th>Doctor</th><th>Time</th><th>Status</th></tr>
+              <tr><td><span class="av" style="background:linear-gradient(135deg,#14b8a6,#0d9488)">RS</span>Rahul Sharma</td><td>Dr. Kavitha</td><td>9:30 AM</td><td><span class="badge b-green">Confirmed</span></td></tr>
+              <tr><td><span class="av" style="background:linear-gradient(135deg,#3b82f6,#2563eb)">PM</span>Priya Mehta</td><td>Dr. Arjun</td><td>10:00 AM</td><td><span class="badge b-purple">In Progress</span></td></tr>
+              <tr><td><span class="av" style="background:linear-gradient(135deg,#a855f7,#7c3aed)">AK</span>Arun Kumar</td><td>Dr. Sneha</td><td>10:30 AM</td><td><span class="badge b-blue">Requested</span></td></tr>
+              <tr><td><span class="av" style="background:linear-gradient(135deg,#f59e0b,#d97706)">NP</span>Neha Patil</td><td>Dr. Kavitha</td><td>11:00 AM</td><td><span class="badge b-amber">Waiting</span></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S3 — BRANCH MONITOR
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-w" data-slide="2">
+  <div class="inner">
+    <span class="lbl lbl-t">Live Operations</span>
+    <h2 class="ttl tn">Monitor Every Branch in Real Time</h2>
+    <p class="sub tm" style="margin-bottom:16px">See exactly what's happening across all your locations — who's available, who's waiting, which rooms are occupied — all updating live, every few seconds.</p>
+
+    <div class="browser">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ef4444"></div>
+        <div class="browser-dot" style="background:#f59e0b"></div>
+        <div class="browser-dot" style="background:#10b981"></div>
+        <div class="browser-url">bestoclinic.com/clinic/branch-monitor</div>
+      </div>
+      <div style="background:#fefcf9;padding:16px 20px">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-size:14px;font-weight:700;color:#0f172a">Branch Monitor</div>
+            <div style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;background:#ecfdf5">
+              <div style="width:6px;height:6px;border-radius:50%;background:#10b981" class="pulse"></div>
+              <span style="font-size:8px;font-weight:700;color:#059669">LIVE</span>
+            </div>
+          </div>
+          <div class="m-btn m-btn-outline" style="font-size:8px">All Branches &#9662;</div>
+        </div>
+        <!-- Summary Stats -->
+        <div class="stat-row">
+          <div class="stat-card" style="border-left:3px solid #10b981">
+            <div class="stat-val" style="color:#10b981;font-size:16px">5</div>
+            <div class="stat-lbl">Rooms Free</div>
+          </div>
+          <div class="stat-card" style="border-left:3px solid #14b8a6">
+            <div class="stat-val" style="color:#14b8a6;font-size:16px">7</div>
+            <div class="stat-lbl">Occupied</div>
+          </div>
+          <div class="stat-card" style="border-left:3px solid #f59e0b">
+            <div class="stat-val" style="color:#f59e0b;font-size:16px">6</div>
+            <div class="stat-lbl">Waiting</div>
+          </div>
+          <div class="stat-card" style="border-left:3px solid #3b82f6">
+            <div class="stat-val" style="color:#3b82f6;font-size:16px">8</div>
+            <div class="stat-lbl">Doctors Active</div>
+          </div>
+          <div class="stat-card" style="border-left:3px solid #a855f7">
+            <div style="display:flex;align-items:center;gap:6px">
+              <div class="stat-val" style="color:#a855f7;font-size:16px">72%</div>
+            </div>
+            <div style="height:5px;background:#f3e8ff;border-radius:3px;margin-top:4px;overflow:hidden">
+              <div style="width:72%;height:100%;background:linear-gradient(90deg,#a855f7,#7c3aed);border-radius:3px"></div>
+            </div>
+            <div class="stat-lbl">Utilization</div>
+          </div>
+        </div>
+        <!-- Tabs -->
+        <div class="m-tabs">
+          <div class="m-tab on">Doctor Board</div>
+          <div class="m-tab">Waiting Room</div>
+          <div class="m-tab">Branch Capacity</div>
+          <div class="m-tab">Rooms</div>
+          <div class="m-tab">Activity Feed</div>
+        </div>
+        <!-- Doctor Board -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div style="flex:1;min-width:140px;background:#fff;border:1px solid rgba(237,229,219,.35);border-radius:10px;padding:10px">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+              <span class="av" style="background:linear-gradient(135deg,#14b8a6,#0d9488);width:22px;height:22px;font-size:8px">KN</span>
+              <div><div style="font-size:9px;font-weight:700">Dr. Kavitha Nair</div><div style="font-size:7px;color:rgba(15,23,42,.35)">Orthodontics</div></div>
+              <span class="badge b-green" style="margin-left:auto;font-size:7px">In Consultation</span>
+            </div>
+            <div style="font-size:8px;color:rgba(15,23,42,.4)">Patient: Rahul S. &bull; Room 3A &bull; 5/8 completed</div>
+          </div>
+          <div style="flex:1;min-width:140px;background:#fff;border:1px solid rgba(237,229,219,.35);border-radius:10px;padding:10px">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+              <span class="av" style="background:linear-gradient(135deg,#3b82f6,#2563eb);width:22px;height:22px;font-size:8px">AM</span>
+              <div><div style="font-size:9px;font-weight:700">Dr. Arjun Mehta</div><div style="font-size:7px;color:rgba(15,23,42,.35)">General Dentistry</div></div>
+              <span class="badge b-teal" style="margin-left:auto;font-size:7px">Available</span>
+            </div>
+            <div style="font-size:8px;color:rgba(15,23,42,.4)">Next: Priya M. at 10:30 &bull; 3 waiting</div>
+          </div>
+          <div style="flex:1;min-width:140px;background:#fff;border:1px solid rgba(237,229,219,.35);border-radius:10px;padding:10px">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+              <span class="av" style="background:linear-gradient(135deg,#a855f7,#7c3aed);width:22px;height:22px;font-size:8px">SK</span>
+              <div><div style="font-size:9px;font-weight:700">Dr. Sneha Kulkarni</div><div style="font-size:7px;color:rgba(15,23,42,.35)">Pediatric</div></div>
+              <span class="badge b-green" style="margin-left:auto;font-size:7px">In Consultation</span>
+            </div>
+            <div style="font-size:8px;color:rgba(15,23,42,.4)">Patient: Arun K. &bull; Room 5B &bull; 2/6 completed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S4 — APPOINTMENTS & SMART QUEUE
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-c" data-slide="3">
+  <div class="inner">
+    <span class="lbl lbl-t">Scheduling</span>
+    <h2 class="ttl tn">Smart Scheduling & Live Queue</h2>
+    <p class="sub tm" style="margin-bottom:16px">From booking to checkout — every step is tracked. Patients check in on their phone, your staff sees them in the live queue, and doctors get notified instantly.</p>
+
+    <div class="split" style="gap:20px">
+      <!-- Left: Appointments -->
+      <div class="browser">
+        <div class="browser-bar">
+          <div class="browser-dot" style="background:#ef4444"></div>
+          <div class="browser-dot" style="background:#f59e0b"></div>
+          <div class="browser-dot" style="background:#10b981"></div>
+          <span style="margin-left:12px;font-size:9px;color:rgba(15,23,42,.3);font-weight:600">APPOINTMENTS</span>
+        </div>
+        <div style="padding:12px;background:#fefcf9">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div class="m-tabs" style="margin:0">
+              <div class="m-tab on">List View</div>
+              <div class="m-tab">Calendar</div>
+            </div>
+            <div class="m-btn m-btn-primary" style="font-size:7px">+ New Appointment</div>
+          </div>
+          <!-- Status Flow -->
+          <div style="display:flex;align-items:center;gap:3px;margin-bottom:10px;justify-content:center">
+            <span class="badge b-blue" style="font-size:7px">Requested</span>
+            <span style="color:rgba(15,23,42,.2);font-size:9px">&#8594;</span>
+            <span class="badge b-green" style="font-size:7px">Confirmed</span>
+            <span style="color:rgba(15,23,42,.2);font-size:9px">&#8594;</span>
+            <span class="badge b-teal" style="font-size:7px">Checked In</span>
+            <span style="color:rgba(15,23,42,.2);font-size:9px">&#8594;</span>
+            <span class="badge b-purple" style="font-size:7px">In Progress</span>
+            <span style="color:rgba(15,23,42,.2);font-size:9px">&#8594;</span>
+            <span class="badge b-green" style="font-size:7px">Completed</span>
+          </div>
+          <table class="tbl">
+            <tr><th>Patient</th><th>Doctor</th><th>Time</th><th>Status</th></tr>
+            <tr><td><span class="av" style="background:linear-gradient(135deg,#14b8a6,#0d9488)">RS</span>Rahul S.</td><td>Dr. Kavitha</td><td>9:30</td><td><span class="badge b-green">Confirmed</span></td></tr>
+            <tr><td><span class="av" style="background:linear-gradient(135deg,#3b82f6,#2563eb)">PM</span>Priya M.</td><td>Dr. Arjun</td><td>10:00</td><td><span class="badge b-purple">In Progress</span></td></tr>
+            <tr><td><span class="av" style="background:linear-gradient(135deg,#a855f7,#7c3aed)">AK</span>Arun K.</td><td>Dr. Sneha</td><td>10:30</td><td><span class="badge b-blue">Requested</span></td></tr>
+            <tr><td><span class="av" style="background:linear-gradient(135deg,#10b981,#059669)">VR</span>Vijay R.</td><td>Dr. Kavitha</td><td>11:00</td><td><span class="badge b-teal">Checked In</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <!-- Right: Queue -->
+      <div class="browser">
+        <div class="browser-bar">
+          <div class="browser-dot" style="background:#ef4444"></div>
+          <div class="browser-dot" style="background:#f59e0b"></div>
+          <div class="browser-dot" style="background:#10b981"></div>
+          <span style="margin-left:12px;font-size:9px;color:rgba(15,23,42,.3);font-weight:600">LIVE QUEUE</span>
+        </div>
+        <div style="padding:12px;background:#fefcf9">
+          <div class="stat-row" style="margin-bottom:10px">
+            <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#0f172a">8</div><div class="stat-lbl">Total</div></div>
+            <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#f59e0b">5</div><div class="stat-lbl">Waiting</div></div>
+            <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#14b8a6">2</div><div class="stat-lbl">In Progress</div></div>
+            <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#ef4444">1</div><div class="stat-lbl">Emergency</div></div>
+          </div>
+          <div class="q-item emergency">
+            <span class="av" style="background:linear-gradient(135deg,#ef4444,#dc2626);width:22px;height:22px;font-size:7px">SM</span>
+            <div style="flex:1"><div style="font-size:9px;font-weight:700">Suresh M.</div><div style="font-size:7px;color:rgba(15,23,42,.35)">Dr. Kavitha &bull; Emergency</div></div>
+            <span class="badge b-red" style="font-size:7px">URGENT</span>
+          </div>
+          <div class="q-item in-progress">
+            <span class="av" style="background:linear-gradient(135deg,#14b8a6,#0d9488);width:22px;height:22px;font-size:7px">RS</span>
+            <div style="flex:1"><div style="font-size:9px;font-weight:700">Rahul Sharma</div><div style="font-size:7px;color:rgba(15,23,42,.35)">Dr. Kavitha &bull; Room 3A</div></div>
+            <span class="badge b-purple" style="font-size:7px">In Progress</span>
+          </div>
+          <div class="q-item">
+            <span class="av" style="background:linear-gradient(135deg,#f59e0b,#d97706);width:22px;height:22px;font-size:7px">NP</span>
+            <div style="flex:1"><div style="font-size:9px;font-weight:700">Neha Patil</div><div style="font-size:7px;color:rgba(15,23,42,.35)">Dr. Arjun &bull; 12 min wait</div></div>
+            <span class="badge b-amber" style="font-size:7px">Waiting</span>
+          </div>
+          <div class="q-item">
+            <span class="av" style="background:linear-gradient(135deg,#10b981,#059669);width:22px;height:22px;font-size:7px">VR</span>
+            <div style="flex:1"><div style="font-size:9px;font-weight:700">Vijay R.</div><div style="font-size:7px;color:rgba(15,23,42,.35)">Dr. Sneha &bull; 4 min wait</div></div>
+            <span class="badge b-amber" style="font-size:7px">Waiting</span>
+          </div>
+          <div class="hbox hbox-t" style="font-size:9px;padding:6px 10px;margin-top:8px">Patient self-check-in via mobile &bull; SMS when called</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S5 — PATIENT & DOCTOR MANAGEMENT
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-w" data-slide="4">
+  <div class="inner">
+    <span class="lbl lbl-t">Management</span>
+    <h2 class="ttl tn">Manage Your Entire Clinic Team</h2>
+    <p class="sub tm" style="margin-bottom:16px">Patients, doctors, staff, branches, departments, inventory — everything is searchable, filterable, and organized in one place.</p>
+
+    <div class="split" style="gap:16px">
+      <!-- Left: Patient Table -->
+      <div class="browser">
+        <div class="browser-bar">
+          <div class="browser-dot" style="background:#ef4444"></div>
+          <div class="browser-dot" style="background:#f59e0b"></div>
+          <div class="browser-dot" style="background:#10b981"></div>
+          <span style="margin-left:12px;font-size:9px;color:rgba(15,23,42,.3);font-weight:600">PATIENT RECORDS</span>
+        </div>
+        <div style="padding:12px;background:#fefcf9">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-size:10px;font-weight:700">Patient Management</div>
+            <div class="m-btn m-btn-primary" style="font-size:7px">+ Add Patient</div>
+          </div>
+          <div class="m-search">&#128269; Search by name, email, phone, or patient ID...</div>
+          <table class="tbl">
+            <tr><th>Name</th><th>Patient ID</th><th>Phone</th><th>Gender</th><th>Blood</th></tr>
+            <tr>
+              <td><span class="av" style="background:linear-gradient(135deg,#14b8a6,#0d9488)">RS</span>Rahul Sharma</td>
+              <td><span style="background:#f5f2ef;padding:1px 5px;border-radius:3px;font-size:7px;font-family:monospace">PT-00847</span></td>
+              <td style="font-size:8px">+91 98765...</td>
+              <td><span class="badge b-blue" style="font-size:7px">Male</span></td>
+              <td><span class="badge b-red" style="font-size:7px">B+</span></td>
+            </tr>
+            <tr>
+              <td><span class="av" style="background:linear-gradient(135deg,#ec4899,#db2777)">PM</span>Priya Mehta</td>
+              <td><span style="background:#f5f2ef;padding:1px 5px;border-radius:3px;font-size:7px;font-family:monospace">PT-00848</span></td>
+              <td style="font-size:8px">+91 87654...</td>
+              <td><span style="background:#fdf2f8;color:#db2777;padding:2px 7px;border-radius:5px;font-size:7px;font-weight:600">Female</span></td>
+              <td><span class="badge b-red" style="font-size:7px">O+</span></td>
+            </tr>
+            <tr>
+              <td><span class="av" style="background:linear-gradient(135deg,#f59e0b,#d97706)">AK</span>Arun Kumar</td>
+              <td><span style="background:#f5f2ef;padding:1px 5px;border-radius:3px;font-size:7px;font-family:monospace">PT-00849</span></td>
+              <td style="font-size:8px">+91 76543...</td>
+              <td><span class="badge b-blue" style="font-size:7px">Male</span></td>
+              <td><span class="badge b-red" style="font-size:7px">A+</span></td>
+            </tr>
+          </table>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:7px;color:rgba(15,23,42,.3)">
+            <span>Showing 1-10 of 1,247</span>
+            <div style="display:flex;gap:3px">
+              <span style="padding:2px 6px;border-radius:4px;background:#f0fdfa;color:#0d9488;font-weight:600">1</span>
+              <span style="padding:2px 6px;border-radius:4px">2</span>
+              <span style="padding:2px 6px;border-radius:4px">3</span>
+              <span style="padding:2px 6px;border-radius:4px">&#8250;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right: Doctor + Staff -->
+      <div>
+        <div class="browser" style="margin-bottom:12px">
+          <div class="browser-bar">
+            <div class="browser-dot" style="background:#ef4444"></div>
+            <div class="browser-dot" style="background:#f59e0b"></div>
+            <div class="browser-dot" style="background:#10b981"></div>
+            <span style="margin-left:12px;font-size:9px;color:rgba(15,23,42,.3);font-weight:600">DOCTOR MANAGEMENT</span>
+          </div>
+          <div style="padding:10px;background:#fefcf9">
+            <div class="stat-row" style="margin-bottom:8px">
+              <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#14b8a6">12</div><div class="stat-lbl">Total Doctors</div></div>
+              <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#10b981">10</div><div class="stat-lbl">Active</div></div>
+              <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#ef4444">2</div><div class="stat-lbl">On Leave</div></div>
+            </div>
+            <table class="tbl">
+              <tr><th>Doctor</th><th>Specialization</th><th>Status</th></tr>
+              <tr><td><span class="av" style="background:linear-gradient(135deg,#14b8a6,#0d9488)">KN</span>Dr. Kavitha</td><td style="font-size:8px">Orthodontics</td><td><span class="badge b-green" style="font-size:7px">Active</span> <span style="background:#fffbeb;color:#d97706;padding:2px 5px;border-radius:4px;font-size:6px;font-weight:700">&#9733; Featured</span></td></tr>
+              <tr><td><span class="av" style="background:linear-gradient(135deg,#3b82f6,#2563eb)">AM</span>Dr. Arjun</td><td style="font-size:8px">General</td><td><span class="badge b-green" style="font-size:7px">Active</span></td></tr>
+            </table>
+          </div>
+        </div>
+        <!-- Staff + Features -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="background:#fff;border:1px solid rgba(237,229,219,.5);border-radius:10px;padding:10px">
+            <div style="font-size:9px;font-weight:700;color:#0f172a;margin-bottom:6px">Staff & Roles</div>
+            <div style="font-size:8px;color:rgba(15,23,42,.4);line-height:1.8">
+              Admin &bull; Manager &bull; Receptionist<br>
+              Billing Officer &bull; HR Manager<br>
+              IT Support &bull; Accountant
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid rgba(237,229,219,.5);border-radius:10px;padding:10px">
+            <div style="font-size:9px;font-weight:700;color:#0f172a;margin-bottom:6px">Also Included</div>
+            <div style="font-size:8px;color:rgba(15,23,42,.4);line-height:1.8">
+              Departments &bull; Branches<br>
+              Inventory Tracking<br>
+              Procedures Catalog
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S6 — ANALYTICS & INSIGHTS
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-c" data-slide="5">
+  <div class="inner">
+    <span class="lbl lbl-t">Analytics</span>
+    <h2 class="ttl tn">Know Your Numbers, Grow Your Practice</h2>
+    <p class="sub tm" style="margin-bottom:16px">Comprehensive dashboards for revenue, appointments, doctor performance, patient growth, insurance claims, and telemedicine — all filterable by date range.</p>
+
+    <div class="browser">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ef4444"></div>
+        <div class="browser-dot" style="background:#f59e0b"></div>
+        <div class="browser-dot" style="background:#10b981"></div>
+        <div class="browser-url">bestoclinic.com/clinic/analytics</div>
+      </div>
+      <div style="padding:16px 20px;background:#fefcf9">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="font-size:13px;font-weight:700;color:#0f172a">Clinic Analytics</div>
+          <div style="display:flex;gap:4px;align-items:center">
+            <div class="m-tabs" style="margin:0">
+              <div class="m-tab">Daily</div>
+              <div class="m-tab on">Monthly</div>
+              <div class="m-tab">Yearly</div>
+            </div>
+          </div>
+        </div>
+        <!-- Tab Navigation -->
+        <div style="display:flex;gap:2px;margin-bottom:14px;border-bottom:1px solid rgba(237,229,219,.4);padding-bottom:8px">
+          <span style="padding:4px 10px;font-size:8px;font-weight:700;color:#0d9488;border-bottom:2px solid #0d9488">Overview</span>
+          <span style="padding:4px 10px;font-size:8px;font-weight:500;color:rgba(15,23,42,.35)">Revenue</span>
+          <span style="padding:4px 10px;font-size:8px;font-weight:500;color:rgba(15,23,42,.35)">Appointments</span>
+          <span style="padding:4px 10px;font-size:8px;font-weight:500;color:rgba(15,23,42,.35)">Doctors</span>
+          <span style="padding:4px 10px;font-size:8px;font-weight:500;color:rgba(15,23,42,.35)">Patients</span>
+          <span style="padding:4px 10px;font-size:8px;font-weight:500;color:rgba(15,23,42,.35)">Insurance</span>
+          <span style="padding:4px 10px;font-size:8px;font-weight:500;color:rgba(15,23,42,.35)">Telemedicine</span>
+        </div>
+        <!-- Stat Cards -->
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-val" style="color:#10b981">&#8377;8.4L</div>
+            <div class="stat-lbl">Monthly Revenue</div>
+            <div style="font-size:7px;color:#10b981;font-weight:600;margin-top:2px">&#9650; 12% vs last month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" style="color:#3b82f6">342</div>
+            <div class="stat-lbl">Appointments</div>
+            <div style="font-size:7px;color:#10b981;font-weight:600;margin-top:2px">&#9650; 8% vs last month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" style="color:#0f172a">1,247</div>
+            <div class="stat-lbl">Total Patients</div>
+            <div style="font-size:7px;color:#10b981;font-weight:600;margin-top:2px">+47 new this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" style="color:#ef4444">4.2%</div>
+            <div class="stat-lbl">No-Show Rate</div>
+            <div style="font-size:7px;color:#10b981;font-weight:600;margin-top:2px">&#9660; Down from 6.8%</div>
+          </div>
+        </div>
+        <!-- Charts Row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px">
+          <!-- Revenue Chart -->
+          <div style="background:#fff;border:1px solid rgba(237,229,219,.35);border-radius:10px;padding:12px">
+            <div style="font-size:9px;font-weight:700;color:rgba(15,23,42,.5);margin-bottom:8px">REVENUE TREND (6 MONTHS)</div>
+            <div class="chart-bars">
+              <div class="chart-bar" style="height:45%;background:linear-gradient(180deg,#99f6e4,#14b8a6)"><span>Oct</span></div>
+              <div class="chart-bar" style="height:55%;background:linear-gradient(180deg,#99f6e4,#14b8a6)"><span>Nov</span></div>
+              <div class="chart-bar" style="height:50%;background:linear-gradient(180deg,#99f6e4,#14b8a6)"><span>Dec</span></div>
+              <div class="chart-bar" style="height:65%;background:linear-gradient(180deg,#99f6e4,#14b8a6)"><span>Jan</span></div>
+              <div class="chart-bar" style="height:72%;background:linear-gradient(180deg,#99f6e4,#14b8a6)"><span>Feb</span></div>
+              <div class="chart-bar" style="height:85%;background:linear-gradient(180deg,#99f6e4,#0d9488)"><span>Mar</span></div>
+            </div>
+          </div>
+          <!-- Appointments Chart -->
+          <div style="background:#fff;border:1px solid rgba(237,229,219,.35);border-radius:10px;padding:12px">
+            <div style="font-size:9px;font-weight:700;color:rgba(15,23,42,.5);margin-bottom:8px">APPOINTMENTS BREAKDOWN</div>
+            <div class="chart-bars">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative">
+                <div style="width:100%;height:50px;background:#ecfdf5;border-radius:4px 4px 0 0;display:flex;align-items:flex-end"><div style="width:100%;height:40px;background:#10b981;border-radius:4px 4px 0 0"></div></div>
+                <span style="font-size:7px;color:rgba(15,23,42,.25)">Oct</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+                <div style="width:100%;height:58px;background:#ecfdf5;border-radius:4px 4px 0 0;display:flex;align-items:flex-end"><div style="width:100%;height:48px;background:#10b981;border-radius:4px 4px 0 0"></div></div>
+                <span style="font-size:7px;color:rgba(15,23,42,.25)">Nov</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+                <div style="width:100%;height:52px;background:#ecfdf5;border-radius:4px 4px 0 0;display:flex;align-items:flex-end"><div style="width:100%;height:42px;background:#10b981;border-radius:4px 4px 0 0"></div></div>
+                <span style="font-size:7px;color:rgba(15,23,42,.25)">Dec</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+                <div style="width:100%;height:64px;background:#ecfdf5;border-radius:4px 4px 0 0;display:flex;align-items:flex-end"><div style="width:100%;height:56px;background:#10b981;border-radius:4px 4px 0 0"></div></div>
+                <span style="font-size:7px;color:rgba(15,23,42,.25)">Jan</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+                <div style="width:100%;height:70px;background:#ecfdf5;border-radius:4px 4px 0 0;display:flex;align-items:flex-end"><div style="width:100%;height:60px;background:#10b981;border-radius:4px 4px 0 0"></div></div>
+                <span style="font-size:7px;color:rgba(15,23,42,.25)">Feb</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+                <div style="width:100%;height:76px;background:#ecfdf5;border-radius:4px 4px 0 0;display:flex;align-items:flex-end"><div style="width:100%;height:68px;background:#10b981;border-radius:4px 4px 0 0"></div></div>
+                <span style="font-size:7px;color:rgba(15,23,42,.25)">Mar</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:14px;font-size:7px">
+              <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#10b981"></span> Completed</span>
+              <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#ecfdf5;border:1px solid #d1fae5"></span> Total</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S7 — BILLING & FINANCE
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-w" data-slide="6">
+  <div class="inner">
+    <span class="lbl lbl-t">Finance</span>
+    <h2 class="ttl tn">Billing, Insurance & Payroll — All in One</h2>
+    <p class="sub tm" style="margin-bottom:16px">Create invoices, process insurance claims, manage your cash register, handle payroll — every rupee tracked from collection to payout.</p>
+
+    <div class="browser">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ef4444"></div>
+        <div class="browser-dot" style="background:#f59e0b"></div>
+        <div class="browser-dot" style="background:#10b981"></div>
+        <div class="browser-url">bestoclinic.com/clinic/billing</div>
+      </div>
+      <div style="padding:14px 18px;background:#fefcf9">
+        <!-- Tabs -->
+        <div class="m-tabs" style="margin-bottom:12px">
+          <div class="m-tab on">Invoices</div>
+          <div class="m-tab">Payments</div>
+          <div class="m-tab">Service Catalog</div>
+          <div class="m-tab">Cash Register</div>
+          <div class="m-tab">Credit Notes</div>
+          <div class="m-tab">Insurance Claims</div>
+        </div>
+        <!-- Stats -->
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-val" style="color:#10b981">&#8377;8.4L</div>
+            <div class="stat-lbl">Total Revenue</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" style="color:#f59e0b">&#8377;1.2L</div>
+            <div class="stat-lbl">Pending</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" style="color:#ef4444">&#8377;34K</div>
+            <div class="stat-lbl">Overdue</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" style="color:#14b8a6">&#8377;6.8L</div>
+            <div class="stat-lbl">Paid This Month</div>
+          </div>
+        </div>
+        <!-- Invoice Table -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div class="m-btn m-btn-outline" style="font-size:7px">Status: All &#9662;</div>
+          <div class="m-btn m-btn-primary" style="font-size:7px">+ Create Invoice</div>
+        </div>
+        <table class="tbl">
+          <tr><th>Invoice #</th><th>Patient</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th><th>Date</th></tr>
+          <tr>
+            <td style="font-weight:700;font-size:9px">INV-2024-0156</td>
+            <td>Rahul Sharma</td>
+            <td style="font-weight:700">&#8377;4,500</td>
+            <td style="color:#059669;font-weight:600">&#8377;4,500</td>
+            <td style="color:#059669">&#8377;0</td>
+            <td><span class="badge b-green">Paid</span></td>
+            <td style="color:rgba(15,23,42,.4)">24 Mar</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;font-size:9px">INV-2024-0155</td>
+            <td>Priya Mehta</td>
+            <td style="font-weight:700">&#8377;12,000</td>
+            <td style="color:#059669;font-weight:600">&#8377;6,000</td>
+            <td style="color:#d97706;font-weight:600">&#8377;6,000</td>
+            <td><span class="badge b-amber">Partial</span></td>
+            <td style="color:rgba(15,23,42,.4)">23 Mar</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;font-size:9px">INV-2024-0154</td>
+            <td>Arun Kumar</td>
+            <td style="font-weight:700">&#8377;2,800</td>
+            <td style="color:rgba(15,23,42,.3)">&#8377;0</td>
+            <td style="color:#ef4444;font-weight:600">&#8377;2,800</td>
+            <td><span class="badge b-red">Overdue</span></td>
+            <td style="color:rgba(15,23,42,.4)">18 Mar</td>
+          </tr>
+        </table>
+        <!-- Bottom features -->
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <div style="flex:1;min-width:120px;background:#fff;border:1px solid rgba(237,229,219,.35);border-radius:8px;padding:8px;text-align:center">
+            <div style="font-size:8px;font-weight:700;color:#a855f7;margin-bottom:2px">Insurance Claims</div>
+            <div style="font-size:7px;color:rgba(15,23,42,.35)">Submit &bull; Track &bull; Settle</div>
+          </div>
+          <div style="flex:1;min-width:120px;background:#fff;border:1px solid rgba(237,229,219,.35);border-radius:8px;padding:8px;text-align:center">
+            <div style="font-size:8px;font-weight:700;color:#3b82f6;margin-bottom:2px">Cash Register</div>
+            <div style="font-size:7px;color:rgba(15,23,42,.35)">Open &bull; Track &bull; Reconcile</div>
+          </div>
+          <div style="flex:1;min-width:120px;background:#fff;border:1px solid rgba(237,229,219,.35);border-radius:8px;padding:8px;text-align:center">
+            <div style="font-size:8px;font-weight:700;color:#10b981;margin-bottom:2px">Payroll</div>
+            <div style="font-size:7px;color:rgba(15,23,42,.35)">Salary &bull; Payslips &bull; Approve</div>
+          </div>
+          <div style="flex:1;min-width:120px;background:#fff;border:1px solid rgba(237,229,219,.35);border-radius:8px;padding:8px;text-align:center">
+            <div style="font-size:8px;font-weight:700;color:#f59e0b;margin-bottom:2px">Credit Notes</div>
+            <div style="font-size:7px;color:rgba(15,23,42,.35)">Issue &bull; Apply &bull; Track</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S8 — AI DENTAL SCANNER
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-ta" data-slide="7">
+  <div class="inner">
+    <span class="lbl lbl-t">AI-Powered</span>
+    <h2 class="ttl tn">Your 24/7 Patient Acquisition Tool</h2>
+    <p class="sub tm" style="margin-bottom:16px">An AI dental health assistant lives on your clinic's website. Visitors scan their teeth, get instant results, and are connected to your doctors — turning website traffic into booked appointments.</p>
+
+    <div class="split" style="align-items:center">
+      <!-- Left: How it works -->
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid rgba(237,229,219,.4);border-radius:14px;padding:14px;margin-bottom:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#ecfeff;color:#06b6d4;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;font-weight:800">1</div>
+          <div><div style="font-size:13px;font-weight:700">Guided Photo Capture</div><div style="font-size:11px;color:rgba(15,23,42,.4)">5 angles — front, upper, lower, left, right bite</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid rgba(237,229,219,.4);border-radius:14px;padding:14px;margin-bottom:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#faf5ff;color:#a855f7;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;font-weight:800">2</div>
+          <div><div style="font-size:13px;font-weight:700">Instant AI Analysis</div><div style="font-size:11px;color:rgba(15,23,42,.4)">Dental health score with tooth-by-tooth breakdown</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid rgba(237,229,219,.4);border-radius:14px;padding:14px;margin-bottom:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#f0fdfa;color:#0d9488;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;font-weight:800">3</div>
+          <div><div style="font-size:13px;font-weight:700">Interactive Dental Chart</div><div style="font-size:11px;color:rgba(15,23,42,.4)">Visual report highlighting areas of concern</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid rgba(237,229,219,.4);border-radius:14px;padding:14px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#ecfdf5;color:#10b981;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;font-weight:800">4</div>
+          <div><div style="font-size:13px;font-weight:700">Connect with Your Doctors</div><div style="font-size:11px;color:rgba(15,23,42,.4)">Nearby specialists with ratings, distance & booking</div></div>
+        </div>
+        <div class="hbox hbox-t" style="font-size:11px;text-align:center">Patients discover your clinic through free scans — a lead generation engine built right in</div>
+      </div>
+      <!-- Right: Chatbot mockup -->
+      <div style="display:flex;justify-content:center">
+        <div class="chatbot-frame">
+          <div class="chatbot-header">
+            <img src="../chatbot/dental-chat-bot-icon.svg" alt="Bot" width="28" height="28">
+            <div style="flex:1">
+              <div style="font-size:11px;font-weight:700;color:#0f172a">AI Dental Scanner</div>
+              <div style="font-size:8px;color:rgba(15,23,42,.35)">Free dental health analysis</div>
+            </div>
+            <span style="padding:2px 6px;font-size:7px;font-weight:700;background:rgba(20,184,166,.1);color:#0d9488;border-radius:4px">3/5</span>
+          </div>
+          <div class="chat-msg">
+            <div class="chat-bubble chat-bot">Hi! I'm your AI dental assistant. Let's check your dental health in just 2 minutes.</div>
+            <div class="chat-bubble chat-bot" style="margin-top:4px">
+              <div style="margin-bottom:4px">&#10003; Front teeth captured</div>
+              <div style="margin-bottom:4px">&#10003; Upper jaw captured</div>
+              <div>&#10003; Lower jaw captured</div>
+            </div>
+            <div style="margin:10px 0">
+              <div style="background:#f0fdfa;border-radius:10px;padding:10px;text-align:center">
+                <div style="font-size:8px;color:#0d9488;font-weight:600;margin-bottom:4px">YOUR DENTAL HEALTH SCORE</div>
+                <div style="font-family:'Plus Jakarta Sans';font-size:32px;font-weight:800;color:#0d9488">78<span style="font-size:14px;color:rgba(13,148,136,.5)">/100</span></div>
+                <div style="font-size:8px;color:rgba(15,23,42,.4)">Good — minor issues detected</div>
+              </div>
+            </div>
+            <div style="font-size:9px;color:rgba(15,23,42,.5);line-height:1.8">
+              <div>&#9888;&#65039; Mild cavity — Tooth #14</div>
+              <div>&#9888;&#65039; Plaque buildup — Lower jaw</div>
+              <div>&#10004; Gums — Healthy</div>
+              <div>&#10004; Alignment — Normal</div>
+            </div>
+            <div style="margin-top:8px;padding:8px;background:#eff6ff;border-radius:8px;font-size:9px;color:#3b82f6;font-weight:600;text-align:center">
+              3 verified specialists near you &#8594;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S9 — TELEMEDICINE + DOCTOR EXPERIENCE
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-w" data-slide="8">
+  <div class="inner">
+    <span class="lbl lbl-t">Virtual Care & Doctor View</span>
+    <h2 class="ttl tn">Telemedicine & Dedicated Doctor Dashboard</h2>
+    <p class="sub tm" style="margin-bottom:16px">Built-in video consultations — not a third-party add-on. Plus, every doctor gets their own personalized dashboard with their schedule, patients, and performance.</p>
+
+    <div class="split" style="gap:16px">
+      <!-- Left: Telemedicine -->
+      <div class="browser">
+        <div class="browser-bar">
+          <div class="browser-dot" style="background:#ef4444"></div>
+          <div class="browser-dot" style="background:#f59e0b"></div>
+          <div class="browser-dot" style="background:#10b981"></div>
+          <span style="margin-left:12px;font-size:9px;color:rgba(15,23,42,.3);font-weight:600">TELEMEDICINE</span>
+        </div>
+        <div style="padding:12px;background:#fefcf9">
+          <div class="stat-row" style="margin-bottom:8px">
+            <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#10b981">3</div><div class="stat-lbl">Active</div></div>
+            <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#f59e0b">5</div><div class="stat-lbl">Waiting</div></div>
+            <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#3b82f6">24</div><div class="stat-lbl">Total Today</div></div>
+          </div>
+          <!-- Session Types -->
+          <div style="display:flex;gap:5px;margin-bottom:8px">
+            <span style="padding:3px 8px;border-radius:6px;font-size:7px;font-weight:600;background:#fef2f2;color:#ef4444">Emergency</span>
+            <span style="padding:3px 8px;border-radius:6px;font-size:7px;font-weight:600;background:#f0fdfa;color:#0d9488">Scheduled</span>
+            <span style="padding:3px 8px;border-radius:6px;font-size:7px;font-weight:600;background:#eff6ff;color:#3b82f6">Follow-up</span>
+          </div>
+          <table class="tbl">
+            <tr><th>Patient</th><th>Doctor</th><th>Type</th><th>Status</th></tr>
+            <tr><td><span class="av" style="background:linear-gradient(135deg,#14b8a6,#0d9488);width:18px;height:18px;font-size:6px">RS</span>Rahul S.</td><td>Dr. Kavitha</td><td style="font-size:7px">Scheduled</td><td><span class="badge b-green" style="font-size:7px"><span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:#10b981;margin-right:2px" class="pulse"></span>Active</span></td></tr>
+            <tr><td><span class="av" style="background:linear-gradient(135deg,#ef4444,#dc2626);width:18px;height:18px;font-size:6px">SM</span>Suresh M.</td><td>Dr. Arjun</td><td style="font-size:7px">Emergency</td><td><span class="badge b-purple" style="font-size:7px">Waiting</span></td></tr>
+            <tr><td><span class="av" style="background:linear-gradient(135deg,#a855f7,#7c3aed);width:18px;height:18px;font-size:6px">NP</span>Neha P.</td><td>Dr. Sneha</td><td style="font-size:7px">Follow-up</td><td><span class="badge b-blue" style="font-size:7px">Scheduled</span></td></tr>
+          </table>
+          <div style="display:flex;gap:4px;margin-top:8px;font-size:7px;color:rgba(15,23,42,.35)">
+            <span>&#128249; HD Video</span> &bull;
+            <span>&#128172; In-call Chat</span> &bull;
+            <span>&#128203; In-session Rx</span> &bull;
+            <span>&#128179; Auto Billing</span>
+          </div>
+        </div>
+      </div>
+      <!-- Right: Doctor Dashboard -->
+      <div class="browser">
+        <div class="browser-bar">
+          <div class="browser-dot" style="background:#ef4444"></div>
+          <div class="browser-dot" style="background:#f59e0b"></div>
+          <div class="browser-dot" style="background:#10b981"></div>
+          <span style="margin-left:12px;font-size:9px;color:rgba(15,23,42,.3);font-weight:600">DOCTOR'S OWN DASHBOARD</span>
+        </div>
+        <div style="padding:12px;background:#fefcf9">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#0f172a">Good morning, Dr. Kavitha</div>
+              <div style="font-size:7px;color:rgba(15,23,42,.3)">Your practice overview for today</div>
+            </div>
+            <span class="badge b-purple" style="font-size:7px">Room 3A &bull; Floor 1</span>
+          </div>
+          <div class="stat-row" style="margin-bottom:10px">
+            <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#14b8a6">8</div><div class="stat-lbl">Today's Appts</div></div>
+            <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#10b981">47</div><div class="stat-lbl">Patients (MTD)</div></div>
+            <div class="stat-card" style="padding:6px 8px"><div class="stat-val" style="font-size:14px;color:#a855f7">&#8377;1.2L</div><div class="stat-lbl">Revenue (MTD)</div></div>
+          </div>
+          <div class="m-tabs" style="margin-bottom:8px">
+            <div class="m-tab on">Schedule</div>
+            <div class="m-tab">Work Hours</div>
+            <div class="m-tab">Patients</div>
+            <div class="m-tab">Revenue</div>
+          </div>
+          <!-- Today's Schedule -->
+          <div style="font-size:8px;font-weight:600;color:rgba(15,23,42,.3);margin-bottom:4px">TODAY'S SCHEDULE</div>
+          <div style="display:flex;align-items:center;gap:6px;padding:6px 8px;background:#fff;border:1px solid rgba(237,229,219,.3);border-radius:8px;margin-bottom:4px;border-left:3px solid #14b8a6">
+            <div style="font-size:8px;font-weight:700;color:#0d9488;width:40px">9:30</div>
+            <div style="flex:1;font-size:8px">Rahul Sharma</div>
+            <span class="badge b-purple" style="font-size:6px">In Progress</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:6px 8px;background:#fff;border:1px solid rgba(237,229,219,.3);border-radius:8px;margin-bottom:4px;border-left:3px solid #3b82f6">
+            <div style="font-size:8px;font-weight:700;color:#3b82f6;width:40px">10:30</div>
+            <div style="flex:1;font-size:8px">Priya Mehta</div>
+            <span class="badge b-green" style="font-size:6px">Confirmed</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:6px 8px;background:#fff;border:1px solid rgba(237,229,219,.3);border-radius:8px;border-left:3px solid #f59e0b">
+            <div style="font-size:8px;font-weight:700;color:#f59e0b;width:40px">11:00</div>
+            <div style="flex:1;font-size:8px">Vijay R.</div>
+            <span class="badge b-blue" style="font-size:6px">Requested</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S10 — SMART REMINDERS & PRESCRIPTION MANAGEMENT
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-mint" data-slide="9">
+  <div class="inner">
+    <span class="lbl lbl-t">Patient Engagement</span>
+    <h2 class="ttl tn">Smart Reminders & Prescription Tracking</h2>
+    <p class="sub tm" style="margin-bottom:20px">Automated reminders reduce no-shows by 40%. Prescription tracking improves treatment compliance by 3x. Keep patients engaged between visits — zero manual effort.</p>
+
+    <div class="split" style="gap:20px;align-items:start">
+      <!-- Left: Appointment Reminders -->
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#0d9488;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Appointment Reminders</div>
+
+        <!-- Notification mock cards -->
+        <div style="background:#fff;border:1px solid rgba(237,229,219,.5);border-radius:14px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#f0fdfa;color:#0d9488;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">&#128276;</div>
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:700;color:#0f172a">Appointment Tomorrow</div>
+            <div style="font-size:9px;color:rgba(15,23,42,.4)">Dr. Kavitha Nair — 10:30 AM, SmileCare Clinic</div>
+          </div>
+          <div style="font-size:8px;color:rgba(15,23,42,.25)">24h before</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid rgba(237,229,219,.5);border-radius:14px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#fffbeb;color:#d97706;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">&#9200;</div>
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:700;color:#0f172a">Appointment in 2 Hours</div>
+            <div style="font-size:9px;color:rgba(15,23,42,.4)">Dental cleaning — Don't forget your insurance card</div>
+          </div>
+          <div style="font-size:8px;color:rgba(15,23,42,.25)">2h before</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid rgba(237,229,219,.5);border-radius:14px;padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#fdf2f8;color:#db2777;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">&#10084;</div>
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:700;color:#0f172a">Follow-Up Due in 3 Days</div>
+            <div style="font-size:9px;color:rgba(15,23,42,.4)">Post root canal check — Dr. Arjun Mehta</div>
+          </div>
+          <div style="font-size:8px;color:rgba(15,23,42,.25)">Upcoming</div>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;background:#f0fdfa;border-radius:10px;padding:10px;text-align:center">
+            <div style="font-family:'Plus Jakarta Sans';font-size:20px;font-weight:800;color:#0d9488">40%</div>
+            <div style="font-size:8px;color:rgba(15,23,42,.35)">Fewer No-Shows</div>
+          </div>
+          <div style="flex:1;background:#f0fdf4;border-radius:10px;padding:10px;text-align:center">
+            <div style="font-family:'Plus Jakarta Sans';font-size:20px;font-weight:800;color:#10b981">95%</div>
+            <div style="font-size:8px;color:rgba(15,23,42,.35)">Reminder Delivery</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Prescription Reminders -->
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#10b981;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Prescription Reminders</div>
+
+        <!-- Medication Schedule -->
+        <div style="background:#fff;border:1px solid rgba(237,229,219,.5);border-radius:14px;padding:14px;margin-bottom:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:11px;font-weight:700;color:#0f172a">Today's Medications</div>
+            <span style="padding:2px 8px;font-size:7px;font-weight:700;background:#ecfdf5;color:#059669;border-radius:6px">3 remaining</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:8px;padding:8px;background:#f0fdfa;border-radius:10px;margin-bottom:6px;border-left:3px solid #10b981">
+            <div style="font-size:14px">&#128138;</div>
+            <div style="flex:1">
+              <div style="font-size:10px;font-weight:700;color:#0f172a">Amoxicillin 500mg</div>
+              <div style="font-size:8px;color:rgba(15,23,42,.4)">1 capsule &bull; After breakfast</div>
+            </div>
+            <div style="font-size:8px;font-weight:600;color:#10b981">8:00 AM &#10003;</div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:8px;padding:8px;background:#fffbeb;border-radius:10px;margin-bottom:6px;border-left:3px solid #f59e0b">
+            <div style="font-size:14px">&#128138;</div>
+            <div style="flex:1">
+              <div style="font-size:10px;font-weight:700;color:#0f172a">Ibuprofen 400mg</div>
+              <div style="font-size:8px;color:rgba(15,23,42,.4)">1 tablet &bull; After lunch</div>
+            </div>
+            <div style="font-size:8px;font-weight:600;color:#f59e0b">1:00 PM</div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:8px;padding:8px;background:#faf5ff;border-radius:10px;border-left:3px solid #a855f7">
+            <div style="font-size:14px">&#128138;</div>
+            <div style="flex:1">
+              <div style="font-size:10px;font-weight:700;color:#0f172a">Chlorhexidine Rinse</div>
+              <div style="font-size:8px;color:rgba(15,23,42,.4)">10ml rinse &bull; Before bed</div>
+            </div>
+            <div style="font-size:8px;font-weight:600;color:#a855f7">9:00 PM</div>
+          </div>
+        </div>
+
+        <!-- How it works -->
+        <div style="background:#fff;border:1px solid rgba(237,229,219,.5);border-radius:14px;padding:12px">
+          <div style="font-size:10px;font-weight:700;color:#0f172a;margin-bottom:8px">How It Works</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdfa;color:#0d9488;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0">1</div>
+            <div style="font-size:9px;color:rgba(15,23,42,.5)">Doctor creates prescription during consultation</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="width:22px;height:22px;border-radius:6px;background:#ecfdf5;color:#10b981;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0">2</div>
+            <div style="font-size:9px;color:rgba(15,23,42,.5)">System auto-generates reminder schedule from dosage</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:22px;height:22px;border-radius:6px;background:#f0fdf4;color:#059669;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0">3</div>
+            <div style="font-size:9px;color:rgba(15,23,42,.5)">Patient gets SMS + push at each dosage time</div>
+          </div>
+        </div>
+
+        <!-- Compliance stat -->
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <div style="flex:1;background:#faf5ff;border-radius:10px;padding:10px;text-align:center">
+            <div style="font-family:'Plus Jakarta Sans';font-size:20px;font-weight:800;color:#a855f7">3x</div>
+            <div style="font-size:8px;color:rgba(15,23,42,.35)">Treatment Compliance</div>
+          </div>
+          <div style="flex:1;background:#eff6ff;border-radius:10px;padding:10px;text-align:center">
+            <div style="font-family:'Plus Jakarta Sans';font-size:20px;font-weight:800;color:#3b82f6">24/7</div>
+            <div style="font-size:8px;color:rgba(15,23,42,.35)">Automated Delivery</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S11 — DATA ISOLATION
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-n" data-slide="10">
+  <div class="glow" style="width:350px;height:350px;top:-80px;left:-80px;background:#14b8a6;opacity:.12"></div>
+  <div class="inner" style="text-align:center">
+    <span class="lbl lbl-w">Privacy & Security</span>
+    <h2 class="ttl tw">Your Clinic's Data Stays Yours. Period.</h2>
+    <p class="sub twm" style="margin:0 auto 28px">Every clinic on BestoClinic gets its own completely separate, isolated database. No shared tables, no data mixing — your patient records are yours and yours alone.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+      <div class="cd">
+        <div class="ci-n">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <h3>One Clinic, One Database</h3>
+        <p>Each clinic is automatically provisioned its own dedicated database the moment they sign up. Completely independent.</p>
+      </div>
+      <div class="cd">
+        <div class="ci-n">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Encrypted & Role-Protected</h3>
+        <p>All clinical data is encrypted. Every action is permission-checked. Each staff member only sees what they're authorized to.</p>
+      </div>
+      <div class="cd">
+        <div class="ci-n">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        </div>
+        <h3>Platform Separation</h3>
+        <p>Administrative data (plans, subscriptions) lives on a separate platform layer — completely segregated from clinical records.</p>
+      </div>
+    </div>
+
+    <!-- Visual architecture diagram -->
+    <div style="margin-top:28px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap">
+      <div style="background:rgba(20,184,166,.1);border:1px solid rgba(20,184,166,.2);border-radius:12px;padding:12px 18px;text-align:center">
+        <div style="font-size:9px;font-weight:700;color:#5eead4;letter-spacing:1px;margin-bottom:4px">CLINIC A</div>
+        <div style="font-size:22px">&#128451;</div>
+        <div style="font-size:8px;color:rgba(255,255,255,.3)">smilecare_db</div>
+      </div>
+      <div style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:12px;padding:12px 18px;text-align:center">
+        <div style="font-size:9px;font-weight:700;color:#93c5fd;letter-spacing:1px;margin-bottom:4px">CLINIC B</div>
+        <div style="font-size:22px">&#128451;</div>
+        <div style="font-size:8px;color:rgba(255,255,255,.3)">brightsmile_db</div>
+      </div>
+      <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);border-radius:12px;padding:12px 18px;text-align:center">
+        <div style="font-size:9px;font-weight:700;color:#d8b4fe;letter-spacing:1px;margin-bottom:4px">CLINIC C</div>
+        <div style="font-size:22px">&#128451;</div>
+        <div style="font-size:8px;color:rgba(255,255,255,.3)">mehta_dental_db</div>
+      </div>
+      <div style="font-size:18px;color:rgba(255,255,255,.15)">|</div>
+      <div style="background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.15);border-radius:12px;padding:12px 18px;text-align:center">
+        <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1px;margin-bottom:4px">PLATFORM</div>
+        <div style="font-size:22px">&#9881;</div>
+        <div style="font-size:8px;color:rgba(255,255,255,.2)">plans &bull; subscriptions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     S12 — CTA
+     ══════════════════════════════════════════════════════════ -->
+<section class="slide bg-cta" data-slide="11">
+  <div class="glow" style="width:500px;height:500px;top:-150px;right:-150px;background:#14b8a6;opacity:.15"></div>
+  <div class="inner" style="text-align:center">
+    <img src="../platform_admin/logo/Besto Clinic Logo with name.svg" alt="BestoClinic" class="logo" style="height:48px;filter:brightness(0) invert(1)">
+    <h2 class="ttl tw" style="font-size:44px;max-width:700px;margin:0 auto 14px">Ready to Run Your Practice Smarter?</h2>
+    <p class="sub twm" style="margin:0 auto 32px;font-size:16px">
+      One platform for scheduling, billing, patient records, live branch monitoring, AI dental scanning, telemedicine, and analytics.<br>Your data. Your database. Your control.
+    </p>
+    <div class="cta-row" style="justify-content:center">
+      <button class="btn btn-p" style="padding:14px 36px;font-size:16px">Book a Demo</button>
+      <button class="btn btn-o" style="padding:14px 36px;font-size:16px">Get in Touch</button>
+    </div>
+    <div style="margin-top:40px;color:rgba(255,255,255,.3);font-size:13px">
+      hello@bestoclinic.com
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- Nav UI -->
+<button class="arr l" id="pB" aria-label="Previous">&#8592;</button>
+<button class="arr r" id="nB" aria-label="Next">&#8594;</button>
+<div class="dots" id="dts"></div>
+<div class="counter" id="ctr">1 / 12</div>
+
+<script>
+(function(){
+const S=document.querySelectorAll('.slide'),T=S.length;let C=0;
+const D=document.getElementById('dts');
+for(let i=0;i<T;i++){const b=document.createElement('button');b.setAttribute('aria-label','Slide '+(i+1));if(!i)b.classList.add('on');b.onclick=()=>go(i);D.appendChild(b)}
+function go(n){if(n<0||n>=T||n===C)return;const d=n>C?1:-1;S[C].classList.remove('active');S[C].style.transform=d>0?'translateX(-50px)':'translateX(50px)';C=n;S[C].style.transform=d>0?'translateX(50px)':'translateX(-50px)';S[C].offsetHeight;S[C].classList.add('active');S.forEach((s,i)=>{if(i!==C)s.classList.remove('active','prev')});D.querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i===C));document.getElementById('ctr').textContent=(C+1)+' / '+T}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(C+1)}if(e.key==='ArrowLeft'){e.preventDefault();go(C-1)}if(e.key==='Home'){e.preventDefault();go(0)}if(e.key==='End'){e.preventDefault();go(T-1)}});
+document.getElementById('nB').onclick=()=>go(C+1);document.getElementById('pB').onclick=()=>go(C-1);
+let tx=0;document.addEventListener('touchstart',e=>{tx=e.changedTouches[0].screenX},{passive:true});document.addEventListener('touchend',e=>{const d=tx-e.changedTouches[0].screenX;if(Math.abs(d)>50){d>0?go(C+1):go(C-1)}},{passive:true});
+let wt=null;document.addEventListener('wheel',e=>{if(wt)return;wt=setTimeout(()=>{wt=null},700);if(e.deltaY>25)go(C+1);else if(e.deltaY<-25)go(C-1)},{passive:true});
+})();
+</script>
+</body>
+</html>

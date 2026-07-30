@@ -1,0 +1,86 @@
+appId: com.bestoclinic.app
+---
+# ══════════════════════════════════════════════════════════════
+#  Maestro Flow: Appointment Reminder Notification
+# ══════════════════════════════════════════════════════════════
+# Tests the interactive push notification for appointment reminders.
+# The patient receives a "Will you attend?" push and taps "Yes, I'll attend".
+#
+# Prerequisites:
+#   1. Backend running with notification workers enabled
+#   2. E2E script has created a test appointment (node scripts/e2e-notifications.js)
+#   3. Patient is registered for FCM push on this device
+#
+# Usage:
+#   maestro test maestro/notification-appointment.yaml
+#   maestro record maestro/notification-appointment.yaml --output recordings/appointment-reminder.mp4
+# ──────────────────────────────────────────────────────────────
+
+# Step 1: Launch the app
+- launchApp:
+    clearState: false
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# Step 2: Check if already logged in — if we see Sign In, we need to login
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      # Enter patient email
+      - tapOn:
+          text: "you@example.com"
+      - eraseText: 30
+      - inputText: "patient-test@jathardental.in"
+
+      # Enter patient password
+      - tapOn:
+          text: "Enter your password"
+      - inputText: "Staff@2025"
+
+      # Tap Sign In
+      - tapOn:
+          text: "Sign In"
+
+      - waitForAnimationToEnd:
+          timeout: 10000
+
+# Step 3: Wait for the app to fully load (patient dashboard)
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- screenshot: "01-patient-dashboard-loaded"
+
+# Step 4: Wait for the push notification to arrive
+# The notification should appear from the backend's appointment reminder worker
+- extendedWaitUntil:
+    visible: "Appointment Reminder"
+    timeout: 180000  # Wait up to 3 minutes
+
+- screenshot: "02-appointment-notification-arrived"
+
+# Step 5: Tap "Yes, I'll attend" on the notification
+- tapOn:
+    text: "Yes, I'll attend"
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+- screenshot: "03-appointment-confirmed"
+
+# Step 6: Navigate to Appointments tab to verify status
+- tapOn:
+    text: "Appointments"
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+- screenshot: "04-appointments-list-after-confirm"
+
+# Step 7: Look for the confirmed appointment
+- runFlow:
+    when:
+      visible: "Confirmed"
+    commands:
+      - screenshot: "05-appointment-confirmed-in-list"
