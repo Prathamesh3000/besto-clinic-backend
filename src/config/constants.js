@@ -251,6 +251,7 @@ const NOTIFICATION_TYPE = Object.freeze({
   ALERT:         'alert',
   REMINDER:      'reminder',
   DENTAL_SCAN:   'dental_scan',
+  PRESCRIPTION:  'prescription',
   VIDEO_CALL:    'video_call',
   EMERGENCY:     'emergency',
   CHAT_MESSAGE:     'chat_message',
@@ -436,6 +437,42 @@ const PURCHASE_ORDER_TRANSITIONS = Object.freeze({
 const PURCHASE_ORDER_URGENCY = Object.freeze({
   NORMAL: 'normal',
   URGENT: 'urgent',
+});
+
+/**
+ * Procedure template categories.
+ *
+ * These six values are not a design choice — they are the exact set measured in
+ * the live `proceduretemplates` collection: 16 documents, `category` present in
+ * 100% of them, zero nulls, zero drift (sql/FINDINGS.md F-3).
+ *
+ * The constant was referenced by src/models/tenant/ProcedureTemplate.js but never
+ * defined, so `Object.values(undefined)` threw at require time and the model was
+ * excluded from the tenant registry. Defining it makes the model loadable; it does
+ * not mount the feature, which has no module in src/modules/.
+ */
+const PROCEDURE_CATEGORY = Object.freeze({
+  COSMETIC:    'cosmetic',
+  SURGERY:     'surgery',
+  PROSTHETIC:  'prosthetic',
+  ORTHODONTIC: 'orthodontic',
+  ENDODONTIC:  'endodontic',
+  PERIODONTAL: 'periodontal',
+});
+
+/**
+ * Material reservation lifecycle.
+ *
+ * `materialreservations` is empty in every profiled clinic, so unlike
+ * PROCEDURE_CATEGORY above there is no data to measure. The values are taken from
+ * the only other statement of them in the codebase — the per-item enum inside
+ * src/models/tenant/MaterialReservation.js, which lists exactly these three — so
+ * the parent status and its items cannot disagree.
+ */
+const RESERVATION_STATUS = Object.freeze({
+  RESERVED: 'reserved',
+  USED:     'used',
+  RELEASED: 'released',
 });
 
 /** Consent statuses */
@@ -794,6 +831,8 @@ module.exports = {
   PURCHASE_ORDER_STATUS,
   PURCHASE_ORDER_TRANSITIONS,
   PURCHASE_ORDER_URGENCY,
+  PROCEDURE_CATEGORY,
+  RESERVATION_STATUS,
   CONSULTATION_STATUS,
   PRESCRIPTION_SCAN_STATUS,
   CONFLICT_RESOLUTION_STATUS,

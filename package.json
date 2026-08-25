@@ -1,7 +1,7 @@
 {
   "name": "bestoclinic-backend",
   "version": "1.0.0",
-  "description": "BestoClinic — Multi-tenant SaaS backend for dental clinic management",
+  "description": "BestoClinic \u2014 Multi-tenant SaaS backend for dental clinic management",
   "main": "server.js",
   "engines": {
     "node": ">=18.0.0"
@@ -15,6 +15,17 @@
     "test:unit": "jest tests/unit --runInBand",
     "test:integration": "jest tests/integration --runInBand --detectOpenHandles",
     "test:coverage": "jest --coverage --runInBand --detectOpenHandles",
+    "sql:check": "node scripts/sql/check-env.js",
+    "sql:profile": "node scripts/sql/profile-mongo.js",
+    "sql:profile:verify": "node scripts/sql/profile-mongo.js --verify",
+    "sql:schema": "node sql/schema/build.js",
+    "sql:schema:census": "node sql/schema/build.js --census",
+    "sql:schema:check": "node sql/schema/build.js --check",
+    "sql:migrate": "node sql/migrate.js",
+    "sql:migrate:status": "node sql/migrate.js --status",
+    "sql:migrate:rollback": "node sql/migrate.js --rollback",
+    "sql:tenant:provision": "node sql/tenant/provision.js",
+    "sql:tenant:list": "node sql/tenant/provision.js --list",
     "seed:platform": "node scripts/seed-platform.js",
     "seed:platform:full": "node scripts/seed-platform-full.js",
     "assign:superadmins": "node scripts/assign-superadmins.js",
@@ -22,11 +33,20 @@
     "seed:featured-doctors": "node scripts/seed-featured-doctors.js",
     "seed:discovery": "node scripts/seed-discovery.js",
     "seed:jobs": "node scripts/seed-jobs.js",
-    "migrate:job-locations": "node scripts/migrate-job-locations.js"
+    "migrate:job-locations": "node scripts/migrate-job-locations.js",
+    "sql:gates": "node scripts/sql/gates.js",
+    "sql:gates:list": "node scripts/sql/gates.js --list",
+    "sql:migrate:verify": "node scripts/sql/verify-ddl.js",
+    "sql:test:isolation": "node scripts/sql/verify-isolation.js",
+    "sql:verify:etl": "node scripts/sql/verify-etl.js",
+    "sql:verify:timezone": "node scripts/sql/verify-timezone.js",
+    "sql:baseline:timezone": "node scripts/sql/verify-timezone.js --baseline",
+    "sql:test:parity": "node scripts/sql/verify-parity.js",
+    "sql:test:regression": "node scripts/sql/verify-no-regression.js",
+    "sql:audit:orphans": "node scripts/sql/audit-orphans.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
-    "@react-native-clipboard/clipboard": "^1.16.3",
     "bcryptjs": "^2.4.3",
     "bullmq": "^5.12.12",
     "compression": "^1.7.4",
@@ -39,14 +59,14 @@
     "ioredis": "^5.4.1",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
+    "knex": "^3.3.0",
     "mongoose": "^8.23.0",
     "morgan": "^1.10.0",
-    "nodemailer": "^8.0.1",
+    "nodemailer": "^9.0.3",
     "pdfkit": "^0.18.0",
+    "pg": "^8.23.0",
     "rate-limit-redis": "^4.2.0",
     "razorpay": "^2.9.4",
-    "react-native-keychain": "^10.0.0",
-    "react-native-reanimated": "^3.15.0",
     "socket.io": "^4.7.5",
     "uuid": "^10.0.0",
     "winston": "^3.13.1",
@@ -61,17 +81,29 @@
     "supertest": "^7.0.0"
   },
   "jest": {
-    "testEnvironment": "node",
-    "setupFilesAfterSetup": [
-      "./tests/setup.js"
-    ],
-    "testMatch": [
-      "**/tests/**/*.test.js"
-    ],
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
       "src/**/*.js",
       "!src/jobs/workers/**"
+    ],
+    "projects": [
+      {
+        "displayName": "unit",
+        "testEnvironment": "node",
+        "testMatch": [
+          "<rootDir>/tests/unit/**/*.test.js"
+        ]
+      },
+      {
+        "displayName": "integration",
+        "testEnvironment": "node",
+        "setupFilesAfterEnv": [
+          "<rootDir>/tests/setup.js"
+        ],
+        "testMatch": [
+          "<rootDir>/tests/integration/**/*.test.js"
+        ]
+      }
     ]
   },
   "nodemonConfig": {

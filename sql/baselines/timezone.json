@@ -1,0 +1,2265 @@
+{
+  "capturedAt": "2026-08-25T05:50:37.058Z",
+  "source": "mongodb+srv://pranav:***@cluster0.zkdolhg.mongodb.net/besto_clinic?appName=Cluster0",
+  "convention": "fake-UTC — stored UTC components ARE the clinic wall clock (IST)",
+  "renderer": "website/src/utils/fakeUtcTime.js",
+  "fields": [
+    "scheduledAt",
+    "originalScheduledAt"
+  ],
+  "samplePerClinic": 250,
+  "clinicsCaptured": 1,
+  "clinicsUnreachable": 0,
+  "entries": [
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243456",
+      "rendered": {
+        "scheduledAt": "16 Sep 2025, 05:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-16T05:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243457",
+      "rendered": {
+        "scheduledAt": "20 Sep 2025, 07:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-20T07:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243458",
+      "rendered": {
+        "scheduledAt": "16 Sep 2025, 09:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-16T09:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243459",
+      "rendered": {
+        "scheduledAt": "26 Sep 2025, 09:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-26T09:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24345a",
+      "rendered": {
+        "scheduledAt": "3 Sep 2025, 03:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-03T03:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24345b",
+      "rendered": {
+        "scheduledAt": "16 Sep 2025, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-16T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24345c",
+      "rendered": {
+        "scheduledAt": "8 Sep 2025, 07:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-08T07:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24345d",
+      "rendered": {
+        "scheduledAt": "22 Sep 2025, 06:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-22T06:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24345e",
+      "rendered": {
+        "scheduledAt": "6 Sep 2025, 04:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-06T04:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24345f",
+      "rendered": {
+        "scheduledAt": "6 Sep 2025, 05:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-06T05:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243460",
+      "rendered": {
+        "scheduledAt": "17 Sep 2025, 07:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-17T07:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243461",
+      "rendered": {
+        "scheduledAt": "19 Sep 2025, 05:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-19T05:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243462",
+      "rendered": {
+        "scheduledAt": "25 Sep 2025, 04:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-25T04:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243463",
+      "rendered": {
+        "scheduledAt": "26 Sep 2025, 07:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-26T07:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243464",
+      "rendered": {
+        "scheduledAt": "18 Sep 2025, 04:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-18T04:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243465",
+      "rendered": {
+        "scheduledAt": "11 Sep 2025, 08:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-11T08:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243466",
+      "rendered": {
+        "scheduledAt": "3 Sep 2025, 07:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-03T07:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243467",
+      "rendered": {
+        "scheduledAt": "15 Sep 2025, 05:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-15T05:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243468",
+      "rendered": {
+        "scheduledAt": "5 Sep 2025, 05:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-05T05:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243469",
+      "rendered": {
+        "scheduledAt": "23 Sep 2025, 05:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-23T05:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24346a",
+      "rendered": {
+        "scheduledAt": "27 Sep 2025, 06:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-27T06:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24346b",
+      "rendered": {
+        "scheduledAt": "8 Sep 2025, 07:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-08T07:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24346c",
+      "rendered": {
+        "scheduledAt": "22 Sep 2025, 10:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-22T10:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24346d",
+      "rendered": {
+        "scheduledAt": "16 Sep 2025, 07:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-16T07:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24346e",
+      "rendered": {
+        "scheduledAt": "13 Sep 2025, 06:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-13T06:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24346f",
+      "rendered": {
+        "scheduledAt": "4 Sep 2025, 10:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-04T10:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243470",
+      "rendered": {
+        "scheduledAt": "15 Sep 2025, 11:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-15T11:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243471",
+      "rendered": {
+        "scheduledAt": "22 Sep 2025, 10:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-22T10:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243472",
+      "rendered": {
+        "scheduledAt": "4 Sep 2025, 09:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-04T09:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243473",
+      "rendered": {
+        "scheduledAt": "27 Sep 2025, 10:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-09-27T10:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243474",
+      "rendered": {
+        "scheduledAt": "28 Oct 2025, 04:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-28T04:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243475",
+      "rendered": {
+        "scheduledAt": "7 Oct 2025, 11:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-07T11:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243476",
+      "rendered": {
+        "scheduledAt": "15 Oct 2025, 05:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-15T05:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243477",
+      "rendered": {
+        "scheduledAt": "1 Oct 2025, 03:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-01T03:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243478",
+      "rendered": {
+        "scheduledAt": "13 Oct 2025, 12:15 PM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-13T12:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243479",
+      "rendered": {
+        "scheduledAt": "20 Oct 2025, 04:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-20T04:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24347a",
+      "rendered": {
+        "scheduledAt": "11 Oct 2025, 03:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-11T03:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24347b",
+      "rendered": {
+        "scheduledAt": "28 Oct 2025, 11:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-28T11:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24347c",
+      "rendered": {
+        "scheduledAt": "1 Oct 2025, 11:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-01T11:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24347d",
+      "rendered": {
+        "scheduledAt": "11 Oct 2025, 04:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-11T04:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24347e",
+      "rendered": {
+        "scheduledAt": "6 Oct 2025, 10:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-06T10:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24347f",
+      "rendered": {
+        "scheduledAt": "18 Oct 2025, 08:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-18T08:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243480",
+      "rendered": {
+        "scheduledAt": "9 Oct 2025, 05:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-09T05:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243481",
+      "rendered": {
+        "scheduledAt": "24 Oct 2025, 12:00 PM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-24T12:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243482",
+      "rendered": {
+        "scheduledAt": "4 Oct 2025, 07:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-04T07:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243483",
+      "rendered": {
+        "scheduledAt": "17 Oct 2025, 03:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-17T03:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243484",
+      "rendered": {
+        "scheduledAt": "3 Oct 2025, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-03T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243485",
+      "rendered": {
+        "scheduledAt": "22 Oct 2025, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-22T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243486",
+      "rendered": {
+        "scheduledAt": "7 Oct 2025, 04:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-07T04:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243487",
+      "rendered": {
+        "scheduledAt": "27 Oct 2025, 07:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-27T07:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243488",
+      "rendered": {
+        "scheduledAt": "20 Oct 2025, 04:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-20T04:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243489",
+      "rendered": {
+        "scheduledAt": "11 Oct 2025, 08:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-11T08:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24348a",
+      "rendered": {
+        "scheduledAt": "13 Oct 2025, 05:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-13T05:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24348b",
+      "rendered": {
+        "scheduledAt": "21 Oct 2025, 05:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-21T05:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24348c",
+      "rendered": {
+        "scheduledAt": "21 Oct 2025, 09:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-21T09:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24348d",
+      "rendered": {
+        "scheduledAt": "6 Oct 2025, 06:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-06T06:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24348e",
+      "rendered": {
+        "scheduledAt": "9 Oct 2025, 07:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-09T07:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24348f",
+      "rendered": {
+        "scheduledAt": "6 Oct 2025, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-06T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243490",
+      "rendered": {
+        "scheduledAt": "4 Oct 2025, 06:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-04T06:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243491",
+      "rendered": {
+        "scheduledAt": "8 Oct 2025, 08:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-10-08T08:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243492",
+      "rendered": {
+        "scheduledAt": "12 Nov 2025, 11:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-12T11:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243493",
+      "rendered": {
+        "scheduledAt": "5 Nov 2025, 09:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-05T09:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243494",
+      "rendered": {
+        "scheduledAt": "24 Nov 2025, 08:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-24T08:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243495",
+      "rendered": {
+        "scheduledAt": "17 Nov 2025, 05:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-17T05:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243496",
+      "rendered": {
+        "scheduledAt": "22 Nov 2025, 09:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-22T09:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243497",
+      "rendered": {
+        "scheduledAt": "13 Nov 2025, 09:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-13T09:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243498",
+      "rendered": {
+        "scheduledAt": "7 Nov 2025, 07:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-07T07:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243499",
+      "rendered": {
+        "scheduledAt": "22 Nov 2025, 08:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-22T08:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24349a",
+      "rendered": {
+        "scheduledAt": "6 Nov 2025, 11:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-06T11:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24349b",
+      "rendered": {
+        "scheduledAt": "26 Nov 2025, 07:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-26T07:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24349c",
+      "rendered": {
+        "scheduledAt": "17 Nov 2025, 06:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-17T06:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24349d",
+      "rendered": {
+        "scheduledAt": "26 Nov 2025, 06:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-26T06:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24349e",
+      "rendered": {
+        "scheduledAt": "17 Nov 2025, 04:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-17T04:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24349f",
+      "rendered": {
+        "scheduledAt": "17 Nov 2025, 09:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-17T09:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434a0",
+      "rendered": {
+        "scheduledAt": "11 Nov 2025, 03:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-11T03:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434a1",
+      "rendered": {
+        "scheduledAt": "5 Nov 2025, 11:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-05T11:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434a2",
+      "rendered": {
+        "scheduledAt": "15 Nov 2025, 08:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-15T08:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434a3",
+      "rendered": {
+        "scheduledAt": "12 Nov 2025, 07:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-12T07:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434a4",
+      "rendered": {
+        "scheduledAt": "13 Nov 2025, 11:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-13T11:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434a5",
+      "rendered": {
+        "scheduledAt": "1 Nov 2025, 06:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-01T06:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434a6",
+      "rendered": {
+        "scheduledAt": "3 Nov 2025, 07:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-03T07:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434a7",
+      "rendered": {
+        "scheduledAt": "20 Nov 2025, 04:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-20T04:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434a8",
+      "rendered": {
+        "scheduledAt": "6 Nov 2025, 04:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-06T04:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434a9",
+      "rendered": {
+        "scheduledAt": "10 Nov 2025, 08:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-10T08:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434aa",
+      "rendered": {
+        "scheduledAt": "21 Nov 2025, 11:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-21T11:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ab",
+      "rendered": {
+        "scheduledAt": "14 Nov 2025, 08:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-14T08:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ac",
+      "rendered": {
+        "scheduledAt": "18 Nov 2025, 04:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-18T04:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ad",
+      "rendered": {
+        "scheduledAt": "17 Nov 2025, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-17T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ae",
+      "rendered": {
+        "scheduledAt": "10 Nov 2025, 06:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-10T06:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434af",
+      "rendered": {
+        "scheduledAt": "14 Nov 2025, 06:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-14T06:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434b0",
+      "rendered": {
+        "scheduledAt": "7 Nov 2025, 08:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-07T08:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434b1",
+      "rendered": {
+        "scheduledAt": "6 Nov 2025, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-06T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434b2",
+      "rendered": {
+        "scheduledAt": "10 Nov 2025, 07:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-10T07:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434b3",
+      "rendered": {
+        "scheduledAt": "11 Nov 2025, 07:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-11T07:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434b4",
+      "rendered": {
+        "scheduledAt": "28 Nov 2025, 08:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-28T08:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434b5",
+      "rendered": {
+        "scheduledAt": "12 Nov 2025, 08:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-12T08:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434b6",
+      "rendered": {
+        "scheduledAt": "17 Nov 2025, 05:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-17T05:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434b7",
+      "rendered": {
+        "scheduledAt": "10 Nov 2025, 05:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-10T05:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434b8",
+      "rendered": {
+        "scheduledAt": "6 Nov 2025, 12:15 PM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-06T12:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434b9",
+      "rendered": {
+        "scheduledAt": "21 Nov 2025, 08:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-21T08:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ba",
+      "rendered": {
+        "scheduledAt": "27 Nov 2025, 08:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-27T08:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434bb",
+      "rendered": {
+        "scheduledAt": "3 Nov 2025, 12:15 PM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-03T12:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434bc",
+      "rendered": {
+        "scheduledAt": "24 Nov 2025, 06:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-24T06:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434bd",
+      "rendered": {
+        "scheduledAt": "18 Nov 2025, 10:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-18T10:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434be",
+      "rendered": {
+        "scheduledAt": "27 Nov 2025, 08:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-27T08:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434bf",
+      "rendered": {
+        "scheduledAt": "22 Nov 2025, 09:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-22T09:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434c0",
+      "rendered": {
+        "scheduledAt": "10 Nov 2025, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-10T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434c1",
+      "rendered": {
+        "scheduledAt": "11 Nov 2025, 04:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-11T04:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434c2",
+      "rendered": {
+        "scheduledAt": "6 Nov 2025, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-06T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434c3",
+      "rendered": {
+        "scheduledAt": "14 Nov 2025, 03:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-14T03:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434c4",
+      "rendered": {
+        "scheduledAt": "22 Nov 2025, 03:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-22T03:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434c5",
+      "rendered": {
+        "scheduledAt": "7 Nov 2025, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-07T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434c6",
+      "rendered": {
+        "scheduledAt": "4 Nov 2025, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-04T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434c7",
+      "rendered": {
+        "scheduledAt": "12 Nov 2025, 06:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-12T06:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434c8",
+      "rendered": {
+        "scheduledAt": "12 Nov 2025, 06:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-12T06:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434c9",
+      "rendered": {
+        "scheduledAt": "4 Nov 2025, 11:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-04T11:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ca",
+      "rendered": {
+        "scheduledAt": "15 Nov 2025, 04:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-15T04:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434cb",
+      "rendered": {
+        "scheduledAt": "10 Nov 2025, 04:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-10T04:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434cc",
+      "rendered": {
+        "scheduledAt": "8 Nov 2025, 03:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-08T03:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434cd",
+      "rendered": {
+        "scheduledAt": "10 Nov 2025, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-11-10T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ce",
+      "rendered": {
+        "scheduledAt": "13 Dec 2025, 06:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-13T06:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434cf",
+      "rendered": {
+        "scheduledAt": "24 Dec 2025, 09:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-24T09:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434d0",
+      "rendered": {
+        "scheduledAt": "11 Dec 2025, 09:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-11T09:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434d1",
+      "rendered": {
+        "scheduledAt": "13 Dec 2025, 10:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-13T10:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434d2",
+      "rendered": {
+        "scheduledAt": "1 Dec 2025, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-01T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434d3",
+      "rendered": {
+        "scheduledAt": "29 Dec 2025, 07:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-29T07:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434d4",
+      "rendered": {
+        "scheduledAt": "9 Dec 2025, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-09T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434d5",
+      "rendered": {
+        "scheduledAt": "12 Dec 2025, 05:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-12T05:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434d6",
+      "rendered": {
+        "scheduledAt": "1 Dec 2025, 11:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-01T11:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434d7",
+      "rendered": {
+        "scheduledAt": "13 Dec 2025, 10:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-13T10:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434d8",
+      "rendered": {
+        "scheduledAt": "19 Dec 2025, 05:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-19T05:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434d9",
+      "rendered": {
+        "scheduledAt": "18 Dec 2025, 05:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-18T05:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434da",
+      "rendered": {
+        "scheduledAt": "22 Dec 2025, 09:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-22T09:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434db",
+      "rendered": {
+        "scheduledAt": "1 Dec 2025, 05:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-01T05:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434dc",
+      "rendered": {
+        "scheduledAt": "18 Dec 2025, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-18T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434dd",
+      "rendered": {
+        "scheduledAt": "10 Dec 2025, 11:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-10T11:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434de",
+      "rendered": {
+        "scheduledAt": "3 Dec 2025, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-03T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434df",
+      "rendered": {
+        "scheduledAt": "4 Dec 2025, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-04T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434e0",
+      "rendered": {
+        "scheduledAt": "1 Dec 2025, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-01T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434e1",
+      "rendered": {
+        "scheduledAt": "19 Dec 2025, 05:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-19T05:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434e2",
+      "rendered": {
+        "scheduledAt": "16 Dec 2025, 12:15 PM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-16T12:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434e3",
+      "rendered": {
+        "scheduledAt": "11 Dec 2025, 06:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-11T06:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434e4",
+      "rendered": {
+        "scheduledAt": "29 Dec 2025, 06:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-29T06:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434e5",
+      "rendered": {
+        "scheduledAt": "8 Dec 2025, 12:15 PM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-08T12:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434e6",
+      "rendered": {
+        "scheduledAt": "23 Dec 2025, 06:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-23T06:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434e7",
+      "rendered": {
+        "scheduledAt": "19 Dec 2025, 04:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-19T04:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434e8",
+      "rendered": {
+        "scheduledAt": "20 Dec 2025, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-20T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434e9",
+      "rendered": {
+        "scheduledAt": "22 Dec 2025, 08:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-22T08:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ea",
+      "rendered": {
+        "scheduledAt": "6 Dec 2025, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-06T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434eb",
+      "rendered": {
+        "scheduledAt": "3 Dec 2025, 07:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-03T07:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ec",
+      "rendered": {
+        "scheduledAt": "5 Dec 2025, 08:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-05T08:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ed",
+      "rendered": {
+        "scheduledAt": "17 Dec 2025, 05:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-17T05:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ee",
+      "rendered": {
+        "scheduledAt": "8 Dec 2025, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-08T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ef",
+      "rendered": {
+        "scheduledAt": "22 Dec 2025, 09:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-22T09:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434f0",
+      "rendered": {
+        "scheduledAt": "19 Dec 2025, 11:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-19T11:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434f1",
+      "rendered": {
+        "scheduledAt": "26 Dec 2025, 11:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-26T11:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434f2",
+      "rendered": {
+        "scheduledAt": "11 Dec 2025, 04:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-11T04:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434f3",
+      "rendered": {
+        "scheduledAt": "19 Dec 2025, 10:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-19T10:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434f4",
+      "rendered": {
+        "scheduledAt": "27 Dec 2025, 06:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-27T06:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434f5",
+      "rendered": {
+        "scheduledAt": "3 Dec 2025, 08:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-03T08:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434f6",
+      "rendered": {
+        "scheduledAt": "12 Dec 2025, 10:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-12T10:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434f7",
+      "rendered": {
+        "scheduledAt": "22 Dec 2025, 09:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-22T09:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434f8",
+      "rendered": {
+        "scheduledAt": "22 Dec 2025, 05:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-22T05:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434f9",
+      "rendered": {
+        "scheduledAt": "4 Dec 2025, 09:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-04T09:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434fa",
+      "rendered": {
+        "scheduledAt": "5 Dec 2025, 08:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-05T08:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434fb",
+      "rendered": {
+        "scheduledAt": "15 Dec 2025, 10:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-15T10:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434fc",
+      "rendered": {
+        "scheduledAt": "20 Dec 2025, 07:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-20T07:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434fd",
+      "rendered": {
+        "scheduledAt": "4 Dec 2025, 05:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-04T05:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434fe",
+      "rendered": {
+        "scheduledAt": "17 Dec 2025, 12:15 PM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-17T12:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee2434ff",
+      "rendered": {
+        "scheduledAt": "15 Dec 2025, 08:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-15T08:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243500",
+      "rendered": {
+        "scheduledAt": "20 Dec 2025, 04:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-20T04:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243501",
+      "rendered": {
+        "scheduledAt": "22 Dec 2025, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-22T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243502",
+      "rendered": {
+        "scheduledAt": "11 Dec 2025, 07:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-11T07:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243503",
+      "rendered": {
+        "scheduledAt": "11 Dec 2025, 08:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-11T08:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243504",
+      "rendered": {
+        "scheduledAt": "22 Dec 2025, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-22T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243505",
+      "rendered": {
+        "scheduledAt": "16 Dec 2025, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-16T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243506",
+      "rendered": {
+        "scheduledAt": "2 Dec 2025, 06:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-02T06:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243507",
+      "rendered": {
+        "scheduledAt": "4 Dec 2025, 09:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-04T09:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243508",
+      "rendered": {
+        "scheduledAt": "19 Dec 2025, 07:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-19T07:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243509",
+      "rendered": {
+        "scheduledAt": "29 Dec 2025, 09:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2025-12-29T09:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24350a",
+      "rendered": {
+        "scheduledAt": "9 Jan 2026, 08:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-09T08:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24350b",
+      "rendered": {
+        "scheduledAt": "21 Jan 2026, 04:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-21T04:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24350c",
+      "rendered": {
+        "scheduledAt": "26 Jan 2026, 07:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-26T07:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24350d",
+      "rendered": {
+        "scheduledAt": "2 Jan 2026, 05:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-02T05:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24350e",
+      "rendered": {
+        "scheduledAt": "14 Jan 2026, 07:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-14T07:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24350f",
+      "rendered": {
+        "scheduledAt": "19 Jan 2026, 10:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-19T10:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243510",
+      "rendered": {
+        "scheduledAt": "23 Jan 2026, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-23T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243511",
+      "rendered": {
+        "scheduledAt": "14 Jan 2026, 04:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-14T04:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243512",
+      "rendered": {
+        "scheduledAt": "19 Jan 2026, 05:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-19T05:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243513",
+      "rendered": {
+        "scheduledAt": "20 Jan 2026, 11:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-20T11:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243514",
+      "rendered": {
+        "scheduledAt": "15 Jan 2026, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-15T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243515",
+      "rendered": {
+        "scheduledAt": "7 Jan 2026, 08:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-07T08:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243516",
+      "rendered": {
+        "scheduledAt": "2 Jan 2026, 03:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-02T03:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243517",
+      "rendered": {
+        "scheduledAt": "27 Jan 2026, 07:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-27T07:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243518",
+      "rendered": {
+        "scheduledAt": "12 Jan 2026, 06:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-12T06:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243519",
+      "rendered": {
+        "scheduledAt": "23 Jan 2026, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-23T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24351a",
+      "rendered": {
+        "scheduledAt": "23 Jan 2026, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-23T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24351b",
+      "rendered": {
+        "scheduledAt": "20 Jan 2026, 06:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-20T06:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24351c",
+      "rendered": {
+        "scheduledAt": "24 Jan 2026, 05:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-24T05:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24351d",
+      "rendered": {
+        "scheduledAt": "20 Jan 2026, 06:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-20T06:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24351e",
+      "rendered": {
+        "scheduledAt": "1 Jan 2026, 05:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-01T05:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24351f",
+      "rendered": {
+        "scheduledAt": "1 Jan 2026, 11:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-01T11:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243520",
+      "rendered": {
+        "scheduledAt": "8 Jan 2026, 10:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-08T10:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243521",
+      "rendered": {
+        "scheduledAt": "28 Jan 2026, 06:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-28T06:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243522",
+      "rendered": {
+        "scheduledAt": "12 Jan 2026, 10:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-12T10:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243523",
+      "rendered": {
+        "scheduledAt": "26 Jan 2026, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-26T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243524",
+      "rendered": {
+        "scheduledAt": "1 Jan 2026, 04:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-01T04:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243525",
+      "rendered": {
+        "scheduledAt": "19 Jan 2026, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-19T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243526",
+      "rendered": {
+        "scheduledAt": "27 Jan 2026, 12:15 PM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-27T12:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243527",
+      "rendered": {
+        "scheduledAt": "17 Jan 2026, 06:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-17T06:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243528",
+      "rendered": {
+        "scheduledAt": "17 Jan 2026, 06:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-17T06:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243529",
+      "rendered": {
+        "scheduledAt": "13 Jan 2026, 03:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-13T03:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24352a",
+      "rendered": {
+        "scheduledAt": "22 Jan 2026, 04:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-22T04:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24352b",
+      "rendered": {
+        "scheduledAt": "6 Jan 2026, 11:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-06T11:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24352c",
+      "rendered": {
+        "scheduledAt": "28 Jan 2026, 11:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-28T11:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24352d",
+      "rendered": {
+        "scheduledAt": "10 Jan 2026, 03:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-10T03:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24352e",
+      "rendered": {
+        "scheduledAt": "20 Jan 2026, 09:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-20T09:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24352f",
+      "rendered": {
+        "scheduledAt": "2 Jan 2026, 08:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-02T08:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243530",
+      "rendered": {
+        "scheduledAt": "21 Jan 2026, 03:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-21T03:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243531",
+      "rendered": {
+        "scheduledAt": "17 Jan 2026, 05:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-17T05:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243532",
+      "rendered": {
+        "scheduledAt": "9 Jan 2026, 05:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-09T05:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243533",
+      "rendered": {
+        "scheduledAt": "17 Jan 2026, 09:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-17T09:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243534",
+      "rendered": {
+        "scheduledAt": "17 Jan 2026, 09:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-17T09:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243535",
+      "rendered": {
+        "scheduledAt": "7 Jan 2026, 10:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-07T10:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243536",
+      "rendered": {
+        "scheduledAt": "24 Jan 2026, 10:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-24T10:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243537",
+      "rendered": {
+        "scheduledAt": "12 Jan 2026, 04:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-12T04:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243538",
+      "rendered": {
+        "scheduledAt": "22 Jan 2026, 05:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-22T05:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243539",
+      "rendered": {
+        "scheduledAt": "22 Jan 2026, 08:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-22T08:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24353a",
+      "rendered": {
+        "scheduledAt": "2 Jan 2026, 06:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-02T06:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24353b",
+      "rendered": {
+        "scheduledAt": "13 Jan 2026, 12:00 PM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-13T12:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24353c",
+      "rendered": {
+        "scheduledAt": "17 Jan 2026, 09:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-17T09:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24353d",
+      "rendered": {
+        "scheduledAt": "1 Jan 2026, 06:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-01T06:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24353e",
+      "rendered": {
+        "scheduledAt": "26 Jan 2026, 05:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-26T05:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24353f",
+      "rendered": {
+        "scheduledAt": "16 Jan 2026, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-16T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243540",
+      "rendered": {
+        "scheduledAt": "13 Jan 2026, 04:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-13T04:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243541",
+      "rendered": {
+        "scheduledAt": "3 Jan 2026, 09:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-03T09:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243542",
+      "rendered": {
+        "scheduledAt": "12 Jan 2026, 06:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-12T06:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243543",
+      "rendered": {
+        "scheduledAt": "13 Jan 2026, 08:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-13T08:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243544",
+      "rendered": {
+        "scheduledAt": "8 Jan 2026, 11:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-08T11:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243545",
+      "rendered": {
+        "scheduledAt": "26 Jan 2026, 04:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-01-26T04:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243546",
+      "rendered": {
+        "scheduledAt": "28 Feb 2026, 06:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-02-28T06:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243547",
+      "rendered": {
+        "scheduledAt": "4 Feb 2026, 08:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-02-04T08:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243548",
+      "rendered": {
+        "scheduledAt": "4 Feb 2026, 10:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-02-04T10:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee243549",
+      "rendered": {
+        "scheduledAt": "14 Feb 2026, 10:15 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-02-14T10:15:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24354a",
+      "rendered": {
+        "scheduledAt": "9 Feb 2026, 07:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-02-09T07:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24354b",
+      "rendered": {
+        "scheduledAt": "11 Feb 2026, 04:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-02-11T04:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24354c",
+      "rendered": {
+        "scheduledAt": "24 Feb 2026, 03:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-02-24T03:30:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24354d",
+      "rendered": {
+        "scheduledAt": "2 Feb 2026, 08:00 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-02-02T08:00:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24354e",
+      "rendered": {
+        "scheduledAt": "3 Feb 2026, 09:45 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-02-03T09:45:00.000Z"
+    },
+    {
+      "clinic": "jathar-dental",
+      "id": "69cfcaf15ed0c70cee24354f",
+      "rendered": {
+        "scheduledAt": "28 Feb 2026, 07:30 AM",
+        "originalScheduledAt": null
+      },
+      "rawScheduledAt": "2026-02-28T07:30:00.000Z"
+    }
+  ]
+}

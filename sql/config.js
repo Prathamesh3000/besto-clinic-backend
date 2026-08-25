@@ -99,8 +99,19 @@ function redact(uri) {
   return String(uri || '').replace(/\/\/([^:/@]+):([^@]+)@/, '//$1:***@');
 }
 
+/**
+ * Secret used to derive per-tenant PostgreSQL role passwords.
+ *
+ * Read here rather than at the point of use so every configuration value the
+ * migration tooling depends on is declared in one file -- the same reason
+ * src/config/env.js exists for the application. This module is the tooling's
+ * equivalent, and reading process.env directly from a script would defeat it.
+ */
+const tenantRoleSecret = process.env.SQL_TENANT_ROLE_SECRET || '';
+
 module.exports = {
   postgres,
+  tenantRoleSecret,
   mongo,
   hostOf,
   isLocalHost,
