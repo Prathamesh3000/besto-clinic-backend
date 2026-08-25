@@ -1,32 +1,64 @@
 'use strict';
 
+/**
+ * Roles — ported to the repository seam (Phase 0, deliverable 8).
+ *
+ * The second pilot, chosen to be different from `department` rather than more of
+ * the same: no `populate()`, no joins, but four callers outside the module and a
+ * cross-entity check (`deleteRole` counts users). That combination is what most
+ * of the remaining ~30 CRUD modules actually look like.
+ *
+ * On the retained `tenantSlug` arguments
+ * --------------------------------------
+ * Rule 2 of plan section 2.2 says tenant identity comes from request-scoped
+ * context, and inside this module it does. The exported signatures still *accept*
+ * a `tenantSlug` because four callers pass one — auth.controller, auth.service,
+ * globalSearch.service and staff.service — and some of them run outside a
+ * request, where there is no context to read.
+ *
+ * `withTenantIfNeeded` resolves that honestly: an already-bound context always
+ * wins, and the argument is used only when there is none. Honouring the argument
+ * over a bound context would be a deliberate cross-tenant read.
+ *
+ * These arguments should disappear as their callers are ported. Removing them now
+ * would mean porting five modules to land two, which is exactly the big-bang the
+ * plan's incremental cutover exists to avoid.
+ */
+
 const ApiError = require('../../utils/ApiError');
 const { parsePagination } = require('../../utils/pagination');
-const { getTenantConnection } = require('../../db/tenantConnectionManager');
 const { ROLE_PERMISSIONS } = require('../../config/permissions');
+const { repo, withTenantIfNeeded, currentTenant } = require('../../db/repository');
 
 // ── In-memory permission cache (per tenant) ──────────────
 const _permCache = new Map();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
+/** The cache is keyed by tenant, so it needs the slug whichever way it arrived. */
+const slugOf = (tenantSlug) => tenantSlug || (currentTenant() && currentTenant().slug) || null;
+
 /**
  * Resolve permissions for a role from the DB cache, falling back to static map.
  */
 async function getRolePermissions(role, tenantSlug) {
-  if (!tenantSlug) return ROLE_PERMISSIONS[role] || [];
+  const slug = slugOf(tenantSlug);
+  if (!slug) return ROLE_PERMISSIONS[role] || [];
 
   const now = Date.now();
-  let entry = _permCache.get(tenantSlug);
+  let entry = _permCache.get(slug);
 
   if (!entry || (now - entry.updatedAt) > CACHE_TTL) {
     try {
-      const conn = await getTenantConnection(tenantSlug);
-      const Role = conn.model('Role');
-      const roles = await Role.find({ isActive: true, deletedAt: null }).lean();
+      const { items } = await withTenantIfNeeded(slug, () => repo('Role').find(
+        { isActive: true },
+        { limit: 1000, sort: { displayOrder: 1 } },
+      ));
       entry = { updatedAt: now, roles: {} };
-      for (const r of roles) entry.roles[r.slug] = r.permissions;
-      _permCache.set(tenantSlug, entry);
+      for (const r of items) entry.roles[r.slug] = r.permissions;
+      _permCache.set(slug, entry);
     } catch {
+      // Permissions must resolve even when the database does not answer, or an
+      // outage becomes a lockout. The static map is the same fallback as before.
       return ROLE_PERMISSIONS[role] || [];
     }
   }
@@ -38,103 +70,91 @@ async function getRolePermissions(role, tenantSlug) {
  * Clear the permission cache for a tenant (call after role updates).
  */
 function clearPermissionCache(tenantSlug) {
-  if (tenantSlug) _permCache.delete(tenantSlug);
+  const slug = slugOf(tenantSlug);
+  if (slug) _permCache.delete(slug);
 }
 
 // ── CRUD ─────────────────────────────────────────────────
 
 async function listRoles(query, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Role = conn.model('Role');
   const { skip, limit, page, sort } = parsePagination(query);
 
-  const filter = { deletedAt: null };
-
+  const filter = {};
   if (query.group) filter.group = query.group;
   if (query.excludeGroup) {
     const groups = Array.isArray(query.excludeGroup) ? query.excludeGroup : [query.excludeGroup];
-    filter.group = { ...(filter.group || {}), $nin: groups };
+    filter.group = { $nin: groups };
   }
   if (query.isActive === 'true' || query.isActive === true) {
     filter.isActive = true;
   } else if (query.isActive === 'false' || query.isActive === false) {
     filter.isActive = false;
   }
-  if (query.search) {
-    const escaped = query.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    filter.$or = [
-      { name: { $regex: escaped, $options: 'i' } },
-      { slug: { $regex: escaped, $options: 'i' } },
-    ];
-  }
 
-  const [items, total] = await Promise.all([
-    Role.find(filter).sort(sort || { displayOrder: 1 }).skip(skip).limit(limit),
-    Role.countDocuments(filter),
-  ]);
+  const { items, total } = await withTenantIfNeeded(tenantSlug, () => repo('Role').find(filter, {
+    sort: sort || { displayOrder: 1 },
+    skip,
+    limit,
+    search: query.search,
+    searchFields: ['name', 'slug'],
+  }));
 
   return { items, total, page, limit };
 }
 
 async function getRoleBySlug(slug, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Role = conn.model('Role');
-  const role = await Role.findOne({ slug });
+  const role = await withTenantIfNeeded(tenantSlug, () => repo('Role').findOne({ slug }));
   if (!role) throw ApiError.notFound(`Role '${slug}' not found`);
   return role;
 }
 
 async function createRole(data, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Role = conn.model('Role');
+  return withTenantIfNeeded(tenantSlug, async () => {
+    const roles = repo('Role');
 
-  const existing = await Role.findOne({ slug: data.slug, deletedAt: null });
-  if (existing) throw ApiError.conflict(`Role with slug '${data.slug}' already exists`);
+    const existing = await roles.findOne({ slug: data.slug });
+    if (existing) throw ApiError.conflict(`Role with slug '${data.slug}' already exists`);
 
-  const role = await Role.create({ ...data, isSystem: false });
-  clearPermissionCache(tenantSlug);
-  return role;
+    const role = await roles.create({ ...data, isSystem: false });
+    clearPermissionCache(tenantSlug);
+    return role;
+  });
 }
 
 async function updateRole(slug, data, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Role = conn.model('Role');
+  return withTenantIfNeeded(tenantSlug, async () => {
+    const roles = repo('Role');
 
-  // Prevent slug changes
-  delete data.slug;
-  delete data.isSystem;
+    // Neither is patchable: the slug is the identity other records reference, and
+    // isSystem is what protects built-in roles from deletion below.
+    const patch = { ...data };
+    delete patch.slug;
+    delete patch.isSystem;
 
-  const role = await Role.findOneAndUpdate(
-    { slug, deletedAt: null },
-    data,
-    { new: true, runValidators: true },
-  );
-  if (!role) throw ApiError.notFound(`Role '${slug}' not found`);
+    const existing = await roles.findOne({ slug });
+    if (!existing) throw ApiError.notFound(`Role '${slug}' not found`);
 
-  clearPermissionCache(tenantSlug);
-  return role;
+    const role = await roles.updateById(existing._id, patch);
+    clearPermissionCache(tenantSlug);
+    return role;
+  });
 }
 
 async function deleteRole(slug, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Role = conn.model('Role');
+  return withTenantIfNeeded(tenantSlug, async () => {
+    const role = await repo('Role').findOne({ slug });
+    if (!role) throw ApiError.notFound(`Role '${slug}' not found`);
+    if (role.isSystem) throw ApiError.forbidden('Cannot delete a system role');
 
-  const role = await Role.findOne({ slug, deletedAt: null });
-  if (!role) throw ApiError.notFound(`Role '${slug}' not found`);
-  if (role.isSystem) throw ApiError.forbidden('Cannot delete a system role');
+    const usersWithRole = await repo('User').count({ role: slug });
+    if (usersWithRole > 0) {
+      throw ApiError.conflict(`Cannot delete role '${slug}' — ${usersWithRole} user(s) are assigned to it`);
+    }
 
-  // Check if any users are assigned this role
-  const User = conn.model('User');
-  const usersWithRole = await User.countDocuments({ role: slug, deletedAt: null });
-  if (usersWithRole > 0) {
-    throw ApiError.conflict(`Cannot delete role '${slug}' — ${usersWithRole} user(s) are assigned to it`);
-  }
-
-  role.deletedAt = new Date();
-  await role.save();
-
-  clearPermissionCache(tenantSlug);
-  return role;
+    const deleted = await repo('Role').softDeleteById(role._id);
+    clearPermissionCache(tenantSlug);
+    return deleted;
+  });
 }
 
 /**
@@ -145,19 +165,9 @@ async function deleteRole(slug, tenantSlug) {
  * @param {string[]} [opts.excludeSlugs]  - Specific slugs to exclude
  */
 async function getActiveRoleSlugs(tenantSlug, opts = {}) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Role = conn.model('Role');
-  const filter = { isActive: true, deletedAt: null };
-
-  if (opts.excludeGroups?.length) {
-    filter.group = { $nin: opts.excludeGroups };
-  }
-  if (opts.excludeSlugs?.length) {
-    filter.slug = { $nin: opts.excludeSlugs };
-  }
-
-  const roles = await Role.find(filter).lean().select('slug');
-  return roles.map((r) => r.slug);
+  const roles = await getActiveRolesMap(tenantSlug, opts);
+  const excluded = new Set(opts.excludeSlugs || []);
+  return roles.map((r) => r.slug).filter((s) => !excluded.has(s));
 }
 
 /**
@@ -167,12 +177,17 @@ async function getActiveRoleSlugs(tenantSlug, opts = {}) {
  * @param {string[]} [opts.excludeGroups] - Groups to exclude (e.g. ['clinical'])
  */
 async function getActiveRolesMap(tenantSlug, opts = {}) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Role = conn.model('Role');
-  const filter = { isActive: true, deletedAt: null };
-  if (opts.excludeGroups?.length) filter.group = { $nin: opts.excludeGroups };
-  const roles = await Role.find(filter).lean().select('slug name');
-  return roles;
+  const filter = { isActive: true };
+  if (opts.excludeGroups && opts.excludeGroups.length) filter.group = { $nin: opts.excludeGroups };
+
+  // A high limit rather than no limit: the repository paginates by design, and a
+  // clinic has tens of roles. If one ever had more than this, truncating silently
+  // would drop valid roles from staff validation — so the bound is explicit.
+  const { items } = await withTenantIfNeeded(tenantSlug, () => repo('Role').find(filter, {
+    limit: 1000,
+    sort: { displayOrder: 1 },
+  }));
+  return items;
 }
 
 module.exports = {

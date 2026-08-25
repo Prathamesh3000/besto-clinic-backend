@@ -79,7 +79,9 @@ const GATES = [
     id: 'CP-6', name: 'Pilot parity',
     verifies: 'Same API request via Mongo and SQL returns equivalent responses',
     cmd: ['node', 'scripts/sql/verify-parity.js'],
-    blockedBy: 'the repository seam and two ported modules (Phase 0, deliverables 7-8)',
+    // Drives both backends from one process: a remote Mongo cluster and a local
+    // PostgreSQL, so the network dominates the wall clock.
+    timeoutMs: 300_000,
   },
   {
     id: 'CP-7', name: 'No regression',

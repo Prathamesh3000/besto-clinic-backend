@@ -271,7 +271,7 @@ async function profileDatabase(conn, label, schemasByCollection, results) {
 
 // ── Reporting ──────────────────────────────────────────────────
 
-function writeSummary(results) {
+function writeSummary(results, write = true) {
   const ok = results.filter((r) => !r.skipped);
   const skipped = results.filter((r) => r.skipped);
 
@@ -378,9 +378,34 @@ function writeSummary(results) {
   lines.push('');
   lines.push('Full field-level detail is in the per-collection JSON files alongside this summary.');
 
-  fs.writeFileSync(path.join(OUT_DIR, 'SUMMARY.md'), lines.join('\n'), 'utf8');
+  if (write) fs.writeFileSync(path.join(OUT_DIR, 'SUMMARY.md'), lines.join('\n'), 'utf8');
 
   return { ok: ok.length, skipped: skipped.length, noSchema: noSchema.length, mixedFields: mixedFields.length, withOrphans: withOrphans.length };
+}
+
+/**
+ * Persist the per-collection JSON and the summary, or just compute the stats.
+ *
+ * `--verify` reads and reports; it does not write. A checkpoint must be
+ * re-runnable at any time without changing anything, and this one was not:
+ * running the full board re-profiled the database, which rewrote the files
+ * sql/schema/build.js derives the manifest from, which made the committed
+ * manifest stale, which failed CP-2 — a gate two steps away going red because an
+ * earlier gate mutated its inputs.
+ *
+ * Generating the profile is `npm run sql:profile`; checking it is
+ * `npm run sql:profile:verify`. Keeping those separate is what makes the board
+ * safe to run repeatedly.
+ */
+function writeOutput(results, write) {
+  if (write) {
+    fs.mkdirSync(OUT_DIR, { recursive: true });
+    for (const r of results) {
+      const safeName = `${r.scope.replace(/[^a-z0-9]+/gi, '_')}__${r.collection}.json`;
+      fs.writeFileSync(path.join(OUT_DIR, safeName), JSON.stringify(r, null, 2), 'utf8');
+    }
+  }
+  return writeSummary(results, write);
 }
 
 // ── Main ───────────────────────────────────────────────────────
@@ -399,7 +424,9 @@ function writeSummary(results) {
     process.exit(1);
   }
 
-  fs.mkdirSync(OUT_DIR, { recursive: true });
+  // Not under --verify: the gate creates nothing, so a check on a machine with no
+  // profile does not leave an empty directory behind implying there is one.
+  if (!options.verify) fs.mkdirSync(OUT_DIR, { recursive: true });
 
   process.stdout.write(`\nCP-1 — Data profiler\nSource: ${redact(mongo.uri)}\nRead preference: ${mongo.readPreference}\n`);
 
@@ -445,17 +472,15 @@ function writeSummary(results) {
 
   await platformConn.close();
 
-  // ── Write output ──
-  for (const r of results) {
-    const safeName = `${r.scope.replace(/[^a-z0-9]+/gi, '_')}__${r.collection}.json`;
-    fs.writeFileSync(path.join(OUT_DIR, safeName), JSON.stringify(r, null, 2), 'utf8');
-  }
-  const stats = writeSummary(results);
+  // ── Write output (skipped entirely under --verify; see writeOutput) ──
+  const stats = writeOutput(results, !options.verify);
 
   process.stdout.write('\n' + '─'.repeat(60) + '\n');
   process.stdout.write(`Profiled ${stats.ok} collections, skipped ${stats.skipped}\n`);
   process.stdout.write(`Mixed-type fields: ${stats.mixedFields} · Orphan refs: ${stats.withOrphans} · No schema: ${stats.noSchema}\n`);
-  process.stdout.write(`Output: sql/profile/SUMMARY.md\n`);
+  process.stdout.write(options.verify
+    ? 'Checked against the live database; sql/profile/ was not modified.\n'
+    : 'Output: sql/profile/SUMMARY.md\n');
 
   if (options.verify) {
     const passed = stats.skipped === 0;

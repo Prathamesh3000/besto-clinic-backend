@@ -4,6 +4,10 @@ Everything needed to run the MongoDB → PostgreSQL migration. See
 [`../SQL_MIGRATION_PLAN.md`](../SQL_MIGRATION_PLAN.md) for the plan this implements, and §4.1 of that
 document for the checkpoint gates.
 
+> **Start with [`MIGRATION_GUIDE.md`](MIGRATION_GUIDE.md).** It covers how the schema is generated,
+> every decision and its reasoning, how to port a module, what is still undecided, and what the
+> remaining phases involve. This file is setup and command reference only.
+
 ---
 
 ## First-time setup
@@ -103,8 +107,23 @@ Platform-wide data (clinics, plans, subscriptions) lives in the `platform` schem
 | Command | Gate | What it does |
 |---|---|---|
 | `npm run sql:check` | **CP-0** | Verifies Postgres is reachable, refuses production targets, confirms the Mongo source |
-| `npm run sql:profile` | — | Profiles real data — field presence, types, drift, orphaned refs |
-| `npm run sql:profile:verify` | **CP-1** | Same, but exits non-zero if any collection was skipped |
+| `npm run sql:profile` | — | Profiles real data — field presence, types, drift, orphaned refs. **Writes** `sql/profile/` |
+| `npm run sql:profile:verify` | **CP-1** | Checks the same, and **writes nothing** — a gate must not mutate what later gates read |
+| `npm run sql:schema` | — | Generates `schema/manifest.json` and `schema/SCHEMA.md` from the models + profile |
+| `npm run sql:schema:census` | — | Table/column/index/array counts without writing |
+| `npm run sql:schema:check` | — | Fails if the committed manifest is stale. For CI, next to lint |
+| `npm run sql:migrate` | — | Builds the platform schema |
+| `npm run sql:migrate:verify` | **CP-2** | up → down → up on a scratch schema, then compares the live one to the manifest |
+| `npm run sql:tenant:list` | — | Clinics and the schema/role each maps to |
+| `npm run sql:tenant:provision -- --all` | — | One schema, role and grant set per clinic |
+| `node sql/etl/load.js --all` | — | Loads platform + every clinic. Add `--dry-run` to convert without writing |
+| `npm run sql:test:isolation` | **CP-3** | Tenant A is refused a fully-qualified read of tenant B |
+| `npm run sql:verify:etl` | **CP-4** | Row parity, spot values, orphan reporting, idempotency |
+| `npm run sql:baseline:timezone` | — | Captures the pre-migration wall clock. Run **before** migrating appointments |
+| `npm run sql:verify:timezone` | **CP-5** | Every sampled appointment displays the same wall-clock time |
+| `npm run sql:test:parity` | **CP-6** | Ported modules return equivalent results from either database |
+| `npm run sql:test:regression` | **CP-7** | The Mongo application still boots and passes its suite |
+| `npm run sql:gates` | all | The board — every gate, one line each |
 
 ### Profiler options
 

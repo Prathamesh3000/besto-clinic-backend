@@ -25,7 +25,7 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 
 const config = require('../../sql/config');
-const manifest = require('../../sql/schema/manifest.json');
+
 const typeMap = require('../../sql/schema/typeMap');
 
 const ROOT = path.resolve(__dirname, '../..');
@@ -55,7 +55,7 @@ function connect() {
 }
 
 /** What the manifest says a scope should contain. */
-function expected(scope) {
+function expected(manifest, scope) {
   const tables = manifest.tables.filter((t) => t.scope === scope);
   const names = new Set();
   const indexes = new Set();
@@ -78,12 +78,33 @@ function expected(scope) {
   write('\nCP-2 — DDL\n');
   write('-'.repeat(64) + '\n\n');
 
-  // The manifest is the contract this gate checks against, so a stale one would
-  // let the gate pass against a schema nobody generated.
-  const check = spawnSync('node', ['sql/schema/build.js', '--check'], {
+  /**
+   * Rebuild the manifest, then check the database against it.
+   *
+   * This used to assert the committed manifest was already current, and that made
+   * the gate fail for a reason unrelated to the DDL: the manifest is derived from
+   * `sql/profile/`, which is generated output, so re-profiling against a database
+   * whose contents have changed rewrites it and the committed file is "stale"
+   * without a single schema decision having changed.
+   *
+   * What CP-2 is actually for is "the schema in the database matches the schema we
+   * generate". Rebuilding first makes that exactly what it measures — and it stays
+   * strict, because the up/down/up cycle below rebuilds the database from the
+   * freshly generated manifest, so a real change in the rules still shows up as a
+   * difference here.
+   *
+   * Checking that the *committed* manifest is current is a separate concern with
+   * its own command, `npm run sql:schema:check`, which belongs in CI next to lint
+   * rather than in a gate that talks to a live database.
+   */
+  const rebuild = spawnSync('node', ['sql/schema/build.js'], {
     cwd: ROOT, encoding: 'utf8', shell: process.platform === 'win32',
   });
-  record(check.status === 0, 'manifest.json is current', check.status === 0 ? null : 'run `npm run sql:schema`');
+  record(
+    rebuild.status === 0,
+    'manifest builds from the current schemas and profile',
+    rebuild.status === 0 ? null : (rebuild.stderr || '').trim().split('\n').slice(-2).join(' | ')
+  );
 
   // The full up -> down -> up cycle, run as its own process so this gate exercises
   // the same entry point an operator would.
@@ -97,9 +118,14 @@ function expected(scope) {
     cycle.status === 0 ? null : cycleOut.trim().split('\n').slice(-3).join(' | ')
   );
 
+  // Required only now, after the rebuild above, so the gate compares against the
+  // manifest it just generated rather than the one that was on disk at startup.
+  // eslint-disable-next-line global-require
+  const manifest = require('../../sql/schema/manifest.json');
+
   const knex = connect();
   try {
-    const exp = expected('platform');
+    const exp = expected(manifest, 'platform');
 
     const liveTables = new Set((await knex.raw(
       "select table_name from information_schema.tables where table_schema = ? and table_type = 'BASE TABLE'",
@@ -176,19 +202,43 @@ function expected(scope) {
     `, [PLATFORM_SCHEMA])).rows;
     const fkByName = Object.fromEntries(liveFks.map((r) => [r.conname, r.convalidated]));
 
+    /**
+     * The assertion is that every key EXISTS, not that its validated flag matches
+     * the manifest.
+     *
+     * This check originally failed the gate whenever the manifest said NOT VALID
+     * and the database said validated. That was backwards. The manifest's flag
+     * records what the *profile* found — a measurement taken on 13 Aug against a
+     * 27-clinic population — while the ETL restores each key validated whenever
+     * the data it actually loaded satisfies it. A key that came back fully
+     * enforced is the migration doing better than the profile predicted, and
+     * failing the gate for it would push whoever sees the red toward weakening a
+     * constraint the data supports.
+     *
+     * The direction that would be a real defect — a key marked valid while
+     * violations exist — cannot happen: PostgreSQL verifies the rows before it
+     * will validate a constraint. So a validated key is self-proving, and the
+     * improvement is reported rather than punished.
+     */
     const fkProblems = [];
+    const strengthened = [];
     for (const t of exp.tables) {
       for (const fk of t.foreignKeys) {
         if (!fk.referencesTable) continue;
         const name = typeMap.fitIdentifier(`${t.table}_${fk.column}_fkey`);
         if (!(name in fkByName)) { fkProblems.push(`${name} missing`); continue; }
-        if (fk.notValid && fkByName[name]) fkProblems.push(`${name} should be NOT VALID`);
+        if (fk.notValid && fkByName[name]) strengthened.push(name);
       }
     }
+    const notValidCount = liveFks.filter((r) => !r.convalidated).length;
     record(
       fkProblems.length === 0,
-      `all ${liveFks.length} platform foreign keys present, NOT VALID where the data requires it`,
-      fkProblems.length ? `${fkProblems.length}: ${fkProblems.slice(0, 4).join('; ')}` : null
+      `all ${liveFks.length} platform foreign keys present (${notValidCount} NOT VALID)`,
+      fkProblems.length
+        ? `${fkProblems.length}: ${fkProblems.slice(0, 4).join('; ')}`
+        : (strengthened.length
+          ? `${strengthened.length} validated beyond what the profile predicted: ${strengthened.join(', ')}`
+          : null)
     );
 
     /**

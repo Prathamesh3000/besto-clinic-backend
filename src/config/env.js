@@ -70,6 +70,27 @@ const schema = Joi.object({
   RATE_LIMIT_MAX: Joi.number().default(100),
   AUTH_RATE_LIMIT_WINDOW_MS: Joi.number().default(900_000),
   AUTH_RATE_LIMIT_MAX: Joi.number().default(15),
+
+  /**
+   * PostgreSQL migration (SQL_MIGRATION_PLAN.md).
+   *
+   * SQL_ENTITIES names the Mongoose models whose reads and writes are served
+   * from PostgreSQL instead of MongoDB — the per-entity cutover switch behind
+   * the repository seam. Empty means everything stays on Mongo, which is the
+   * default so that adding a table to the manifest cannot silently redirect
+   * live traffic. `*` routes everything to SQL and is for parity testing: it is
+   * only safe once every clinic has been through the ETL.
+   *
+   * These are declared here rather than read from process.env at the point of
+   * use so that a malformed value fails at boot, next to every other setting,
+   * rather than on the first request that happens to touch a ported module.
+   *
+   * Note the migration *tooling* under sql/ deliberately does NOT read this
+   * file — it must run on a machine that has a database and nothing else. This
+   * entry is for the application half of the seam only.
+   */
+  SQL_ENTITIES: Joi.string().allow('').default(''),
+  PG_POOL_MAX: Joi.number().default(10),
 }).unknown(true); // allow other process.env vars
 
 const { error, value } = schema.validate(process.env, {

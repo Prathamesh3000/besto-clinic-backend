@@ -1,5 +1,23 @@
 # CP-1 Findings — decisions required before DDL
 
+> **Updated 25 Aug 2026, after Phase 0 was implemented.** Three items below were
+> changed by running the migration rather than reading the profile. Each
+> correction is marked inline and the original wording is kept, because the point
+> of recording a finding is spoiled if it is quietly rewritten:
+>
+> - **F-2's recommendation was wrong** and is not what was built. See F-2.
+> - **F-3 cites a file that does not exist** (`src/modules/procedure/`). The fix
+>   was smaller than described. See F-3.
+> - **A seventh orphaned reference exists** that this report does not list:
+>   `notifications.recipient` → `users`, 2 rows, found by the ETL orphan audit.
+>   It needs a decision like the rest.
+>
+> Also measured since: the array count in the plan is **86**, not 237
+> (`npm run sql:schema:census`), and the platform database now holds **1** clinic
+> rather than the 27 profiled here — see
+> [`MIGRATION_GUIDE.md`](MIGRATION_GUIDE.md) §8.
+
+
 Produced by `npm run sql:profile` against live data, 13 Aug 2026.
 Source: platform DB + tenant `jathar-dental`. 74 collections profiled, 0 skipped.
 
@@ -73,7 +91,28 @@ nullable column matches the existing schema exactly. `ChatMessage.session` is th
 
 **Impact.** `chat_messages.session_id` cannot be `NOT NULL` against current data.
 
-**Decide:** make `chat_messages.session_id` nullable (recommended — do not fabricate sessions).
+**Decide:** ~~make `chat_messages.session_id` nullable (recommended — do not fabricate sessions).~~
+
+> ⚠ **Corrected 25 Aug 2026 — this recommendation was not followed, because the
+> evidence above does not support it.**
+>
+> `session` is present in **100%** of rows with **zero nulls** in both clinics
+> (77 and 2 documents). Nothing is missing. What is broken is that every value
+> points at a VideoSession that has since been deleted.
+>
+> Those are two different constraints. NOT NULL is satisfied by the data and loads
+> every row; it is the *foreign key* that cannot be enforced, and `NOT VALID` is
+> exactly the tool for that — new rows checked, existing damage tolerated,
+> promotable with `VALIDATE CONSTRAINT` once the rows are decided.
+>
+> Making the column nullable would permit future messages with no session at all,
+> which `required: true` has prevented since the model was written and which no
+> document has ever contained: a real loss of guarantee, accepted to solve a
+> problem in a different constraint that is already handled.
+>
+> The column is **NOT NULL** in the shipped schema. Recorded in
+> [`schema/overrides.js`](schema/overrides.js). The live defect below is
+> unaffected and still open.
 
 ⚠ **Raise separately: this looks like a live defect, not just a migration constraint.** Both clinics that
 have ever held chat data have lost 100% of their video sessions, and `videosessions` is empty in
@@ -99,8 +138,12 @@ exactly six values:
 **The fix is one constant matching data we have already measured** — no guessing, and no risk of declaring
 an enum the existing rows cannot satisfy. Two things make it slightly larger than a one-liner:
 
-1. There is a **second consumer** — [`procedure.validator.js:4`](../src/modules/procedure/procedure.validator.js#L4)
-   imports the same constant in three places. One definition fixes both; both need testing.
+1. ~~There is a **second consumer** — `procedure.validator.js:4` imports the same
+   constant in three places.~~
+   **Corrected 25 Aug 2026: there is no second consumer.** Neither
+   `src/modules/procedure/` nor `src/modules/reservation/` exists in the
+   repository, so the only files affected are the two models. The fix was
+   correspondingly smaller — a constant definition and nothing else.
 2. Defining the constant makes the model **loadable**, not the feature **live**. The `procedure/` module is
    still unmounted in `routes/index.js`, and `MaterialReservation` is excluded for related reasons.
    Migrating the table and re-enabling the feature are separate decisions.
@@ -111,6 +154,11 @@ Placement (Single)", ₹35,000, 9 required materials). Two are manual test entri
 
 **Recommendation: migrate it.** The fix is contained, the data is mostly real, and abandoning it writes off
 14 costed procedure templates with material lists. Relates to tracker `D-01`/`C-5`.
+
+> **Done, 25 Aug 2026.** `PROCEDURE_CATEGORY` and `RESERVATION_STATUS` are defined
+> in `src/config/constants.js`; the six category values are the exact set measured
+> above, not a guess. Both models load, and all 16 documents migrated. Neither
+> feature is mounted — that stays a separate decision.
 
 ### F-8 · Two platform-table orphans still undecided
 

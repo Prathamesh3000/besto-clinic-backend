@@ -17,20 +17,34 @@
 const manifest = require('../../schema/manifest.json');
 const ddl = require('../../schema/ddl');
 
-const SCHEMA = 'platform';
-
 /**
- * A platform table never references a tenant table -- clinics own their data and
- * the platform only records that a clinic exists. If a reference the other way
- * ever appears, resolving it to the platform schema here would silently point it
- * at the wrong table, so it fails loudly instead.
+ * Which schema this run builds.
+ *
+ * Normally `platform`. The CP-2 up -> down -> up cycle points it at a scratch
+ * schema instead, because `down` drops the schema and everything in it -- running
+ * that against the live one destroys the loaded platform data and, through
+ * CASCADE, every tenant foreign key that references it. That is exactly what
+ * happened the first time the full gate board ran: CP-2 passed in isolation,
+ * then wiped 185 rows and took CP-4 down with it.
  */
-function resolveSchema(scope) {
-  if (scope === 'platform' || scope === undefined || scope === null) return SCHEMA;
-  throw new Error(`platform migration cannot resolve a reference into scope "${scope}"`);
+function targetSchema(knex) {
+  return (knex.client.config && knex.client.config.platformSchema) || 'platform';
 }
 
 exports.up = async function up(knex) {
+  const SCHEMA = targetSchema(knex);
+
+  /**
+   * A platform table never references a tenant table -- clinics own their data
+   * and the platform only records that a clinic exists. If a reference the other
+   * way ever appears, resolving it to the platform schema here would silently
+   * point it at the wrong table, so it fails loudly instead.
+   */
+  const resolveSchema = (scope) => {
+    if (scope === 'platform' || scope === undefined || scope === null) return SCHEMA;
+    throw new Error(`platform migration cannot resolve a reference into scope "${scope}"`);
+  };
+
   for (const sql of ddl.createDomain()) await knex.raw(sql);
   for (const sql of ddl.createSchema(SCHEMA)) await knex.raw(sql);
 
@@ -57,6 +71,7 @@ exports.up = async function up(knex) {
  * clinic in the same database.
  */
 exports.down = async function down(knex) {
+  const SCHEMA = targetSchema(knex);
   for (const sql of ddl.dropSchema(SCHEMA)) await knex.raw(sql);
 
   const { rows } = await knex.raw(`

@@ -24,7 +24,7 @@ data wins — that is the rule the profiling step exists to enforce.
 | undeclared columns | 12 |
 | unsupported indexes | 2 |
 | ttl indexes | 6 |
-| unprofiled tables | 1 |
+| unprofiled tables | 0 |
 | load failures | 0 |
 
 ## Columns where the data overruled the schema
@@ -100,4 +100,3 @@ Statutory. billing.service.js:1094 unwinds $items to build the HSN-wise GST summ
 Nullability for these follows the Mongoose schema, because no data contradicted it. Safe
 while the collections are empty; re-check after profiling a clinic that uses them.
 
-- `webhook_events` (platform/WebhookEvent)

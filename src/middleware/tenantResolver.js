@@ -15,6 +15,7 @@
 
 const ApiError = require('../utils/ApiError');
 const { TENANT_HEADER } = require('../config/constants');
+const { runWithTenant } = require('../db/repository/context');
 
 function tenantResolver() {
   return (req, _res, next) => {
@@ -52,7 +53,28 @@ function tenantResolver() {
     }
 
     req.tenantSlug = sanitized;
-    next();
+
+    /**
+     * Bind the tenant for the rest of the request.
+     *
+     * Done here rather than as a separate middleware because this is the single
+     * place `req.tenantSlug` is assigned, so the two cannot disagree and no route
+     * can forget to mount it. Modules ported to the repository seam read tenant
+     * identity from this context instead of taking a `tenantSlug` argument —
+     * rule 2 of SQL_MIGRATION_PLAN.md section 2.2.
+     *
+     * It runs *after* the checks above, not before. The order is the whole point:
+     * tracker item C-01 was six routers resolving the tenant before
+     * authenticating, so `req.tenantSlug` became whatever the caller put in the
+     * header and the request was scoped correctly to the wrong clinic. Binding
+     * only once the JWT has been matched against the header means the context can
+     * never hold a tenant the caller was not entitled to.
+     *
+     * `next` is called *inside* the context so everything downstream — including
+     * the async continuation of every handler — sees it. Calling it outside would
+     * bind the context to this function and nothing else.
+     */
+    return runWithTenant({ slug: sanitized, clinicId: req.clinicId || null }, () => next());
   };
 }
 
