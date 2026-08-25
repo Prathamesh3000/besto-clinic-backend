@@ -48,3 +48,10 @@ Thumbs.db
 # ─── Deployment ───────────────────────────────────────────
 .vercel
 srs-deploy/.vercel
+
+# SQL migration profiler output
+sql/profile/
+
+# Editor / tooling backup files
+*.bak
+.env.bak-*
