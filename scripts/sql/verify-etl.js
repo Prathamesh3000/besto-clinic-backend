@@ -38,6 +38,7 @@ const config = require('../../sql/config');
 const manifest = require('../../sql/schema/manifest.json');
 const transform = require('../../sql/etl/transform');
 const { schemaFor } = require('../../sql/tenant/naming');
+const { REPAIRED_ROWS } = require('../../sql/lib/provenance');
 
 const ROOT = path.resolve(__dirname, '../..');
 const REPORT = path.join(ROOT, 'sql/reports/etl-last-run.json');
@@ -79,6 +80,7 @@ function pg() {
 async function countParity(knex, db, scope, schema) {
   const specs = manifest.tables.filter((t) => t.scope === scope);
   const mismatches = [];
+  const repairs = [];
   let compared = 0;
   let rows = 0;
 
@@ -86,11 +88,38 @@ async function countParity(knex, db, scope, schema) {
     const source = await db.collection(spec.collection).countDocuments();
     const { rows: r } = await knex.raw(`select count(*)::int as n from ${schema}.${spec.table}`);
     const target = r[0].n;
+
+    /**
+     * Subtract rows that were deliberately repaired, not migrated.
+     *
+     * CP-4 asks whether the ETL moved the data faithfully. A reconstructed
+     * VideoSession never existed in MongoDB, so counting it as a parity failure
+     * answers a different question and would leave this gate permanently red
+     * after a repair -- which in practice means someone stops reading it.
+     *
+     * Subtracted by their provenance marker rather than by skipping the table, so
+     * the rest of `video_sessions` is still compared and the exclusion is
+     * reported rather than silent.
+     */
+    let repaired = 0;
+    const repair = REPAIRED_ROWS.find((x) => x.table === spec.table);
+    if (repair) {
+      const { rows: rr } = await knex.raw(
+        `select count(*)::int as n from ${schema}.${spec.table} where ${repair.column} = ?`,
+        [repair.marker]
+      );
+      repaired = rr[0].n;
+      if (repaired > 0) repairs.push(`${spec.table}: ${repaired} reconstructed row(s) [${repair.finding}]`);
+    }
+
     compared += 1;
     rows += target;
-    if (source !== target) mismatches.push(`${spec.table}: mongo ${source} vs pg ${target}`);
+    if (source !== target - repaired) {
+      mismatches.push(`${spec.table}: mongo ${source} vs pg ${target}`
+        + (repaired ? ` (${repaired} reconstructed, ${target - repaired} migrated)` : ''));
+    }
   }
-  return { compared, rows, mismatches };
+  return { compared, rows, mismatches, repairs };
 }
 
 /**
@@ -242,11 +271,13 @@ async function snapshot(knex, schema) {
       await tenantClient.connect();
       const tdb = tenantClient.db();
 
-      const tParity = await countParity(knex, tdb, 'tenant', schema);
+        const tParity = await countParity(knex, tdb, 'tenant', schema);
       record(
         tParity.mismatches.length === 0,
         `${slug} row counts match across ${tParity.compared} collections`,
-        tParity.mismatches.length ? tParity.mismatches.join('; ') : `${tParity.rows} rows`
+        tParity.mismatches.length
+          ? tParity.mismatches.join('; ')
+          : `${tParity.rows} rows${tParity.repairs.length ? ` — excluding ${tParity.repairs.join('; ')}` : ''}`
       );
 
       const tSpot = await spotValues(knex, tdb, 'tenant', schema);

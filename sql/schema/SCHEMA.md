@@ -17,7 +17,7 @@ data wins — that is the rule the profiling step exists to enforce.
 | columns | 1581 |
 | indexes | 453 |
 | foreign keys | 194 |
-| foreign keys not valid | 10 |
+| foreign keys not valid | 7 |
 | foreign keys unresolved | 0 |
 | foreign keys cross schema | 0 |
 | relaxed not null | 0 |
@@ -44,11 +44,8 @@ one once its rows are decided.
 |---|---|---|---|---|---|
 | `subscriptions` | `clinic_id` | Clinic | F-8 | 1 of 2 clinic ids missing (50%) | PENDING — billing data. Needs a decision, not a default. |
 | `tenant_audit_logs` | `clinic_id` | Clinic | F-8 | 3 of 21 clinic ids missing (14.3%) | PENDING — audit trail. |
-| `appointments` | `patient_id` | Patient | — | 1 of undefined ids missing | validated after load |
-| `appointments` | `created_by_id` | User | — | 1 of undefined ids missing | validated after load |
 | `chat_messages` | `session_id` | VideoSession | F-2 | 79 rows across 2 clinics, 100% of references orphaned (column itself 100% present) | Column stays NOT NULL — see the correction in COLUMNS. FK NOT VALID pending the live-defect investigation. |
 | `emergency_sessions` | `video_session_id` | VideoSession | F-2 | 8 rows, 100% orphaned | Already optional in the schema; nullable column matches. |
-| `invoices` | `appointment_id` | Appointment | — | 1 of undefined ids missing | validated after load |
 | `patient_ledgers` | `patient_id` | Patient | F-1 | 1,564 of 2,191 rows in jathar-dental reference 320 patient ids that do not exist (71.4%) | PENDING — delete as seed debris (recommended) or reattach. The 627 sound rows load either way. |
 | `patient_ledgers` | `created_by_id` | User | F-1 | 3 of 11 user ids missing, same 1,564 rows | PENDING — follows F-1 |
 | `patient_ledgers` | `branch_id` | Branch | F-1 | 6 of 11 branch ids missing, same 1,564 rows | PENDING — follows F-1 |

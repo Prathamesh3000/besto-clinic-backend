@@ -7844,10 +7844,9 @@
       "collection": "accesslogs",
       "table": "access_logs",
       "profiled": true,
-      "documentsProfiled": 1700,
+      "documentsProfiled": 1694,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -7869,7 +7868,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 1700 documents",
+          "nullReason": "required, and present in 100% of 1694 documents",
           "enum": null,
           "ref": "Patient",
           "notes": []
@@ -7891,7 +7890,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 1700 documents",
+          "nullReason": "required, and present in 100% of 1694 documents",
           "enum": [
             "view",
             "download",
@@ -7911,7 +7910,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 1700 documents",
+          "nullReason": "required, and present in 100% of 1694 documents",
           "enum": [
             "profile",
             "appointment",
@@ -8154,10 +8153,9 @@
       "collection": "appointments",
       "table": "appointments",
       "profiled": true,
-      "documentsProfiled": 677,
+      "documentsProfiled": 603,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -8179,7 +8177,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 677 documents",
+          "nullReason": "required, and present in 100% of 603 documents",
           "enum": null,
           "ref": "Patient",
           "notes": []
@@ -8190,7 +8188,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 677 documents",
+          "nullReason": "required, and present in 100% of 603 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -8201,7 +8199,7 @@
           "type": "timestamptz",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 677 documents",
+          "nullReason": "required, and present in 100% of 603 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -8686,9 +8684,9 @@
           "referencesScope": "tenant",
           "crossSchema": false,
           "onDelete": "restrict",
-          "notValid": true,
+          "notValid": false,
           "finding": null,
-          "measured": "1 of undefined ids missing",
+          "measured": null,
           "decision": null
         },
         {
@@ -8782,9 +8780,9 @@
           "referencesScope": "tenant",
           "crossSchema": false,
           "onDelete": "set null",
-          "notValid": true,
+          "notValid": false,
           "finding": null,
-          "measured": "1 of undefined ids missing",
+          "measured": null,
           "decision": null
         }
       ],
@@ -8964,10 +8962,9 @@
       "collection": "branches",
       "table": "branches",
       "profiled": true,
-      "documentsProfiled": 11,
+      "documentsProfiled": 7,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -8989,7 +8986,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 11 documents",
+          "nullReason": "required, and present in 100% of 7 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -9000,7 +8997,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 11 documents",
+          "nullReason": "required, and present in 100% of 7 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -9247,8 +9244,7 @@
       "profiled": true,
       "documentsProfiled": 3,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -9571,8 +9567,7 @@
       "profiled": true,
       "documentsProfiled": 1217,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -10030,8 +10025,7 @@
       "profiled": true,
       "documentsProfiled": 5,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -10461,10 +10455,9 @@
       "collection": "chatmessages",
       "table": "chat_messages",
       "profiled": true,
-      "documentsProfiled": 79,
+      "documentsProfiled": 77,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -10497,7 +10490,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 79 documents",
+          "nullReason": "required, and present in 100% of 77 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -10508,7 +10501,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 79 documents",
+          "nullReason": "required, and present in 100% of 77 documents",
           "enum": [
             "doctor",
             "patient",
@@ -10553,7 +10546,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 79 documents",
+          "nullReason": "required, and present in 100% of 77 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -10815,8 +10808,7 @@
       "profiled": true,
       "documentsProfiled": 0,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -11072,8 +11064,7 @@
       "profiled": true,
       "documentsProfiled": 6,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -11311,8 +11302,7 @@
       "profiled": true,
       "documentsProfiled": 0,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -11719,8 +11709,7 @@
       "profiled": true,
       "documentsProfiled": 240,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -12038,10 +12027,9 @@
       "collection": "consultationrooms",
       "table": "consultation_rooms",
       "profiled": true,
-      "documentsProfiled": 28,
+      "documentsProfiled": 16,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -12063,7 +12051,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 28 documents",
+          "nullReason": "required, and present in 100% of 16 documents",
           "enum": null,
           "ref": "Branch",
           "notes": []
@@ -12074,7 +12062,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 28 documents",
+          "nullReason": "required, and present in 100% of 16 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -12085,7 +12073,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 28 documents",
+          "nullReason": "required, and present in 100% of 16 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -12392,8 +12380,7 @@
       "profiled": true,
       "documentsProfiled": 10,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -12771,8 +12758,7 @@
       "profiled": true,
       "documentsProfiled": 0,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -13179,10 +13165,9 @@
       "collection": "dentalscans",
       "table": "dental_scans",
       "profiled": true,
-      "documentsProfiled": 13,
+      "documentsProfiled": 12,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -13204,7 +13189,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 13 documents",
+          "nullReason": "required, and present in 100% of 12 documents",
           "enum": null,
           "ref": "Patient",
           "notes": []
@@ -13246,7 +13231,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": false,
-          "nullReason": "schema does not require it",
+          "nullReason": "schema does not require it; no data profiled",
           "enum": [
             "guided_3pos",
             "classic_5angle"
@@ -13274,7 +13259,7 @@
           "type": "boolean",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 13 documents",
+          "nullReason": "required, and present in 100% of 12 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -13296,7 +13281,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": false,
-          "nullReason": "schema does not require it",
+          "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
           "notes": []
@@ -13362,7 +13347,7 @@
           "type": "boolean",
           "typeSource": "schema",
           "notNull": false,
-          "nullReason": "schema does not require it",
+          "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
           "notes": []
@@ -13373,7 +13358,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": false,
-          "nullReason": "schema does not require it",
+          "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
           "notes": []
@@ -13629,8 +13614,7 @@
       "profiled": true,
       "documentsProfiled": 12,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -13971,10 +13955,9 @@
       "collection": "departments",
       "table": "departments",
       "profiled": true,
-      "documentsProfiled": 27,
+      "documentsProfiled": 17,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -13996,7 +13979,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 27 documents",
+          "nullReason": "required, and present in 100% of 17 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -14007,7 +13990,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 27 documents",
+          "nullReason": "required, and present in 100% of 17 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -14018,7 +14001,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 27 documents",
+          "nullReason": "required, and present in 100% of 17 documents",
           "enum": null,
           "ref": "Branch",
           "notes": []
@@ -14201,8 +14184,7 @@
       "profiled": true,
       "documentsProfiled": 0,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -14410,10 +14392,9 @@
       "collection": "doctorleaves",
       "table": "doctor_leaves",
       "profiled": true,
-      "documentsProfiled": 68,
+      "documentsProfiled": 32,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -14435,7 +14416,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 68 documents",
+          "nullReason": "required, and present in 100% of 32 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -14446,7 +14427,7 @@
           "type": "timestamptz",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 68 documents",
+          "nullReason": "required, and present in 100% of 32 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -14457,7 +14438,7 @@
           "type": "timestamptz",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 68 documents",
+          "nullReason": "required, and present in 100% of 32 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -14664,10 +14645,9 @@
       "collection": "doctorschedules",
       "table": "doctor_schedules",
       "profiled": true,
-      "documentsProfiled": 27,
+      "documentsProfiled": 19,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -14689,7 +14669,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 27 documents",
+          "nullReason": "required, and present in 100% of 19 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -14700,7 +14680,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 27 documents",
+          "nullReason": "required, and present in 100% of 19 documents",
           "enum": null,
           "ref": "Branch",
           "notes": []
@@ -14928,8 +14908,7 @@
       "profiled": true,
       "documentsProfiled": 15,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -15200,10 +15179,9 @@
       "collection": "emergencysessions",
       "table": "emergency_sessions",
       "profiled": true,
-      "documentsProfiled": 14,
+      "documentsProfiled": 13,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -15225,7 +15203,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 14 documents",
+          "nullReason": "required, and present in 100% of 13 documents",
           "enum": null,
           "ref": "Patient",
           "notes": []
@@ -15258,7 +15236,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 14 documents",
+          "nullReason": "required, and present in 100% of 13 documents",
           "enum": [
             "chat",
             "video"
@@ -15706,10 +15684,9 @@
       "collection": "financialauditlogs",
       "table": "financial_audit_logs",
       "profiled": true,
-      "documentsProfiled": 118,
+      "documentsProfiled": 112,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -15731,7 +15708,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 118 documents",
+          "nullReason": "required, and present in 100% of 112 documents",
           "enum": [
             "payment_created",
             "payment_completed",
@@ -15759,7 +15736,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 118 documents",
+          "nullReason": "required, and present in 100% of 112 documents",
           "enum": [
             "Payment",
             "Invoice",
@@ -15777,7 +15754,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 118 documents",
+          "nullReason": "required, and present in 100% of 112 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -15788,7 +15765,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 118 documents",
+          "nullReason": "required, and present in 100% of 112 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -16020,8 +15997,7 @@
       "profiled": true,
       "documentsProfiled": 8,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -16251,8 +16227,7 @@
       "profiled": true,
       "documentsProfiled": 10,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -16781,10 +16756,9 @@
       "collection": "insuranceproviders",
       "table": "insurance_providers",
       "profiled": true,
-      "documentsProfiled": 7,
+      "documentsProfiled": 3,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -16806,7 +16780,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 7 documents",
+          "nullReason": "required, and present in 100% of 3 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -16817,7 +16791,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 7 documents",
+          "nullReason": "required, and present in 100% of 3 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -17062,8 +17036,7 @@
       "profiled": true,
       "documentsProfiled": 0,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -17352,10 +17325,9 @@
       "collection": "inventoryitems",
       "table": "inventory_items",
       "profiled": true,
-      "documentsProfiled": 98,
+      "documentsProfiled": 53,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -17377,7 +17349,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 98 documents",
+          "nullReason": "required, and present in 100% of 53 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -17388,7 +17360,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 98 documents",
+          "nullReason": "required, and present in 100% of 53 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -17399,7 +17371,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 98 documents",
+          "nullReason": "required, and present in 100% of 53 documents",
           "enum": [
             "braces",
             "implants",
@@ -17617,7 +17589,7 @@
           "enum": null,
           "ref": null,
           "notes": [
-            "UNDECLARED: absent from the Mongoose schema, typed from data (intx94)"
+            "UNDECLARED: absent from the Mongoose schema, typed from data (intx49)"
           ]
         },
         {
@@ -17630,7 +17602,7 @@
           "enum": null,
           "ref": null,
           "notes": [
-            "UNDECLARED: absent from the Mongoose schema, typed from data (stringx28)"
+            "UNDECLARED: absent from the Mongoose schema, typed from data (stringx17)"
           ]
         },
         {
@@ -17643,7 +17615,7 @@
           "enum": null,
           "ref": null,
           "notes": [
-            "UNDECLARED: absent from the Mongoose schema, typed from data (stringx28)"
+            "UNDECLARED: absent from the Mongoose schema, typed from data (stringx17)"
           ]
         },
         {
@@ -17656,7 +17628,7 @@
           "enum": null,
           "ref": null,
           "notes": [
-            "UNDECLARED: absent from the Mongoose schema, typed from data (stringx27)"
+            "UNDECLARED: absent from the Mongoose schema, typed from data (stringx16)"
           ]
         },
         {
@@ -17669,7 +17641,7 @@
           "enum": null,
           "ref": null,
           "notes": [
-            "UNDECLARED: absent from the Mongoose schema, typed from data (intx27)"
+            "UNDECLARED: absent from the Mongoose schema, typed from data (intx16)"
           ]
         }
       ],
@@ -17840,10 +17812,9 @@
       "collection": "inventorytransactions",
       "table": "inventory_transactions",
       "profiled": true,
-      "documentsProfiled": 112,
+      "documentsProfiled": 65,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -17865,7 +17836,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 112 documents",
+          "nullReason": "required, and present in 100% of 65 documents",
           "enum": null,
           "ref": "InventoryItem",
           "notes": []
@@ -17876,7 +17847,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 112 documents",
+          "nullReason": "required, and present in 100% of 65 documents",
           "enum": [
             "stock_in",
             "stock_out",
@@ -17895,7 +17866,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 112 documents",
+          "nullReason": "required, and present in 100% of 65 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -17906,7 +17877,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 112 documents",
+          "nullReason": "required, and present in 100% of 65 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -17917,7 +17888,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 112 documents",
+          "nullReason": "required, and present in 100% of 65 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -18005,7 +17976,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 112 documents",
+          "nullReason": "required, and present in 100% of 65 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -18157,10 +18128,9 @@
       "collection": "invoices",
       "table": "invoices",
       "profiled": true,
-      "documentsProfiled": 485,
+      "documentsProfiled": 455,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -18182,7 +18152,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 485 documents",
+          "nullReason": "required, and present in 100% of 455 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -18193,7 +18163,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 485 documents",
+          "nullReason": "required, and present in 100% of 455 documents",
           "enum": null,
           "ref": "Patient",
           "notes": []
@@ -18237,7 +18207,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 485 documents",
+          "nullReason": "required, and present in 100% of 455 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -18270,7 +18240,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 485 documents",
+          "nullReason": "required, and present in 100% of 455 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -18602,7 +18572,7 @@
               "type": "text",
               "typeSource": "schema",
               "notNull": true,
-              "nullReason": "required, and present in 100% of 485 documents",
+              "nullReason": "required, and present in 100% of 455 documents",
               "enum": null,
               "ref": null,
               "notes": []
@@ -18624,7 +18594,7 @@
               "type": "numeric",
               "typeSource": "schema",
               "notNull": true,
-              "nullReason": "required, and present in 100% of 485 documents",
+              "nullReason": "required, and present in 100% of 455 documents",
               "enum": null,
               "ref": null,
               "notes": []
@@ -18657,7 +18627,7 @@
               "type": "numeric",
               "typeSource": "schema",
               "notNull": true,
-              "nullReason": "required, and present in 100% of 485 documents",
+              "nullReason": "required, and present in 100% of 455 documents",
               "enum": null,
               "ref": null,
               "notes": []
@@ -18686,7 +18656,7 @@
               "type": "objectid",
               "typeSource": "schema",
               "notNull": false,
-              "nullReason": "schema does not require it",
+              "nullReason": "schema does not require it; no data profiled",
               "enum": null,
               "ref": "ServiceItem",
               "notes": []
@@ -18793,9 +18763,9 @@
           "referencesScope": "tenant",
           "crossSchema": false,
           "onDelete": "set null",
-          "notValid": true,
+          "notValid": false,
           "finding": null,
-          "measured": "1 of undefined ids missing",
+          "measured": null,
           "decision": null
         },
         {
@@ -18948,8 +18918,7 @@
       "profiled": true,
       "documentsProfiled": 0,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -19282,8 +19251,7 @@
       "profiled": true,
       "documentsProfiled": 0,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -19630,10 +19598,9 @@
       "collection": "notifications",
       "table": "notifications",
       "profiled": true,
-      "documentsProfiled": 3196,
+      "documentsProfiled": 2000,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -19655,7 +19622,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 3196 documents",
+          "nullReason": "required, and present in 100% of 2000 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -19666,7 +19633,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 3196 documents",
+          "nullReason": "required, and present in 100% of 2000 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -19677,7 +19644,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 3196 documents",
+          "nullReason": "required, and present in 100% of 2000 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -19926,9 +19893,7 @@
         "Undeclared field metadata.followUpDate lives inside the metadata jsonb column — not emitted separately.",
         "Undeclared field metadata.previousDate lives inside the metadata jsonb column — not emitted separately.",
         "Undeclared field metadata.newDate lives inside the metadata jsonb column — not emitted separately.",
-        "Undeclared field metadata.rescheduledBy lives inside the metadata jsonb column — not emitted separately.",
-        "Undeclared field metadata.itemId lives inside the metadata jsonb column — not emitted separately.",
-        "Undeclared field metadata.procedures lives inside the metadata jsonb column — not emitted separately."
+        "Undeclared field metadata.rescheduledBy lives inside the metadata jsonb column — not emitted separately."
       ]
     },
     {
@@ -19937,10 +19902,9 @@
       "collection": "patients",
       "table": "patients",
       "profiled": true,
-      "documentsProfiled": 164,
+      "documentsProfiled": 137,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -19973,7 +19937,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 164 documents",
+          "nullReason": "required, and present in 100% of 137 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -19984,7 +19948,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 164 documents",
+          "nullReason": "required, and present in 100% of 137 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -20006,7 +19970,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 164 documents",
+          "nullReason": "required, and present in 100% of 137 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -20570,10 +20534,9 @@
       "collection": "patientledgers",
       "table": "patient_ledgers",
       "profiled": true,
-      "documentsProfiled": 2003,
+      "documentsProfiled": 2000,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -20595,7 +20558,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 2003 documents",
+          "nullReason": "required, and present in 100% of 2000 documents",
           "enum": null,
           "ref": "Patient",
           "notes": []
@@ -20606,7 +20569,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 2003 documents",
+          "nullReason": "required, and present in 100% of 2000 documents",
           "enum": [
             "debit",
             "credit"
@@ -20620,7 +20583,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 2003 documents",
+          "nullReason": "required, and present in 100% of 2000 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -20631,7 +20594,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 2003 documents",
+          "nullReason": "required, and present in 100% of 2000 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -20642,7 +20605,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 2003 documents",
+          "nullReason": "required, and present in 100% of 2000 documents",
           "enum": [
             "payment",
             "refund",
@@ -20686,7 +20649,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 2003 documents",
+          "nullReason": "required, and present in 100% of 2000 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -20855,10 +20818,9 @@
       "collection": "payments",
       "table": "payments",
       "profiled": true,
-      "documentsProfiled": 377,
+      "documentsProfiled": 360,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -20880,7 +20842,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 377 documents",
+          "nullReason": "required, and present in 100% of 360 documents",
           "enum": null,
           "ref": "Invoice",
           "notes": []
@@ -20891,7 +20853,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 377 documents",
+          "nullReason": "required, and present in 100% of 360 documents",
           "enum": null,
           "ref": "Patient",
           "notes": []
@@ -20902,7 +20864,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 377 documents",
+          "nullReason": "required, and present in 100% of 360 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -20913,7 +20875,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 377 documents",
+          "nullReason": "required, and present in 100% of 360 documents",
           "enum": [
             "cash",
             "upi",
@@ -21436,10 +21398,9 @@
       "collection": "payslips",
       "table": "payslips",
       "profiled": true,
-      "documentsProfiled": 208,
+      "documentsProfiled": 206,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -21461,7 +21422,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 208 documents",
+          "nullReason": "required, and present in 100% of 206 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -21483,7 +21444,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 208 documents",
+          "nullReason": "required, and present in 100% of 206 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -21494,7 +21455,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 208 documents",
+          "nullReason": "required, and present in 100% of 206 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -21505,7 +21466,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 208 documents",
+          "nullReason": "required, and present in 100% of 206 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -21530,7 +21491,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 208 documents",
+          "nullReason": "required, and present in 100% of 206 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -21566,7 +21527,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 208 documents",
+          "nullReason": "required, and present in 100% of 206 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -21844,10 +21805,9 @@
       "collection": "prescriptions",
       "table": "prescriptions",
       "profiled": true,
-      "documentsProfiled": 125,
+      "documentsProfiled": 111,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -21869,7 +21829,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 125 documents",
+          "nullReason": "required, and present in 100% of 111 documents",
           "enum": null,
           "ref": "Patient",
           "notes": []
@@ -21880,7 +21840,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 125 documents",
+          "nullReason": "required, and present in 100% of 111 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -21924,7 +21884,7 @@
           "type": "jsonb",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 125 documents",
+          "nullReason": "required, and present in 100% of 111 documents",
           "enum": null,
           "ref": null,
           "default": "'[]'::jsonb",
@@ -21964,7 +21924,7 @@
           "type": "timestamptz",
           "typeSource": "schema",
           "notNull": false,
-          "nullReason": "schema does not require it",
+          "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
           "notes": []
@@ -22238,8 +22198,7 @@
       "profiled": true,
       "documentsProfiled": 127,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -22691,10 +22650,9 @@
       "collection": "proceduretemplates",
       "table": "procedure_templates",
       "profiled": true,
-      "documentsProfiled": 30,
+      "documentsProfiled": 16,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -22716,7 +22674,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 30 documents",
+          "nullReason": "required, and present in 100% of 16 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -22727,7 +22685,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 30 documents",
+          "nullReason": "required, and present in 100% of 16 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -22738,7 +22696,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 30 documents",
+          "nullReason": "required, and present in 100% of 16 documents",
           "enum": [
             "cosmetic",
             "surgery",
@@ -22975,8 +22933,7 @@
       "profiled": true,
       "documentsProfiled": 4,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -23404,8 +23361,7 @@
       "profiled": true,
       "documentsProfiled": 34,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -23895,8 +23851,7 @@
       "profiled": true,
       "documentsProfiled": 51,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -24226,10 +24181,9 @@
       "collection": "roles",
       "table": "roles",
       "profiled": true,
-      "documentsProfiled": 25,
+      "documentsProfiled": 15,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -24251,7 +24205,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 25 documents",
+          "nullReason": "required, and present in 100% of 15 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -24262,7 +24216,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 25 documents",
+          "nullReason": "required, and present in 100% of 15 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -24284,7 +24238,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 25 documents",
+          "nullReason": "required, and present in 100% of 15 documents",
           "enum": [
             "admin",
             "clinical",
@@ -24459,10 +24413,9 @@
       "collection": "salarystructures",
       "table": "salary_structures",
       "profiled": true,
-      "documentsProfiled": 27,
+      "documentsProfiled": 25,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -24484,7 +24437,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 27 documents",
+          "nullReason": "required, and present in 100% of 25 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -24495,7 +24448,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 27 documents",
+          "nullReason": "required, and present in 100% of 25 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -24545,7 +24498,7 @@
           "type": "timestamptz",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 27 documents",
+          "nullReason": "required, and present in 100% of 25 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -24726,10 +24679,9 @@
       "collection": "serviceitems",
       "table": "service_items",
       "profiled": true,
-      "documentsProfiled": 48,
+      "documentsProfiled": 28,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -24751,7 +24703,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 48 documents",
+          "nullReason": "required, and present in 100% of 28 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -24762,7 +24714,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 48 documents",
+          "nullReason": "required, and present in 100% of 28 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -24773,7 +24725,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 48 documents",
+          "nullReason": "required, and present in 100% of 28 documents",
           "enum": [
             "treatment",
             "medicine",
@@ -24802,7 +24754,7 @@
           "type": "numeric",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 48 documents",
+          "nullReason": "required, and present in 100% of 28 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -25062,10 +25014,9 @@
       "collection": "sharetokens",
       "table": "share_tokens",
       "profiled": true,
-      "documentsProfiled": 6,
+      "documentsProfiled": 4,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -25087,7 +25038,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 6 documents",
+          "nullReason": "required, and present in 100% of 4 documents",
           "enum": null,
           "ref": "Patient",
           "notes": []
@@ -25098,7 +25049,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 6 documents",
+          "nullReason": "required, and present in 100% of 4 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -25109,7 +25060,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 6 documents",
+          "nullReason": "required, and present in 100% of 4 documents",
           "enum": [
             "treatment",
             "prescription",
@@ -25136,7 +25087,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 6 documents",
+          "nullReason": "required, and present in 100% of 4 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -25158,7 +25109,7 @@
           "type": "timestamptz",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 6 documents",
+          "nullReason": "required, and present in 100% of 4 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -25341,8 +25292,7 @@
       "profiled": true,
       "documentsProfiled": 0,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -25691,10 +25641,9 @@
       "collection": "treatmentrecords",
       "table": "treatment_records",
       "profiled": true,
-      "documentsProfiled": 411,
+      "documentsProfiled": 390,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -25716,7 +25665,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 411 documents",
+          "nullReason": "required, and present in 100% of 390 documents",
           "enum": null,
           "ref": "Patient",
           "notes": []
@@ -25727,7 +25676,7 @@
           "type": "objectid",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 411 documents",
+          "nullReason": "required, and present in 100% of 390 documents",
           "enum": null,
           "ref": "User",
           "notes": []
@@ -25749,7 +25698,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 411 documents",
+          "nullReason": "required, and present in 100% of 390 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -25760,7 +25709,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 411 documents",
+          "nullReason": "required, and present in 100% of 390 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -26423,10 +26372,9 @@
       "collection": "users",
       "table": "users",
       "profiled": true,
-      "documentsProfiled": 182,
+      "documentsProfiled": 159,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -26448,7 +26396,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 182 documents",
+          "nullReason": "required, and present in 100% of 159 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -26459,7 +26407,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 182 documents",
+          "nullReason": "required, and present in 100% of 159 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -26481,7 +26429,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 182 documents",
+          "nullReason": "required, and present in 100% of 159 documents",
           "enum": null,
           "ref": null,
           "notes": []
@@ -26492,7 +26440,7 @@
           "type": "text",
           "typeSource": "schema",
           "notNull": true,
-          "nullReason": "required, and present in 100% of 182 documents",
+          "nullReason": "required, and present in 100% of 159 documents",
           "enum": [
             "product_owner",
             "super_admin",
@@ -27024,8 +26972,7 @@
       "profiled": true,
       "documentsProfiled": 5,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {
@@ -27328,8 +27275,7 @@
       "profiled": true,
       "documentsProfiled": 0,
       "profiledScopes": [
-        "tenant:jathar-dental",
-        "tenant:smilecare-dental"
+        "tenant:jathar-dental"
       ],
       "columns": [
         {

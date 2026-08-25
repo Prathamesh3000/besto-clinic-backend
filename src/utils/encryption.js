@@ -54,4 +54,43 @@ function decrypt(payload, hexKey) {
   return decrypted;
 }
 
-module.exports = { encrypt, decrypt };
+/**
+ * Does this value look like an `iv:tag:ciphertext` payload?
+ *
+ * Shape-checked rather than guessed: three colon-separated parts, the first two
+ * hex and of exactly the right length. A MongoDB URI also contains colons
+ * (`mongodb+srv://user:pass@host`), so a looser test would misread a plaintext
+ * URI as ciphertext and fail to connect.
+ */
+function isEncrypted(value) {
+  if (typeof value !== 'string') return false;
+  const parts = value.split(':');
+  if (parts.length !== 3) return false;
+  const [iv, tag, ciphertext] = parts;
+  return new RegExp(`^[0-9a-f]{${IV_LENGTH * 2}}$`, 'i').test(iv)
+    && new RegExp(`^[0-9a-f]{${TAG_LENGTH * 2}}$`, 'i').test(tag)
+    && /^[0-9a-f]+$/i.test(ciphertext);
+}
+
+/**
+ * Decrypt if the value is encrypted, pass it through if it is not.
+ *
+ * The migration to encryption-at-rest cannot be atomic across a live system: the
+ * code that reads a value has to deploy before the data is rewritten, or every
+ * lookup fails in the window between the two. Accepting both shapes is what makes
+ * the rollout safe in either order, and it keeps working if a single record is
+ * ever restored from an older backup.
+ *
+ * This is deliberately NOT a silent fallback for a *failed* decryption — a value
+ * that looks encrypted and will not decrypt throws, because that means the key is
+ * wrong and returning the ciphertext as if it were a URI would produce a far more
+ * confusing failure somewhere else.
+ */
+function decryptIfEncrypted(value, hexKey) {
+  if (!isEncrypted(value)) return value;
+  return decrypt(value, hexKey);
+}
+
+module.exports = {
+  encrypt, decrypt, isEncrypted, decryptIfEncrypted,
+};

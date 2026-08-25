@@ -4,7 +4,11 @@
  * Tenant Connection Manager — lazy pool of per-tenant Mongoose connections.
  *
  * Architecture:
- *   1. Platform DB stores each clinic's encrypted dbUri.
+ *   1. Platform DB stores each clinic's dbUri, encrypted at rest with
+ *      AES-256-GCM (see scripts/encrypt-tenant-uris.js). Plaintext values are
+ *      still accepted on read so the code can deploy before the data is
+ *      rewritten — the reverse order would break every tenant lookup in the
+ *      window between the two.
  *   2. On first request for a tenant, we decrypt the URI, open a Mongoose
  *      connection, cache it in an in-memory Map, and register tenant models.
  *   3. Subsequent requests reuse the cached connection (no cold-start).
@@ -22,7 +26,7 @@
 
 const mongoose = require('mongoose');
 const logger = require('../utils/logger');
-const { encrypt, decrypt } = require('../utils/encryption');
+const { encrypt, decrypt, decryptIfEncrypted } = require('../utils/encryption');
 const { getRedis } = require('../config/redis');
 
 /** @type {Map<string, { conn: mongoose.Connection, lastUsed: number, circuitOpen: boolean }>} */
@@ -192,13 +196,27 @@ function getPoolSize() {
  */
 async function _resolveTenantUri(slug) {
   const env = require('../config/env');
-  const redis = getRedis();
   const cacheKey = `tenant:dbUri:${slug}`;
 
-  // Check Redis cache
-  const cachedEncrypted = await redis.get(cacheKey);
-  if (cachedEncrypted) {
-    return decrypt(cachedEncrypted, env.APP_ENCRYPTION_KEY);
+  // Redis is a cache here, not the source of truth — the platform DB below is.
+  // Treating it as mandatory meant every script and one-off task had to boot
+  // Redis first or fail with "Redis not initialized", even for a read.
+  let redis = null;
+  try {
+    redis = getRedis();
+  } catch (err) {
+    logger.warn('Tenant DB [%s]: Redis unavailable (%s) — resolving from the platform DB', slug, err.message);
+  }
+
+  if (redis) {
+    try {
+      const cachedEncrypted = await redis.get(cacheKey);
+      if (cachedEncrypted) {
+        return decrypt(cachedEncrypted, env.APP_ENCRYPTION_KEY);
+      }
+    } catch (err) {
+      logger.warn('Tenant DB [%s]: cache read failed (%s) — falling back', slug, err.message);
+    }
   }
 
   // Query platform DB — use .select('+dbUri') since dbUri has select: false.
@@ -211,11 +229,35 @@ async function _resolveTenantUri(slug) {
     throw new Error(`Tenant "${slug}" not found`);
   }
 
-  // Cache encrypted URI in Redis
-  const encrypted = encrypt(clinic.dbUri, env.APP_ENCRYPTION_KEY);
-  await redis.set(cacheKey, encrypted, 'EX', REDIS_URI_TTL);
+  /**
+   * Decrypt the stored value if it is encrypted.
+   *
+   * This line is the fix for the finding recorded as F-4 in sql/FINDINGS.md. The
+   * module header claimed "Platform DB stores each clinic's encrypted dbUri" and
+   * this function encrypted only the copy it wrote to the Redis cache, returning
+   * the database value untouched — so the field was plaintext at rest in all 27
+   * clinics, and `select: false` was the only protection actually in force. That
+   * guards against accidental exposure in an API response, not against anyone who
+   * can read the collection.
+   *
+   * `decryptIfEncrypted` accepts both shapes on purpose. Encryption-at-rest cannot
+   * be rolled out atomically across a live system: this code has to be deployed
+   * before `scripts/encrypt-tenant-uris.js` rewrites the data, or every tenant
+   * lookup fails in the window between the two.
+   */
+  const dbUri = decryptIfEncrypted(clinic.dbUri, env.APP_ENCRYPTION_KEY);
 
-  return clinic.dbUri;
+  // Cache encrypted URI in Redis when it is available — best effort.
+  if (redis) {
+    try {
+      const encrypted = encrypt(dbUri, env.APP_ENCRYPTION_KEY);
+      await redis.set(cacheKey, encrypted, 'EX', REDIS_URI_TTL);
+    } catch (err) {
+      logger.warn('Tenant DB [%s]: could not cache URI (%s)', slug, err.message);
+    }
+  }
+
+  return dbUri;
 }
 
 /**
