@@ -331,10 +331,41 @@ function mapIndex(tableName, spec, options, columnByPath, containerPaths = [], p
   // rejecting real rows.
   if (opts.partialFilterExpression) {
     const where = translatePartialFilter(opts.partialFilterExpression, resolve);
-    if (where) index.where = where;
-    else {
+    if (where) {
+      index.where = where;
+    } else if (opts.unique) {
+      /**
+       * A UNIQUE index whose predicate could not be translated must NOT be created.
+       *
+       * Dropping the WHERE clause from a unique index does not weaken it -- it
+       * *strengthens* it, over a larger set of rows than was ever intended, and it
+       * starts rejecting data that has always been legal. `cash_registers` is the
+       * worked example: Mongo declares unique on `branch` where
+       * `status = 'open' and deletedAt is null`, meaning "at most one *open*
+       * register per branch". Without the predicate it reads "at most one register
+       * per branch, ever", and the load failed on a branch with five.
+       *
+       * Refusing to emit it is the safe direction: a missing index costs
+       * performance and is caught by CP-2's manifest comparison, while a
+       * wrong unique constraint silently rejects valid writes in production.
+       */
+      return {
+        kind: 'unsupported',
+        name: typeMap.fitIdentifier(`${tableName}_${columns.map((c) => c.column).join('_')}_key`),
+        spec,
+        partialFilterExpression: opts.partialFilterExpression,
+        needsReview: true,
+        note: 'UNIQUE index with an untranslatable partial filter '
+          + `(${JSON.stringify(opts.partialFilterExpression)}). NOT created: without its predicate it `
+          + 'would reject rows that are legal today. Needs a hand-written partial index.',
+      };
+    } else {
+      // A non-unique partial index only narrows *which* rows are indexed, so
+      // building it over all of them is a superset -- correct, just larger.
       index.needsReview = true;
-      index.note = `partialFilterExpression not translated: ${JSON.stringify(opts.partialFilterExpression)}`;
+      index.note = 'Mongo partial filter not translated '
+        + `(${JSON.stringify(opts.partialFilterExpression)}); index built over all rows. `
+        + 'Correct but broader than declared.';
     }
   }
 
@@ -357,6 +388,12 @@ function translatePartialFilter(expr, resolve) {
   const clauses = [];
   for (const [field, cond] of Object.entries(expr)) {
     const col = resolve(field);
+
+    // `{ deletedAt: null }` is the soft-delete half of almost every partial index
+    // here, and it is a bare null rather than an operator object -- which is what
+    // the original object-only branch below skipped straight past.
+    if (cond === null) { clauses.push(`${col} is null`); continue; }
+
     if (cond && typeof cond === 'object') {
       if (cond.$type === 'string' || cond.$exists === true) { clauses.push(`${col} is not null`); continue; }
       if (cond.$gt !== undefined && typeof cond.$gt === 'number') { clauses.push(`${col} > ${cond.$gt}`); continue; }

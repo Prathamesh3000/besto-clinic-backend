@@ -25,7 +25,6 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 
 const config = require('../../sql/config');
-const knexfile = require('../../knexfile');
 const manifest = require('../../sql/schema/manifest.json');
 const typeMap = require('../../sql/schema/typeMap');
 

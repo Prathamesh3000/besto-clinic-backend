@@ -55,3 +55,6 @@ sql/profile/
 # Editor / tooling backup files
 *.bak
 .env.bak-*
+
+# reports/ holds ETL run reports, which quote source values.
+sql/reports/

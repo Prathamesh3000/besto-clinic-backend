@@ -45,27 +45,29 @@ const GATES = [
   },
   {
     id: 'CP-1', name: 'Data profile',
-    verifies: 'All 73 collections profiled — presence, types, orphaned refs',
+    verifies: 'All 74 collections profiled — presence, types, orphaned refs',
     cmd: ['node', 'scripts/sql/profile-mongo.js', '--verify'],
   },
   {
     id: 'CP-2', name: 'DDL',
-    verifies: 'Migrations up/down/up cleanly; 225 indexes; per-tenant roles',
+    verifies: 'Migrations up/down/up cleanly; every manifest object present; per-tenant roles',
     cmd: ['node', 'scripts/sql/verify-ddl.js'],
-    blockedBy: 'Knex migrations (Phase 0, deliverable 4)',
+    // Runs the full up -> down -> up cycle in a child process, then compares every
+    // table, index, column and constraint against the manifest.
+    timeoutMs: 300_000,
   },
   {
     id: 'CP-3', name: 'Isolation',
     verifies: "Tenant A's role cannot read tenant B — permission denied, not empty",
     cmd: ['node', 'scripts/sql/verify-isolation.js'],
-    blockedBy: 'per-tenant schemas and roles (Phase 0, deliverable 4)',
     critical: true,
   },
   {
     id: 'CP-4', name: 'ETL correctness',
     verifies: 'Row-count parity, FK integrity, spot values, idempotency',
     cmd: ['node', 'scripts/sql/verify-etl.js'],
-    blockedBy: 'the ETL script (Phase 0, deliverable 5)',
+    // Re-runs the entire load to prove idempotency, so it costs a full ETL pass.
+    timeoutMs: 900_000,
   },
   {
     id: 'CP-5', name: 'Timezone',
@@ -91,6 +93,12 @@ const GATES = [
  * Per-gate timeout. A gate that hangs — an unreachable database, a suite waiting
  * on a connection that will never open — must go red rather than stall the
  * board. "Still running after 5 minutes" is a failure with extra steps.
+ *
+ * Gates that legitimately take longer set their own `timeoutMs`. Getting this
+ * wrong is not harmless: at the default, CP-2 and CP-4 were reported FAILED on
+ * this board while both passed when run directly, which is worse than a slow
+ * board — a gate that reports red for a reason unrelated to what it tests
+ * teaches people to ignore it.
  */
 const DEFAULT_TIMEOUT_MS = 120_000;
 
@@ -167,8 +175,16 @@ function list() {
   process.stdout.write(`${results.length - red.length} of ${results.length} green\n`);
 
   if (red.length > 0) {
-    const blocked = red.filter((r) => r.gate.blockedBy);
-    const broken = red.filter((r) => !r.gate.blockedBy);
+    const timedOut = red.filter((r) => r.timedOut);
+    const blocked = red.filter((r) => !r.timedOut && r.gate.blockedBy);
+    const broken = red.filter((r) => !r.timedOut && !r.gate.blockedBy);
+
+    if (timedOut.length > 0) {
+      process.stdout.write('\nRed because they ran out of time, which says nothing about what they test:\n');
+      for (const r of timedOut) {
+        process.stdout.write(`  ${r.gate.id} — ${r.out}. Run it directly: ${r.gate.cmd.join(' ')}\n`);
+      }
+    }
 
     if (blocked.length > 0) {
       process.stdout.write('\nRed because the work they guard has not been done yet (expected):\n');

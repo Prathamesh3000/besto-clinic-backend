@@ -10,6 +10,25 @@ const mongoose = require('mongoose');
 
 let mongoServer;
 
+/**
+ * Integration tests get 30s per test and hook, not Jest's default 5s.
+ *
+ * These suites start an in-memory MongoDB, provision a tenant and open a real
+ * tenant connection inside `beforeEach`. That takes ~3.7s on an idle machine —
+ * comfortably under the default until the rest of the suite is running beside it,
+ * at which point it crosses 5s and `patientScope.test.js` fails with
+ * "Exceeded timeout of 5000 ms for a hook" while passing in isolation.
+ *
+ * That flakiness is worth fixing rather than tolerating, because CP-7 is the gate
+ * asserting the migration has not degraded the running product. A gate that goes
+ * red for reasons unrelated to what it tests trains people to ignore it, and this
+ * one is the only thing watching the live application.
+ *
+ * This applies only to the integration project — `setupFilesAfterEach` is not
+ * loaded for unit tests, which keep the strict default.
+ */
+jest.setTimeout(30_000);
+
 beforeAll(async () => {
   // In-memory MongoDB for isolated tests
   mongoServer = await MongoMemoryServer.create();

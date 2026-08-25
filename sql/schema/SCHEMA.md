@@ -22,7 +22,7 @@ data wins — that is the rule the profiling step exists to enforce.
 | foreign keys cross schema | 0 |
 | relaxed not null | 0 |
 | undeclared columns | 12 |
-| unsupported indexes | 5 |
+| unsupported indexes | 2 |
 | ttl indexes | 6 |
 | unprofiled tables | 1 |
 | load failures | 0 |
@@ -85,11 +85,8 @@ Statutory. billing.service.js:1094 unwinds $items to build the HSN-wise GST summ
 | `prescription_scans` | `prescription_scans_expires_at_idx` | Mongo TTL index (expireAfterSeconds=0). PostgreSQL has no TTL; this needs a scheduled delete job. Recorded so the expiry behaviour is not lost. |
 | `webhook_events` | `webhook_events_processed_at_idx` | Mongo TTL index (expireAfterSeconds=7776000). PostgreSQL has no TTL; this needs a scheduled delete job. Recorded so the expiry behaviour is not lost. |
 | `appointments` | `appointments_reminders_gin_idx` | Mongo indexed "reminders.status" inside the reminders array. GIN over the whole jsonb column supports the containment query the port must use; a btree on an extracted key cannot serve "any element matches". |
-| `cash_registers` | `cash_registers_branch_id_key` | partialFilterExpression not translated: {"status":"open","deletedAt":null} |
 | `consents` | `consents_expires_at_idx` | Mongo TTL index (expireAfterSeconds=0). PostgreSQL has no TTL; this needs a scheduled delete job. Recorded so the expiry behaviour is not lost. |
 | `dental_scan_results` | `dental_scan_results_observations_gin_idx` | Mongo indexed "observations.type" inside the observations array. GIN over the whole jsonb column supports the containment query the port must use; a btree on an extracted key cannot serve "any element matches". |
-| `doctor_schedules` | `doctor_schedules_doctor_id_branch_id_key` | partialFilterExpression not translated: {"isActive":true,"deletedAt":null} |
-| `doctor_schedule_overrides` | `doctor_schedule_overrides_doctor_id_branch_id_date_key` | partialFilterExpression not translated: {"deletedAt":null} |
 | `inventory_items` | `inventory_items_name_description_fts_idx` | Mongo text index -> GIN over to_tsvector('simple', ...). Ranking behaviour differs; queries must be ported, not just the index. |
 | `notifications` | `notifications_expires_at_idx` | Mongo TTL index (expireAfterSeconds=0). PostgreSQL has no TTL; this needs a scheduled delete job. Recorded so the expiry behaviour is not lost. |
 | `patients` | `patients_name_email_fts_idx` | Mongo text index -> GIN over to_tsvector('simple', ...). Ranking behaviour differs; queries must be ported, not just the index. |

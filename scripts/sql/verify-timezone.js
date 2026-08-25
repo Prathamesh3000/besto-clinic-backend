@@ -277,11 +277,29 @@ async function verifyAgainstBaseline(helpers) {
     const isTimestamptz = dataType === 'timestamp with time zone';
 
     if (isTimestamptz) {
+      /**
+       * This warning used to predict that `timestamptz` WOULD fail the gate and
+       * that the fix was `timestamp without time zone`. The gate then measured
+       * 250 of 250 appointments rendering identically through it, so the
+       * prediction was wrong and has been corrected rather than left standing.
+       *
+       * Why it holds: node-postgres returns a `timestamptz` as a JavaScript Date
+       * carrying the same instant Mongo stored, and `fakeUtcTime` formats in UTC.
+       * The wall clock survives because both ends agree to read the instant as
+       * UTC — exactly as they did before the migration.
+       *
+       * The underlying risk is real but narrower than "this type shifts it". It
+       * bites only when **PostgreSQL itself** formats the value — `::text`, a
+       * `to_char`, a psql session, a BI tool — because that renders through
+       * `TimeZone` and shows local time. So: read this column through the driver,
+       * never let SQL format it for display.
+       */
       process.stdout.write(
-        '\n  ! scheduled_at is "timestamp with time zone".\n'
-        + '    The stored value is a wall clock, not an instant, so this type will render it\n'
-        + '    through the session timezone and shift it. Expect this gate to fail below;\n'
-        + '    the fix is "timestamp without time zone".\n',
+        '\n  note: scheduled_at is "timestamp with time zone".\n'
+        + '    The wall clock survives, because the driver returns the instant and the app\n'
+        + '    renders it as UTC — the comparison below is the proof, not this note.\n'
+        + '    The narrower risk: anything that lets PostgreSQL format the value (::text,\n'
+        + '    to_char, psql, a BI tool) renders it through the session timezone instead.\n',
       );
     }
 
@@ -297,9 +315,15 @@ async function verifyAgainstBaseline(helpers) {
 
     for (const [clinic, entries] of byClinic) {
       const ids = entries.map((e) => e.id);
+      // Keyed on `id`, which holds the original Mongo ObjectId.
+      //
+      // This gate was written before the schema existed and guessed at a separate
+      // `mongo_id` column. The schema instead preserves `_id` as the primary key,
+      // so there is no surrogate key to join on — and preserving it is what lets
+      // this comparison identify the same appointment on both sides at all.
       const { rows } = await client.query(
         `SELECT * FROM ${quoteIdent(clinic.replace(/-/g, '_'))}.appointments
-          WHERE mongo_id = ANY($1::text[])`,
+          WHERE id = ANY($1::text[])`,
         [ids],
       ).catch(() => ({ rows: null }));
 
@@ -309,7 +333,8 @@ async function verifyAgainstBaseline(helpers) {
         continue;
       }
 
-      const found = new Map(rows.map((r) => [String(r.mongo_id), r]));
+      // `id` is char(24), which pads on read — trim before matching.
+      const found = new Map(rows.map((r) => [String(r.id).trim(), r]));
       for (const entry of entries) {
         const row = found.get(entry.id);
         if (!row) { missing += 1; continue; }

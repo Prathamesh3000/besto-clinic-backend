@@ -10431,8 +10431,7 @@
               "desc": false
             }
           ],
-          "needsReview": true,
-          "note": "partialFilterExpression not translated: {\"status\":\"open\",\"deletedAt\":null}"
+          "where": "status = 'open' and deleted_at is null"
         },
         {
           "kind": "btree",
@@ -14869,8 +14868,7 @@
               "desc": false
             }
           ],
-          "needsReview": true,
-          "note": "partialFilterExpression not translated: {\"isActive\":true,\"deletedAt\":null}"
+          "where": "is_active is true and deleted_at is null"
         },
         {
           "kind": "btree",
@@ -15162,8 +15160,7 @@
               "desc": false
             }
           ],
-          "needsReview": true,
-          "note": "partialFilterExpression not translated: {\"deletedAt\":null}"
+          "where": "deleted_at is null"
         },
         {
           "kind": "btree",

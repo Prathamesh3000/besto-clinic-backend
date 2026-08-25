@@ -60,6 +60,14 @@ function checkAppBoots() {
   // do not want its module registrations polluting this one.
   const probe = `
     process.env.NODE_ENV = process.env.NODE_ENV || 'test';
+    // Mirror server.js's boot order: it requires src/config/env before src/app,
+    // and that is what loads .env.
+    //
+    // Without this line the probe requires the app with no environment at all and
+    // fails on the first mandatory variable — reporting "the running product has
+    // been degraded" when the product is fine and only the probe was wrong. A
+    // false red on a gate is worse than no gate: it trains people to skip it.
+    require('./src/config/env');
     try {
       const createApp = require('./src/app');
       const app = createApp();

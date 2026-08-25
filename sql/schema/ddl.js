@@ -159,6 +159,13 @@ function addForeignKey(schema, table, fk, targetSchema) {
 const validateForeignKey = (schema, table, fkName) =>
   `alter table ${qualified(schema, table)} validate constraint ${ident(fkName)};`;
 
+const dropForeignKey = (schema, table, fkName) =>
+  `alter table ${qualified(schema, table)} drop constraint if exists ${ident(fkName)};`;
+
+/** The constraint name the generator gives a foreign key. One definition, because
+ *  the ETL drops by name what the migration created by name. */
+const foreignKeyName = (table, column) => typeMap.fitIdentifier(`${table}_${column}_fkey`);
+
 /* ── Indexes ───────────────────────────────────────────────── */
 
 function createIndex(schema, table, index) {
@@ -345,6 +352,8 @@ module.exports = {
   createTable,
   addForeignKey,
   validateForeignKey,
+  dropForeignKey,
+  foreignKeyName,
   createIndex,
   createTenantRole,
   dropTenantRole,
