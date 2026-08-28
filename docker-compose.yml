@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+  api:
+    build: .
+    container_name: bestoclinic-api
+    restart: unless-stopped
+    ports:
+      - '${PORT:-5000}:5000'
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    networks:
+      - bestoclinic
+
+  redis:
+    image: redis:7-alpine
+    container_name: bestoclinic-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bestoclinic
+
+  mongo:
+    image: mongo:7
+    container_name: bestoclinic-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bestoclinic
+
+volumes:
+  redis_data:
+  mongo_data:
+
+networks:
+  bestoclinic:
+    driver: bridge

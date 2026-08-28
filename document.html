@@ -1,0 +1,4095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Export</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.3.0/github-markdown-dark.min.css">
+  <style>
+      body {
+          background-color: #0d1117;
+          color: #c9d1d9;
+      }
+      .markdown-body {
+          box-sizing: border-box;
+          min-width: 200px;
+          max-width: 980px;
+          margin: 0 auto;
+          padding: 45px;
+          background-color: #0d1117;
+          color: #c9d1d9;
+      }
+
+      /* Syntax Highlighting */
+      .hljs-doctag, .hljs-keyword, .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-variable.language_ { color: #ff7b72; }
+      .hljs-title, .hljs-title.class_, .hljs-title.class_.inherited__, .hljs-title.function_ { color: #d2a8ff; }
+      .hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-variable, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id { color: #79c0ff; }
+      .hljs-regexp, .hljs-string, .hljs-meta .hljs-string { color: #a5d6ff; }
+      .hljs-built_in, .hljs-symbol { color: #ffa657; }
+      .hljs-comment, .hljs-code, .hljs-formula { color: #8b949e; }
+      .hljs-name, .hljs-quote, .hljs-selector-tag, .hljs-selector-pseudo { color: #7ee787; }
+      .hljs-subst { color: #c9d1d9; }
+      .hljs-section { color: #1f6feb; font-weight: bold; }
+      .hljs-bullet { color: #79c0ff; }
+      .hljs-emphasis { font-style: italic; }
+      .hljs-strong { font-weight: bold; }
+      .hljs-addition { color: #aff5b4; background-color: #033a16; }
+      .hljs-deletion { color: #ffdcd7; background-color: #67060c; }
+
+      @media (max-width: 767px) {
+          .markdown-body {
+              padding: 15px;
+          }
+      }
+
+      /* ─── Print / PDF Pagination ─────────────────── */
+      @page {
+          size: A4;
+          margin: 20mm 15mm 20mm 15mm;
+      }
+
+      @media print {
+          body {
+              background-color: #0d1117;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+          }
+          .markdown-body {
+              max-width: 100%;
+              padding: 0;
+              margin: 0;
+          }
+
+          /* Page break before every Part (h1) */
+          h1 {
+              page-break-before: always;
+              page-break-after: avoid;
+              margin-top: 0;
+              padding-top: 10mm;
+          }
+
+          /* First h1 (Table of Contents) — no break before it */
+          h1:first-of-type {
+              page-break-before: avoid;
+          }
+
+          /* Page break before every major section (h2) */
+          h2 {
+              page-break-before: always;
+              page-break-after: avoid;
+              margin-top: 0;
+              padding-top: 5mm;
+          }
+
+          /* Keep h3/h4 with their content */
+          h3, h4, h5, h6 {
+              page-break-after: avoid;
+          }
+
+          /* Prevent tables from splitting across pages (when possible) */
+          table {
+              page-break-inside: avoid;
+          }
+
+          /* Prevent code blocks from splitting */
+          pre {
+              page-break-inside: avoid;
+          }
+
+          /* Prevent list items from orphaning */
+          li {
+              page-break-inside: avoid;
+          }
+
+          /* Prevent figures / diagrams from splitting */
+          figure, .mermaid, svg {
+              page-break-inside: avoid;
+          }
+
+          /* Avoid widows and orphans in paragraphs */
+          p {
+              orphans: 3;
+              widows: 3;
+          }
+
+          /* Hide the hr tags used as visual separators (page breaks replace them) */
+          hr {
+              visibility: hidden;
+              height: 0;
+              margin: 0;
+              padding: 0;
+              border: none;
+          }
+
+          /* Cover page: first content block before TOC */
+          .markdown-body > p:first-child {
+              page-break-after: avoid;
+          }
+      }
+
+      /* ─── Screen Pagination (visual page boundaries) ─── */
+      @media screen {
+          .markdown-body h1 {
+              margin-top: 80px;
+              padding-top: 40px;
+              border-top: 3px solid #30363d;
+          }
+          .markdown-body h1:first-of-type {
+              margin-top: 40px;
+              border-top: none;
+          }
+          .markdown-body h2 {
+              margin-top: 60px;
+              padding-top: 30px;
+              border-top: 1px solid #21262d;
+          }
+      }
+  </style>
+</head>
+<body>
+  <article class="markdown-body">
+      <p><strong>DENTAL CLINIC MANAGEMENT — FEATURE SRS</strong></p>
+<p><strong>Software Requirements Specification</strong>
+<strong>Advanced Feature Modules</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Project Name</th>
+<th align="left">DCM — Dental Clinic Management</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Version</td>
+<td align="left">2.0</td>
+</tr>
+<tr>
+<td align="left">Document Type</td>
+<td align="left">Software Requirements Specification (SRS)</td>
+</tr>
+<tr>
+<td align="left">Prepared By</td>
+<td align="left">Development Team</td>
+</tr>
+<tr>
+<td align="left">Date</td>
+<td align="left">March 9, 2026</td>
+</tr>
+<tr>
+<td align="left">Scope</td>
+<td align="left">3 New Feature Modules</td>
+</tr>
+</tbody></table>
+<hr>
+<h1><strong>Table of Contents</strong></h1>
+<h2><strong>Part I: Introduction</strong></h2>
+<p>1.   [Document Purpose &amp; Scope]</p>
+<p>2.   [System Context &amp; Current Architecture]</p>
+<p>3.   [Technology Stack Reference]</p>
+<h2><strong>Part II: Feature 1 — AI-Assisted Dental Scan &amp; Clinic Recommendation Chatbot</strong></h2>
+<p>4.   [Feature Overview]</p>
+<p>5.   [Functional Requirements]</p>
+<p>6.   [Non-Functional Requirements]</p>
+<p>7.   [Database Schema Design]</p>
+<p>8.   [API Specification]</p>
+<p>9.   [High-Level Design]</p>
+<p>10.  [Low-Level Design]</p>
+<p>11.  [User Interface Specifications]</p>
+<p>12.  [Integration Points]</p>
+<h2><strong>Part III: Feature 2 — Automated Prescription Follow-Up &amp; Care Reminder System</strong></h2>
+<p>13.  [Feature Overview]</p>
+<p>14.  [Functional Requirements]</p>
+<p>15.  [Non-Functional Requirements]</p>
+<p>16.  [Database Schema Design]</p>
+<p>17.  [API Specification]</p>
+<p>18.  [High-Level Design]</p>
+<p>19.  [Low-Level Design]</p>
+<p>20.  [User Interface Specifications]</p>
+<p>21.  [Integration Points]</p>
+<h2><strong>Part IV: Feature 3 — Clinical Inventory &amp; Procedure Readiness Management System</strong></h2>
+<p>22.  [Feature Overview]</p>
+<p>23.  [Functional Requirements]</p>
+<p>24.  [Non-Functional Requirements]</p>
+<p>25.  [Database Schema Design]</p>
+<p>26.  [API Specification]</p>
+<p>27.  [High-Level Design]</p>
+<p>28.  [Low-Level Design]</p>
+<p>29.  [User Interface Specifications]</p>
+<p>30.  [Integration Points]</p>
+<h2><strong>Part V: Cross-Feature Architecture</strong></h2>
+<p>31.  [System Architecture Upgrade]</p>
+<p>32.  [Combined Database Schema Relationships]</p>
+<p>33.  [Job Queue Infrastructure]</p>
+<p>34.  [Security &amp; Authorization]</p>
+<p>35.  [Deployment &amp; Migration Strategy]</p>
+<h2><strong>Part VI: Appendices</strong></h2>
+<p>36.  [Glossary]</p>
+<p>37.  [File Manifest]</p>
+<p>38.  [Risk Assessment]</p>
+<hr>
+<hr>
+<h1><strong>Part I: Introduction</strong></h1>
+<hr>
+<h2><strong>1. Document Purpose &amp; Scope</strong></h2>
+<h3><strong>1.1 Purpose</strong></h3>
+<p>This Software Requirements Specification (SRS) document defines the complete technical and functional requirements for three new feature modules to be added to the Dental Clinic Management (DCM) platform. Each feature is designed to solve a specific operational gap in dental clinic workflows:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Feature</th>
+<th align="left">Problem Solved</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">AI Dental Scan &amp; Recommendation</td>
+<td align="left">Patients have no way to self-assess dental conditions or discover relevant specialists before visiting a clinic</td>
+</tr>
+<tr>
+<td align="left">Prescription Follow-Up &amp; Care Reminders</td>
+<td align="left">Post-treatment care instructions are forgotten by patients, leading to poor recovery outcomes and low compliance</td>
+</tr>
+<tr>
+<td align="left">Clinical Inventory &amp; Procedure Readiness</td>
+<td align="left">Doctors cannot verify equipment availability before scheduling complex procedures, causing delays and cancellations</td>
+</tr>
+</tbody></table>
+<h3><strong>1.2 Scope</strong></h3>
+<p>This document covers:</p>
+<p> • Complete functional and non-functional requirements for each feature
+ • Database schema designs with field-level specifications
+ • REST API endpoint definitions with request/response contracts
+ • High-Level Design (HLD) with architecture and sequence diagrams
+ • Low-Level Design (LLD) with component diagrams, state machines, and ER diagrams
+ • User interface specifications for Mobile App (React Native), Web Admin Panel (React), and Patient Portal
+ • Integration points with existing DCM modules
+ • Security, authorization, and multi-tenancy considerations
+ • Deployment and migration strategies</p>
+<h3><strong>1.3 Intended Audience</strong></h3>
+<p> • Development Team — for implementation guidance
+ • Project Manager — for scope and timeline estimation
+ • QA Team — for test case derivation
+ • Product Owner — for feature validation and acceptance criteria
+ • DevOps — for infrastructure planning</p>
+<h3><strong>1.4 Document Conventions</strong></h3>
+<p> • <strong>[MUST]</strong> — Mandatory requirement, feature is incomplete without it
+ • <strong>[SHOULD]</strong> — Important requirement, may be deferred to a patch release
+ • <strong>[MAY]</strong> — Optional enhancement, can be added in a future iteration
+ • All API paths are relative to <code>/api/v1</code>
+ • All diagrams use Mermaid syntax for reproducibility</p>
+<h3><strong>1.5 References</strong></h3>
+<p> • DCM Technical Project Report v1.0 (Dental Clinic Management.md)
+ • DCM Appointment Reminder &amp; Patient Confirmation System (implemented)
+ • Node.js API codebase (src/)
+ • React Native mobile app (BestoClinicMobile/)
+ • React web admin panel (website/)</p>
+<hr>
+<h2><strong>2. System Context &amp; Current Architecture</strong></h2>
+<h3><strong>2.1 Architecture Overview</strong></h3>
+<p>The DCM platform is a multi-tenant SaaS application built on a service-oriented monolith architecture:</p>
+<pre><code class="hljs plaintext">┌─────────────────────────────────────────────────────────────────┐
+│                        CLIENT LAYER                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
+│  │ Mobile App   │  │ Web Admin    │  │ Patient PWA          │  │
+│  │ React Native │  │ React+Vite   │  │ QR-Based Web App     │  │
+│  │ 0.75.4       │  │ 19.2.0       │  │                      │  │
+│  └──────┬───────┘  └──────┬───────┘  └──────────┬───────────┘  │
+│         │                 │                      │              │
+│         └─────────────────┼──────────────────────┘              │
+│                           │                                     │
+│                    HTTPS / WSS                                  │
+└───────────────────────────┼─────────────────────────────────────┘
+                            │
+┌───────────────────────────┼─────────────────────────────────────┐
+│                     API GATEWAY LAYER                           │
+│  ┌────────────────────────┴─────────────────────────────────┐  │
+│  │              Express.js 4.21.0 (Node.js &gt;= 18)           │  │
+│  │  ┌─────────┐ ┌─────────┐ ┌──────────┐ ┌──────────────┐  │  │
+│  │  │ Helmet  │ │  CORS   │ │ Rate     │ │ Correlation  │  │  │
+│  │  │         │ │         │ │ Limiter  │ │ ID           │  │  │
+│  │  └─────────┘ └─────────┘ └──────────┘ └──────────────┘  │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │              MIDDLEWARE PIPELINE                          │  │
+│  │  JWT Auth → Tenant Resolver → Subscription Guard →       │  │
+│  │  Feature Guard → Permission Authorize → Validate         │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │              Socket.IO 4.7.5 (Real-time)                 │  │
+│  │  Chat Handler │ Notification Handler │ Video Handler     │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+                            │
+┌───────────────────────────┼─────────────────────────────────────┐
+│                     BUSINESS LOGIC LAYER                        │
+│  ┌────────────────────────────────────────────────────────┐    │
+│  │  34 MODULES (routes → controller → service → model)    │    │
+│  │  Auth │ Patient │ Appointment │ Prescription │ Invoice │    │
+│  │  Portal │ Doctor │ Emergency │ Telemedicine │ Queue    │    │
+│  │  Billing │ Payment │ Analytics │ Notification │ ...    │    │
+│  └────────────────────────────────────────────────────────┘    │
+│  ┌────────────────────────────────────────────────────────┐    │
+│  │  SHARED SERVICES                                       │    │
+│  │  Email │ Notification │ Storage │ Razorpay │ Reminder  │    │
+│  └────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────┘
+                            │
+┌───────────────────────────┼─────────────────────────────────────┐
+│                     JOB PROCESSING LAYER                        │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  BullMQ 5.12.12 (Redis-backed)                           │  │
+│  │  9 Queues: email │ reminder │ reminderScan │ invoice │   │  │
+│  │  report │ subscriptionLifecycle │ provisioning │ sync │   │  │
+│  │  auditArchival                                           │  │
+│  │  8 Workers: concurrent processing with retry strategies  │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+                            │
+┌───────────────────────────┼─────────────────────────────────────┐
+│                     DATA LAYER                                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
+│  │ Platform DB  │  │ Tenant DBs   │  │ Redis                │  │
+│  │ MongoDB Atlas│  │ Per-Clinic   │  │ ioredis 5.4.1        │  │
+│  │              │  │ MongoDB      │  │                      │  │
+│  │ Clinic       │  │ Patient      │  │ Session Cache        │  │
+│  │ Plan         │  │ Appointment  │  │ Token Blacklist      │  │
+│  │ Subscription │  │ Prescription │  │ Subscription Cache   │  │
+│  │ PlatformUser │  │ Invoice      │  │ Queue Storage        │  │
+│  │ Promotion    │  │ User         │  │ Tenant URI Cache     │  │
+│  │ FeatureFlag  │  │ 30+ models   │  │                      │  │
+│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  File Storage: Local (dev) / AWS S3 (prod)               │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘</code></pre><h3><strong>2.2 Multi-Tenancy Model</strong></h3>
+<p> • <strong>Platform Database</strong> — Shared MongoDB Atlas instance storing clinic metadata, subscription plans, feature flags, and platform-level audit logs
+ • <strong>Tenant Databases</strong> — Isolated MongoDB instances per clinic, with encrypted connection URIs cached in Redis (1-hour TTL)
+ • <strong>Tenant Resolution</strong> — <code>X-Tenant-ID</code> header validated against JWT <code>tenantSlug</code> claim via <code>tenantResolver()</code> middleware
+ • <strong>Data Isolation</strong> — All queries scoped to tenant connection; cross-tenant access blocked at middleware level</p>
+<h3><strong>2.3 Authentication &amp; Authorization</strong></h3>
+<p> • <strong>JWT Authentication</strong> — Three separate secrets: access (15min), refresh (7d), platform (product owner)
+ • <strong>Redis Token Blacklist</strong> — Revoked tokens tracked via JTI in Redis
+ • <strong>Permission Matrix</strong> — Role-based access control (RBAC) with granular permission keys (e.g., <code>PATIENT_READ_OWN</code>, <code>APPOINTMENT_CANCEL</code>)
+ • <strong>Feature Guards</strong> — 3-tier hierarchy: tenant override &gt; plan default &gt; global feature flag</p>
+<h3><strong>2.4 Existing Module Inventory (34 Modules)</strong></h3>
+<p>Auth, Patient, Appointment, Invoice, Clinic, User, Subscription, Dashboard, Branch, Department, Doctor, Staff, Insurance, Payroll, Notification, LegacyUpload, Integration, Role, Queue, Prescription, Consent, Emergency, DoctorDashboard, IntegrationViewer, PatientPortal, Telemedicine, Payment, Billing, CashRegister, CreditNote, Analytics, Public, Platform, Monitoring</p>
+<h3><strong>2.5 Job Queue Infrastructure</strong></h3>
+<p> • <strong>Framework</strong> — BullMQ 5.12.12 with Redis-backed persistence
+ • <strong>Existing Queues</strong> — email, appointmentReminder, appointmentReminderScan, invoiceOverdue, reportGeneration, subscriptionLifecycle, provisioning, sync, auditArchival
+ • <strong>Workers</strong> — 8 concurrent workers started at boot (lazy-loaded after Redis connection)
+ • <strong>Repeatable Jobs</strong> — Subscription lifecycle (hourly), appointment reminder scan (every 15 minutes)</p>
+<hr>
+<h2><strong>3. Technology Stack Reference</strong></h2>
+<h3><strong>3.1 Backend Technologies</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Component</th>
+<th align="left">Technology</th>
+<th align="left">Version</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Runtime</td>
+<td align="left">Node.js</td>
+<td align="left">&gt;= 18.0.0</td>
+<td align="left">Server-side JavaScript execution</td>
+</tr>
+<tr>
+<td align="left">Framework</td>
+<td align="left">Express.js</td>
+<td align="left">4.21.0</td>
+<td align="left">HTTP request handling and routing</td>
+</tr>
+<tr>
+<td align="left">ODM</td>
+<td align="left">Mongoose</td>
+<td align="left">8.23.0</td>
+<td align="left">MongoDB schema management and queries</td>
+</tr>
+<tr>
+<td align="left">Cache</td>
+<td align="left">ioredis</td>
+<td align="left">5.4.1</td>
+<td align="left">Redis client for caching and sessions</td>
+</tr>
+<tr>
+<td align="left">Queue</td>
+<td align="left">BullMQ</td>
+<td align="left">5.12.12</td>
+<td align="left">Distributed job queue with Redis backend</td>
+</tr>
+<tr>
+<td align="left">Auth</td>
+<td align="left">jsonwebtoken</td>
+<td align="left">—</td>
+<td align="left">JWT token generation and validation</td>
+</tr>
+<tr>
+<td align="left">Validation</td>
+<td align="left">Joi</td>
+<td align="left">17.13.3</td>
+<td align="left">Request payload and environment validation</td>
+</tr>
+<tr>
+<td align="left">Email</td>
+<td align="left">Nodemailer</td>
+<td align="left">8.0.1</td>
+<td align="left">SMTP email delivery</td>
+</tr>
+<tr>
+<td align="left">Payments</td>
+<td align="left">Razorpay SDK</td>
+<td align="left">2.9.4</td>
+<td align="left">Payment gateway integration</td>
+</tr>
+<tr>
+<td align="left">Real-time</td>
+<td align="left">Socket.IO</td>
+<td align="left">4.7.5</td>
+<td align="left">WebSocket server for real-time events</td>
+</tr>
+<tr>
+<td align="left">Logging</td>
+<td align="left">Winston</td>
+<td align="left">3.13.1</td>
+<td align="left">Structured logging with daily rotation</td>
+</tr>
+<tr>
+<td align="left">Security</td>
+<td align="left">Helmet</td>
+<td align="left">7.1.0</td>
+<td align="left">HTTP security headers</td>
+</tr>
+<tr>
+<td align="left">Encryption</td>
+<td align="left">AES-256</td>
+<td align="left">Built-in</td>
+<td align="left">Tenant database URI encryption</td>
+</tr>
+<tr>
+<td align="left">Hashing</td>
+<td align="left">bcryptjs</td>
+<td align="left">2.4.3</td>
+<td align="left">Password hashing</td>
+</tr>
+<tr>
+<td align="left">Rate Limiting</td>
+<td align="left">express-rate-limit</td>
+<td align="left">7.4.0</td>
+<td align="left">API rate limiting with Redis store</td>
+</tr>
+</tbody></table>
+<h3><strong>3.2 Frontend Technologies</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Component</th>
+<th align="left">Technology</th>
+<th align="left">Version</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Web Framework</td>
+<td align="left">React</td>
+<td align="left">19.2.0</td>
+<td align="left">Admin panel and patient portal UI</td>
+</tr>
+<tr>
+<td align="left">Build Tool</td>
+<td align="left">Vite</td>
+<td align="left">7.3.1</td>
+<td align="left">Fast development and production builds</td>
+</tr>
+<tr>
+<td align="left">Styling</td>
+<td align="left">Tailwind CSS</td>
+<td align="left">4.2.1</td>
+<td align="left">Utility-first CSS framework</td>
+</tr>
+<tr>
+<td align="left">Charts</td>
+<td align="left">Recharts</td>
+<td align="left">3.7.0</td>
+<td align="left">Dashboard data visualization</td>
+</tr>
+<tr>
+<td align="left">Icons</td>
+<td align="left">Lucide React</td>
+<td align="left">0.575.0</td>
+<td align="left">Icon library for web</td>
+</tr>
+<tr>
+<td align="left">Animation</td>
+<td align="left">Framer Motion</td>
+<td align="left">12.34.3</td>
+<td align="left">UI animations and transitions</td>
+</tr>
+<tr>
+<td align="left">Routing</td>
+<td align="left">React Router DOM</td>
+<td align="left">7.13.1</td>
+<td align="left">Client-side routing</td>
+</tr>
+</tbody></table>
+<h3><strong>3.3 Mobile Technologies</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Component</th>
+<th align="left">Technology</th>
+<th align="left">Version</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Framework</td>
+<td align="left">React Native</td>
+<td align="left">0.75.4</td>
+<td align="left">Cross-platform mobile app</td>
+</tr>
+<tr>
+<td align="left">State</td>
+<td align="left">Zustand</td>
+<td align="left">4.5.5</td>
+<td align="left">Lightweight state management</td>
+</tr>
+<tr>
+<td align="left">Server State</td>
+<td align="left">React Query</td>
+<td align="left">5.59.0</td>
+<td align="left">Server state synchronization and caching</td>
+</tr>
+<tr>
+<td align="left">Navigation</td>
+<td align="left">React Navigation</td>
+<td align="left">6.x</td>
+<td align="left">Screen navigation (stack, tabs, drawer)</td>
+</tr>
+<tr>
+<td align="left">API Client</td>
+<td align="left">Axios</td>
+<td align="left">1.6.0</td>
+<td align="left">HTTP requests with interceptors</td>
+</tr>
+<tr>
+<td align="left">Storage</td>
+<td align="left">MMKV</td>
+<td align="left">2.12.2</td>
+<td align="left">Encrypted key-value local storage</td>
+</tr>
+<tr>
+<td align="left">Real-time</td>
+<td align="left">Socket.IO Client</td>
+<td align="left">4.8.0</td>
+<td align="left">WebSocket for notifications and chat</td>
+</tr>
+<tr>
+<td align="left">Video</td>
+<td align="left">react-native-webrtc</td>
+<td align="left">124.0.4</td>
+<td align="left">WebRTC for teleconsultation</td>
+</tr>
+<tr>
+<td align="left">Push</td>
+<td align="left">Firebase Messaging</td>
+<td align="left">20.5.0</td>
+<td align="left">Push notifications</td>
+</tr>
+<tr>
+<td align="left">Icons</td>
+<td align="left">Vector Icons</td>
+<td align="left">10.2.0</td>
+<td align="left">MaterialCommunityIcons</td>
+</tr>
+<tr>
+<td align="left">Camera</td>
+<td align="left">react-native-camera</td>
+<td align="left">—</td>
+<td align="left">Camera access for dental scan</td>
+</tr>
+<tr>
+<td align="left">Payments</td>
+<td align="left">React Native Razorpay</td>
+<td align="left">2.3.0</td>
+<td align="left">In-app payment flow</td>
+</tr>
+</tbody></table>
+<h3><strong>3.4 New Technology Additions (For These Features)</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Component</th>
+<th align="left">Technology</th>
+<th align="left">Purpose</th>
+<th align="left">Feature</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">AI Vision</td>
+<td align="left">Pluggable (see §3.6)</td>
+<td align="left">Dental image analysis</td>
+<td align="left">Feature 1</td>
+</tr>
+<tr>
+<td align="left">Camera SDK</td>
+<td align="left">react-native-vision-camera</td>
+<td align="left">High-quality dental image capture</td>
+<td align="left">Feature 1</td>
+</tr>
+<tr>
+<td align="left">AI Client</td>
+<td align="left">openai Node.js SDK / axios</td>
+<td align="left">Server-side AI API calls</td>
+<td align="left">Feature 1</td>
+</tr>
+<tr>
+<td align="left">Cron Parsing</td>
+<td align="left">croner / cron-parser</td>
+<td align="left">Custom reminder schedule parsing</td>
+<td align="left">Feature 2</td>
+</tr>
+</tbody></table>
+<h3><strong>3.5A AI Vision Provider — Three Approaches</strong></h3>
+<p>The dental image analysis component is designed behind a <strong>provider-agnostic interface</strong> (<code>aiAnalysis.service.js</code>) so the underlying AI engine can be swapped without affecting any other part of the system (routes, queues, models, mobile app). Three approaches are supported:</p>
+<h4><strong>Approach A: Cloud AI API (Recommended for Phase 1)</strong></h4>
+<p>Use a hosted multimodal LLM to analyze dental images via HTTPS. No ML infrastructure needed.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Provider</th>
+<th align="left">Model</th>
+<th align="left">Pros</th>
+<th align="left">Cons</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">OpenAI</td>
+<td align="left">GPT-4o / GPT-4 Vision</td>
+<td align="left">Best-in-class multimodal, structured JSON output, fast</td>
+<td align="left">Per-call cost (~$0.01-0.03/image), vendor lock-in, data leaves your server</td>
+</tr>
+<tr>
+<td align="left">Google Cloud</td>
+<td align="left">Gemini Pro Vision</td>
+<td align="left">Strong vision capabilities, competitive pricing</td>
+<td align="left">Different API shape, less dental-specific tuning</td>
+</tr>
+<tr>
+<td align="left">Azure</td>
+<td align="left">Azure OpenAI GPT-4V</td>
+<td align="left">Same model as OpenAI, data stays in Azure region</td>
+<td align="left">Requires Azure subscription, additional setup</td>
+</tr>
+</tbody></table>
+<p><strong>Stack addition:</strong> <code>openai</code> npm package (or <code>axios</code> for raw HTTP). Single env var (<code>OPENAI_API_KEY</code>).</p>
+<p><strong>Architecture:</strong></p>
+<pre><code class="hljs plaintext">Mobile App → Node.js API → BullMQ Queue → dentalScanAnalysisWorker
+                                                ↓
+                                          aiAnalysis.service.js
+                                                ↓ (HTTPS)
+                                          OpenAI / Gemini / Azure API
+                                                ↓
+                                          JSON observations → MongoDB</code></pre><h4><strong>Approach B: Self-Hosted ML Model (Full Control)</strong></h4>
+<p>Run your own fine-tuned dental vision model on a Python microservice. No data leaves your infrastructure.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Component</th>
+<th align="left">Technology</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ML Framework</td>
+<td align="left">PyTorch or TensorFlow</td>
+<td align="left">Model training &amp; inference</td>
+</tr>
+<tr>
+<td align="left">API Server</td>
+<td align="left">FastAPI</td>
+<td align="left">Python REST microservice</td>
+</tr>
+<tr>
+<td align="left">Image Processing</td>
+<td align="left">OpenCV, Pillow</td>
+<td align="left">Preprocessing dental images (resize, normalize, enhance)</td>
+</tr>
+<tr>
+<td align="left">Detection Model</td>
+<td align="left">YOLOv8 (ultralytics)</td>
+<td align="left">Object detection — cavity, plaque, inflammation regions</td>
+</tr>
+<tr>
+<td align="left">Classification</td>
+<td align="left">Fine-tuned EfficientNet / ResNet</td>
+<td align="left">Classify observation severity &amp; type</td>
+</tr>
+<tr>
+<td align="left">Model Serving</td>
+<td align="left">TorchServe or TF Serving</td>
+<td align="left">Production model serving with batching &amp; versioning</td>
+</tr>
+<tr>
+<td align="left">GPU Infra</td>
+<td align="left">NVIDIA T4 / A10G (AWS/GCP)</td>
+<td align="left">GPU inference (~100-200ms per image)</td>
+</tr>
+<tr>
+<td align="left">Communication</td>
+<td align="left">HTTP (internal network)</td>
+<td align="left">Node.js → Python bridge via private VPC</td>
+</tr>
+</tbody></table>
+<p><strong>Architecture:</strong></p>
+<pre><code class="hljs plaintext">Mobile App → Node.js API → BullMQ Queue → dentalScanAnalysisWorker
+                                                ↓
+                                          aiAnalysis.service.js
+                                                ↓ (HTTP — internal network)
+                                          Python FastAPI ML Service
+                                                ↓
+                                          PyTorch / TensorFlow
+                                          Fine-tuned dental model (GPU)
+                                                ↓
+                                          JSON observations → MongoDB</code></pre><p><strong>Requirements:</strong>
+ • <strong>Training data</strong>: ~5,000+ labeled dental images (cavities, plaque, gum disease, misalignment, etc.)
+ • <strong>Labeling</strong>: Bounding box annotations for detection + classification labels
+ • <strong>Training time</strong>: 2-4 weeks for initial model, ongoing retraining with new data
+ • <strong>GPU infrastructure</strong>: Dedicated GPU instance for inference ($150-500/month depending on provider)
+ • <strong>ML expertise</strong>: Data scientist / ML engineer for model development and maintenance</p>
+<p><strong>Python microservice contract</strong> (what <code>aiAnalysis.service.js</code> calls):</p>
+<pre><code class="hljs plaintext">POST http://ml-service:8000/analyze
+Content-Type: application/json
+
+{
+  "images": ["base64_image_1", "base64_image_2", ...],
+  "options": { "minConfidence": 0.6 }
+}
+
+Response:
+{
+  "observations": [
+    { "type": "cavity", "area": "Lower right molar", "toothNumbers": [30],
+      "confidence": "high", "boundingBox": [x, y, w, h], "description": "..." }
+  ],
+  "overallSummary": "...",
+  "recommendedSpecializations": ["endodontist", "periodontist"],
+  "modelVersion": "dental-v1.2.0"
+}</code></pre><h4><strong>Approach C: Hybrid (Recommended Overall Strategy)</strong></h4>
+<p>Ship fast with a cloud API, build a custom model in parallel, swap seamlessly.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Phase</th>
+<th align="left">Timeline</th>
+<th align="left">Strategy</th>
+<th align="left">AI Backend</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Phase 1</strong></td>
+<td align="left">Months 1-3</td>
+<td align="left">Ship MVP with cloud AI API</td>
+<td align="left">OpenAI GPT-4 Vision</td>
+</tr>
+<tr>
+<td align="left"><strong>Phase 2</strong></td>
+<td align="left">Months 3-6</td>
+<td align="left">Collect real dental images from usage, begin labeling &amp; training</td>
+<td align="left">OpenAI (production) + PyTorch (training)</td>
+</tr>
+<tr>
+<td align="left"><strong>Phase 3</strong></td>
+<td align="left">Months 6-9</td>
+<td align="left">Shadow mode — run both, compare accuracy</td>
+<td align="left">Both in parallel</td>
+</tr>
+<tr>
+<td align="left"><strong>Phase 4</strong></td>
+<td align="left">Month 9+</td>
+<td align="left">Swap <code>aiAnalysis.service.js</code> to point at self-hosted model</td>
+<td align="left">Self-hosted PyTorch model</td>
+</tr>
+</tbody></table>
+<p><strong>Why this works:</strong> The entire system is designed so <code>aiAnalysis.service.js</code> is the <strong>only file that knows which AI provider is being used</strong>. Swapping the implementation inside that file changes nothing in:
+ • Mongoose models (DentalScan, DentalScanResult)
+ • BullMQ queue/worker (dentalScanAnalysisQueue/Worker)
+ • API routes, controllers, validators
+ • Mobile app screens
+ • Doctor dashboard views</p>
+<pre><code class="hljs plaintext">// aiAnalysis.service.js — provider switch
+const PROVIDER = process.env.AI_VISION_PROVIDER || 'openai'; // 'openai' | 'self-hosted' | 'google'
+
+async function analyzeDentalImages(images, options) {
+  switch (PROVIDER) {
+    case 'openai':     return _analyzeWithOpenAI(images, options);
+    case 'google':     return _analyzeWithGemini(images, options);
+    case 'self-hosted': return _analyzeWithLocalModel(images, options);
+    default:           throw new Error(`Unknown AI provider: ${PROVIDER}`);
+  }
+}</code></pre><h3><strong>3.5 Infrastructure</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Component</th>
+<th align="left">Technology</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Database</td>
+<td align="left">MongoDB Atlas</td>
+<td align="left">Primary data storage (platform + tenants)</td>
+</tr>
+<tr>
+<td align="left">Cache/Queue</td>
+<td align="left">Redis (single instance)</td>
+<td align="left">Session cache, job queues, pub/sub</td>
+</tr>
+<tr>
+<td align="left">File Storage</td>
+<td align="left">Local (dev) / AWS S3 (prod)</td>
+<td align="left">Images, documents, X-rays, scan images</td>
+</tr>
+<tr>
+<td align="left">Process Manager</td>
+<td align="left">PM2</td>
+<td align="left">Zero-downtime deployments</td>
+</tr>
+<tr>
+<td align="left">Monitoring</td>
+<td align="left">Winston + Custom health endpoints</td>
+<td align="left">Application monitoring</td>
+</tr>
+</tbody></table>
+<hr>
+<hr>
+<h1><strong>Part II: Feature 1 — AI-Assisted Dental Scan &amp; Clinic Recommendation Chatbot</strong></h1>
+<hr>
+<h2><strong>4. Feature Overview</strong></h2>
+<h3><strong>4.1 Problem Statement</strong></h3>
+<p>Currently, patients have no mechanism within the DCM platform to self-assess their dental condition before visiting a clinic. They must physically visit a dentist for even preliminary observations. This creates two problems:</p>
+<p> • <strong>Patient hesitation</strong> — Many patients delay dental visits due to uncertainty about the severity of their condition
+ • <strong>Missed conversions</strong> — The platform has no digital funnel to convert curious users into booked appointments</p>
+<h3><strong>4.2 Solution</strong></h3>
+<p>An AI-powered conversational dental scan feature that guides patients through capturing dental images using their mobile device camera. The system analyzes these images using computer vision AI to provide a high-level visual overview of the patient's dental condition, then recommends appropriate dentists from the clinic's registered network.</p>
+<h3><strong>4.3 Business Objectives</strong></h3>
+<p> • <strong>Increase patient engagement</strong> through an interactive self-check experience
+ • <strong>Drive appointment bookings</strong> by connecting scan observations to relevant dentists
+ • <strong>Reduce consultation time</strong> by providing doctors with preliminary visual data before the visit
+ • <strong>Create a conversion funnel</strong>: curiosity → self-assessment → specialist discovery → appointment booking</p>
+<h3><strong>4.4 Ethical &amp; Legal Boundaries</strong></h3>
+<p> • <strong>[MUST]</strong> All analysis outputs labeled as "observational" and "informational" — never as medical diagnosis
+ • <strong>[MUST]</strong> Persistent disclaimer on every scan result: <em>"This is a preliminary visual assessment only. It is not a professional diagnosis. Please consult a licensed dentist for accurate evaluation and treatment."</em>
+ • <strong>[MUST]</strong> System never recommends treatments, medications, or clinical procedures
+ • <strong>[MUST]</strong> No clinical decisions made by AI — only visual pattern detection
+ • <strong>[MUST]</strong> Scan data retained under clinic data retention policy with explicit patient consent
+ • <strong>[SHOULD]</strong> AI model version tracked for auditability</p>
+<h3><strong>4.5 User Roles</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Role</th>
+<th align="left">Interaction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Patient</td>
+<td align="left">Initiates scan, captures images, views results, books appointments</td>
+</tr>
+<tr>
+<td align="left">Doctor</td>
+<td align="left">Views scan results during consultation (if patient shared), receives booking from scan</td>
+</tr>
+<tr>
+<td align="left">Admin</td>
+<td align="left">Views scan analytics (completion rates, conversion rates)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2><strong>5. Functional Requirements</strong></h2>
+<h3><strong>5.1 FR-DS-001: Scan Initiation</strong></h3>
+<p> • <strong>[MUST]</strong> Patient can initiate a dental scan from the mobile app chatbot interface
+ • <strong>[MUST]</strong> System displays a consent prompt before starting: <em>"Your dental images will be analyzed by AI for informational purposes only. Do you consent?"</em>
+ • <strong>[MUST]</strong> Patient must accept consent to proceed
+ • <strong>[MUST]</strong> System creates a <code>DentalScan</code> record with status <code>capturing</code>
+ • <strong>[SHOULD]</strong> Show estimated scan duration (2-3 minutes)</p>
+<h3><strong>5.2 FR-DS-002: Guided Image Capture</strong></h3>
+<p> • <strong>[MUST]</strong> Chatbot guides patient through 5 sequential capture steps:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Step</th>
+<th align="left">Angle</th>
+<th align="left">Instruction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">Front view</td>
+<td align="left">"Close your teeth together, pull lips apart, and capture the front of your teeth"</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Left side</td>
+<td align="left">"Turn your head slightly right and capture the left side of your teeth"</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">Right side</td>
+<td align="left">"Turn your head slightly left and capture the right side of your teeth"</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">Upper arch</td>
+<td align="left">"Open your mouth wide, tilt your phone down, and capture your upper teeth"</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">Lower arch</td>
+<td align="left">"Open your mouth wide, tilt your phone up, and capture your lower teeth"</td>
+</tr>
+</tbody></table>
+<p> • <strong>[MUST]</strong> Each step includes a visual overlay guide showing correct camera positioning
+ • <strong>[MUST]</strong> Patient can retake any image before proceeding to next step
+ • <strong>[MUST]</strong> Images uploaded to secure clinic-scoped file storage (local/S3)
+ • <strong>[SHOULD]</strong> Image quality validation: minimum resolution 640x480, blur detection
+ • <strong>[MAY]</strong> Auto-capture when alignment matches overlay template</p>
+<h3><strong>5.3 FR-DS-003: AI Analysis</strong></h3>
+<p> • <strong>[MUST]</strong> After all 5 images uploaded, patient triggers analysis
+ • <strong>[MUST]</strong> System updates scan status to <code>processing</code> and enqueues analysis job
+ • <strong>[MUST]</strong> BullMQ worker sends images to AI Vision API with structured analysis prompt
+ • <strong>[MUST]</strong> AI identifies visual indicators from this set:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Indicator</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Plaque buildup</td>
+<td align="left">Visible tartar or calculus deposits</td>
+</tr>
+<tr>
+<td align="left">Gum inflammation</td>
+<td align="left">Redness, swelling, or bleeding gums</td>
+</tr>
+<tr>
+<td align="left">Discoloration</td>
+<td align="left">Yellowing, staining, or dark spots on teeth</td>
+</tr>
+<tr>
+<td align="left">Misalignment</td>
+<td align="left">Crooked, crowded, or gapped teeth</td>
+</tr>
+<tr>
+<td align="left">Cavity indicators</td>
+<td align="left">Dark spots or visible decay</td>
+</tr>
+<tr>
+<td align="left">Gum recession</td>
+<td align="left">Exposed tooth roots or receding gumline</td>
+</tr>
+</tbody></table>
+<p> • <strong>[MUST]</strong> Each observation includes: type, affected area, confidence level (low/medium/high), description
+ • <strong>[MUST]</strong> System generates an overall summary of observations
+ • <strong>[MUST]</strong> Results stored in <code>DentalScanResult</code> linked to scan and patient
+ • <strong>[MUST]</strong> Scan status updated to <code>completed</code> (or <code>failed</code> on error)
+ • <strong>[MUST]</strong> Patient notified via WebSocket event <code>dental-scan:completed</code> and push notification
+ • <strong>[SHOULD]</strong> Analysis latency tracked for performance monitoring
+ • <strong>[SHOULD]</strong> AI model version recorded for auditability</p>
+<h3><strong>5.4 FR-DS-004: Dentist Recommendation Engine</strong></h3>
+<p> • <strong>[MUST]</strong> System maps observations to dental specializations:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Observation</th>
+<th align="left">Mapped Specialization</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Plaque buildup, Cavity</td>
+<td align="left">General Dentistry</td>
+</tr>
+<tr>
+<td align="left">Gum inflammation, Gum recession</td>
+<td align="left">Periodontics</td>
+</tr>
+<tr>
+<td align="left">Misalignment</td>
+<td align="left">Orthodontics</td>
+</tr>
+<tr>
+<td align="left">Discoloration</td>
+<td align="left">Cosmetic Dentistry</td>
+</tr>
+<tr>
+<td align="left">Cavity (severe)</td>
+<td align="left">Endodontics</td>
+</tr>
+</tbody></table>
+<p> • <strong>[MUST]</strong> Query registered doctors within the patient's clinic tenant by matched specializations
+ • <strong>[MUST]</strong> Filter by: active status, branch availability, appointment availability
+ • <strong>[MUST]</strong> Sort by: relevance to observations → average review rating → experience
+ • <strong>[MUST]</strong> Return top 5 dentist recommendations with name, specialization, rating, availability
+ • <strong>[MUST]</strong> Each recommendation includes a "Book Consultation" action that pre-fills the appointment booking form
+ • <strong>[SHOULD]</strong> Show doctor's next available slot</p>
+<h3><strong>5.5 FR-DS-005: Scan History</strong></h3>
+<p> • <strong>[MUST]</strong> Patient can view all past scans with status and date
+ • <strong>[MUST]</strong> Patient can view detailed results of any completed scan
+ • <strong>[SHOULD]</strong> Doctor can view patient's scan history during consultation (if linked)
+ • <strong>[MAY]</strong> Compare two scans side-by-side for progress tracking</p>
+<h3><strong>5.6 FR-DS-006: Conversion Tracking</strong></h3>
+<p> • <strong>[SHOULD]</strong> Track funnel metrics: scan initiated → images captured → analysis completed → recommendations viewed → appointment booked
+ • <strong>[SHOULD]</strong> Analytics endpoint for admin: scan completion rate, recommendation click-through, booking conversion rate
+ • <strong>[MAY]</strong> A/B test different recommendation presentation styles</p>
+<hr>
+<h2><strong>6. Non-Functional Requirements</strong></h2>
+<h3><strong>6.1 Performance</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Metric</th>
+<th align="left">Requirement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Image upload</td>
+<td align="left">&lt; 3 seconds per image on 4G network</td>
+</tr>
+<tr>
+<td align="left">AI analysis</td>
+<td align="left">&lt; 30 seconds end-to-end (including queue time)</td>
+</tr>
+<tr>
+<td align="left">Recommendation query</td>
+<td align="left">&lt; 500ms response time</td>
+</tr>
+<tr>
+<td align="left">Concurrent scans</td>
+<td align="left">Support 50 simultaneous scans per tenant</td>
+</tr>
+</tbody></table>
+<h3><strong>6.2 Scalability</strong></h3>
+<p> • AI analysis jobs processed via BullMQ with configurable concurrency (default: 5 workers)
+ • Image storage scales via S3 (production) with clinic-scoped prefixes
+ • Scan results indexed for fast retrieval by patient and date</p>
+<h3><strong>6.3 Reliability</strong></h3>
+<p> • <strong>[MUST]</strong> If AI API fails, scan marked as <code>failed</code> with retry option for patient
+ • <strong>[MUST]</strong> Images persisted before analysis — no data loss on worker crash
+ • <strong>[SHOULD]</strong> Dead-letter queue for failed analysis jobs (manual retry by ops)</p>
+<h3><strong>6.4 Security</strong></h3>
+<p> • <strong>[MUST]</strong> Dental images encrypted at rest (S3 server-side encryption / local disk encryption)
+ • <strong>[MUST]</strong> Images accessible only by the patient and their assigned doctor
+ • <strong>[MUST]</strong> AI API calls use HTTPS with API key stored in environment variables (never committed)
+ • <strong>[MUST]</strong> Consent logged with timestamp and IP address</p>
+<h3><strong>6.5 Data Retention</strong></h3>
+<p> • Scan images retained for 2 years (configurable per tenant)
+ • Scan results retained indefinitely (or until patient requests deletion)
+ • Expired scans purged via scheduled job</p>
+<hr>
+<h2><strong>7. Database Schema Design</strong></h2>
+<h3><strong>7.1 DentalScan Model</strong></h3>
+<p><strong>Collection:</strong> <code>dentalscans</code> (Tenant Database)</p>
+<p><strong>Purpose:</strong> Tracks a dental scan session from initiation through image capture to analysis completion.</p>
+<pre><code class="hljs plaintext">DentalScan {
+  _id:              ObjectId (auto-generated)
+  patient:          ObjectId (ref: Patient, required, indexed)
+  status:           String (enum: [capturing, processing, completed, failed],
+                      default: 'capturing')
+  images: [{
+    angle:          String (enum: [front, left, right, upper, lower], required)
+    fileUrl:        String (required, path to stored image)
+    fileName:       String (original file name)
+    fileSize:       Number (bytes)
+    uploadedAt:     Date (default: Date.now)
+  }]
+  consentGiven:     Boolean (required, default: false)
+  consentTimestamp: Date
+  consentIp:        String (IPv4/IPv6 address)
+  scanStartedAt:    Date (default: Date.now)
+  completedAt:      Date
+  failureReason:    String (populated on status: failed)
+  analysisJobId:    String (BullMQ job ID for tracking)
+  createdBy:        ObjectId (ref: User)
+  deletedAt:        Date (soft-delete)
+  createdAt:        Date (auto, via timestamps)
+  updatedAt:        Date (auto, via timestamps)
+}
+
+Indexes:
+  - { patient: 1, createdAt: -1 }       // Patient's scan history
+  - { status: 1 }                        // Filter by processing status
+  - { deletedAt: 1 }                     // Soft-delete filter
+
+Pre-find Hook:
+  - Automatically filters { deletedAt: null }</code></pre><h3><strong>7.2 DentalScanResult Model</strong></h3>
+<p><strong>Collection:</strong> <code>dentalscanresults</code> (Tenant Database)</p>
+<p><strong>Purpose:</strong> Stores the AI analysis output for a completed dental scan.</p>
+<pre><code class="hljs plaintext">DentalScanResult {
+  _id:                ObjectId (auto-generated)
+  scan:               ObjectId (ref: DentalScan, required, unique, indexed)
+  patient:            ObjectId (ref: Patient, required, indexed)
+  observations: [{
+    type:             String (enum: [plaque, inflammation, discoloration,
+                        misalignment, cavity, gum_recession, other], required)
+    area:             String (description of affected area)
+    toothNumbers:     [Number] (1-32, universal numbering system)
+    confidence:       String (enum: [low, medium, high], required)
+    description:      String (human-readable observation text, required)
+  }]
+  overallSummary:     String (required, AI-generated summary paragraph)
+  recommendedSpecs:   [String] (e.g., ['orthodontics', 'periodontics'])
+  disclaimer:         String (default: standard disclaimer text)
+  disclaimerAcknowledged: Boolean (default: false)
+  analysisModel:      String (AI model version, e.g., 'gpt-4-vision-preview')
+  analysisLatencyMs:  Number (total processing time in milliseconds)
+  rawAiResponse:      Mixed (full AI response for debugging, select: false)
+  createdAt:          Date (auto, via timestamps)
+}
+
+Indexes:
+  - { scan: 1 }                          // One-to-one lookup
+  - { patient: 1, createdAt: -1 }        // Patient history
+  - { 'observations.type': 1 }           // Analytics: most common issues</code></pre><hr>
+<h2><strong>8. API Specification</strong></h2>
+<h3><strong>8.1 Route Registration</strong></h3>
+<p><strong>Prefix:</strong> <code>/portal/dental-scan</code>
+<strong>Authentication:</strong> <code>authenticate()</code> → <code>tenantResolver()</code> → <code>requireRole('patient', 'guardian')</code></p>
+<h3><strong>8.2 Endpoints</strong></h3>
+<h4><strong>POST /portal/dental-scan</strong> — Initiate Scan</h4>
+<pre><code class="hljs plaintext">Purpose:  Create a new dental scan session
+Auth:     Patient/Guardian role
+Body:     { consentGiven: true }
+
+Request:
+  POST /api/v1/portal/dental-scan
+  Headers: Authorization: Bearer &lt;token&gt;, X-Tenant-ID: &lt;slug&gt;
+  Body: {
+    "consentGiven": true
+  }
+
+Response (201 Created):
+  {
+    "success": true,
+    "message": "Dental scan initiated",
+    "data": {
+      "_id": "65a...",
+      "status": "capturing",
+      "images": [],
+      "consentGiven": true,
+      "consentTimestamp": "2026-03-09T10:00:00.000Z",
+      "scanStartedAt": "2026-03-09T10:00:00.000Z"
+    }
+  }
+
+Validation (Joi):
+  consentGiven: Joi.boolean().valid(true).required()
+
+Errors:
+  400 — Consent not given
+  401 — Unauthorized
+  403 — Not a patient/guardian</code></pre><h4><strong>PUT /portal/dental-scan/:id/upload</strong> — Upload Scan Image</h4>
+<pre><code class="hljs plaintext">Purpose:  Upload a dental image for a specific angle
+Auth:     Patient/Guardian role (must own the scan)
+Params:   id — DentalScan ObjectId
+Body:     { angle: 'front', image: '&lt;base64 encoded image&gt;' }
+
+Request:
+  PUT /api/v1/portal/dental-scan/65a.../upload
+  Body: {
+    "angle": "front",
+    "image": "data:image/jpeg;base64,/9j/4AAQ..."
+  }
+
+Response (200 OK):
+  {
+    "success": true,
+    "message": "Image uploaded",
+    "data": {
+      "angle": "front",
+      "fileUrl": "/uploads/dental-scans/abc123.jpg",
+      "uploadedAt": "2026-03-09T10:01:00.000Z",
+      "imagesCount": 1,
+      "remainingAngles": ["left", "right", "upper", "lower"]
+    }
+  }
+
+Validation (Joi):
+  angle: Joi.string().valid('front','left','right','upper','lower').required()
+  image: Joi.string().required() // base64 or multipart
+
+Errors:
+  400 — Invalid angle or missing image
+  403 — Not the scan owner
+  404 — Scan not found
+  409 — Angle already uploaded (must delete first)</code></pre><h4><strong>POST /portal/dental-scan/:id/analyze</strong> — Trigger AI Analysis</h4>
+<pre><code class="hljs plaintext">Purpose:  Submit all images for AI analysis
+Auth:     Patient/Guardian role (must own the scan)
+Params:   id — DentalScan ObjectId
+
+Request:
+  POST /api/v1/portal/dental-scan/65a.../analyze
+
+Response (202 Accepted):
+  {
+    "success": true,
+    "message": "Analysis started. You will be notified when complete.",
+    "data": {
+      "status": "processing",
+      "estimatedTime": "15-30 seconds"
+    }
+  }
+
+Errors:
+  400 — Not all 5 images captured
+  403 — Not the scan owner
+  404 — Scan not found
+  409 — Scan already analyzed or currently processing</code></pre><h4><strong>GET /portal/dental-scan/:id/result</strong> — Get Scan Result</h4>
+<pre><code class="hljs plaintext">Purpose:  Retrieve AI analysis results
+Auth:     Patient/Guardian role (must own the scan)
+Params:   id — DentalScan ObjectId
+
+Response (200 OK):
+  {
+    "success": true,
+    "message": "Scan result retrieved",
+    "data": {
+      "scan": "65a...",
+      "observations": [
+        {
+          "type": "plaque",
+          "area": "Lower front teeth (lingual surface)",
+          "toothNumbers": [23, 24, 25, 26],
+          "confidence": "high",
+          "description": "Visible tartar buildup along the gumline..."
+        },
+        {
+          "type": "inflammation",
+          "area": "Upper gums (right side)",
+          "toothNumbers": [3, 4, 5],
+          "confidence": "medium",
+          "description": "Mild redness and swelling detected..."
+        }
+      ],
+      "overallSummary": "The scan detected 2 areas of concern...",
+      "recommendedSpecs": ["general_dentistry", "periodontics"],
+      "disclaimer": "This is a preliminary visual assessment only..."
+    }
+  }
+
+Errors:
+  403 — Not the scan owner
+  404 — Scan not found or result not yet available</code></pre><h4><strong>GET /portal/dental-scan/:id/recommendations</strong> — Get Doctor Recommendations</h4>
+<pre><code class="hljs plaintext">Purpose:  Get matched dentists based on scan observations
+Auth:     Patient/Guardian role
+Params:   id — DentalScan ObjectId
+
+Response (200 OK):
+  {
+    "success": true,
+    "message": "Recommendations retrieved",
+    "data": {
+      "recommendations": [
+        {
+          "doctor": {
+            "_id": "doc1...",
+            "name": "Dr. Priya Sharma",
+            "specialization": "Periodontics",
+            "consultationFee": 500,
+            "averageRating": 4.8,
+            "reviewCount": 42
+          },
+          "matchedObservations": ["inflammation", "gum_recession"],
+          "relevanceScore": 0.95,
+          "nextAvailableSlot": "2026-03-10T10:00:00.000Z"
+        }
+      ],
+      "totalMatched": 3
+    }
+  }</code></pre><h4><strong>GET /portal/dental-scan/history</strong> — List Patient Scans</h4>
+<pre><code class="hljs plaintext">Purpose:  List all scans for the authenticated patient
+Auth:     Patient/Guardian role
+Query:    patientId, page, limit
+
+Response (200 OK):
+  {
+    "success": true,
+    "message": "Scans retrieved",
+    "data": [...],
+    "pagination": { "total": 5, "page": 1, "limit": 10 }
+  }</code></pre><hr>
+<h2><strong>9. High-Level Design</strong></h2>
+<h3><strong>9.1 System Architecture Diagram</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-qmsj5kwdz" class="mermaid">graph TB
+    subgraph "Patient Mobile App"
+        UI[Chatbot UI / Scan Screen]
+        CAM[Camera Module]
+        NOTIF[Push Notification Handler]
+    end
+
+    subgraph "API Server (Express.js)"
+        MW[Auth + Tenant Middleware]
+        DSR[dentalScan.routes.js]
+        DSC[dentalScan.controller.js]
+        DSS[dentalScan.service.js]
+        DSV[dentalScan.validator.js]
+    end
+
+    subgraph "Job Processing (BullMQ)"
+        Q[dentalScanAnalysisQueue]
+        W[dentalScanAnalysisWorker]
+    end
+
+    subgraph "AI Provider (Pluggable — see §3.5A)"
+        AIS[aiAnalysis.service.js<br>Provider Strategy]
+        AI_A[Approach A: OpenAI / Gemini<br>Cloud API - HTTPS]
+        AI_B[Approach B: Self-Hosted<br>Python FastAPI + PyTorch]
+        AIS --&gt; AI_A
+        AIS --&gt; AI_B
+    end
+
+    subgraph "Data Layer"
+        TDB[(Tenant MongoDB)]
+        S3[(File Storage)]
+        REDIS[(Redis)]
+        WS[Socket.IO]
+    end
+
+    UI --&gt; CAM
+    CAM --&gt;|base64 image| MW --&gt; DSR --&gt; DSC --&gt; DSS
+    DSV --&gt; DSR
+    DSS --&gt;|store image| S3
+    DSS --&gt;|save scan| TDB
+    DSS --&gt;|enqueue job| Q
+    Q --&gt; W
+    W --&gt;|fetch images| S3
+    W --&gt;|analyze| AIS
+    AIS --&gt;|observations| W
+    W --&gt;|save result| TDB
+    W --&gt;|notify patient| WS
+    WS --&gt; NOTIF
+    DSS --&gt;|query doctors| TDB
+    Q -.-&gt;|backed by| REDIS</div></div><h3><strong>9.2 Sequence Diagram — Complete Scan Flow</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-6zl4hzpsm" class="mermaid">sequenceDiagram
+    actor P as Patient
+    participant APP as Mobile App
+    participant API as Express API
+    participant DB as Tenant MongoDB
+    participant S3 as File Storage
+    participant Q as BullMQ Queue
+    participant W as Scan Worker
+    participant AIS as aiAnalysis.service.js
+    participant AI as AI Provider<br>(OpenAI / Self-Hosted / Gemini)
+    participant WS as Socket.IO
+
+    P-&gt;&gt;APP: Open "Dental Scan" in chatbot
+    APP-&gt;&gt;APP: Show consent prompt
+    P-&gt;&gt;APP: Accept consent
+    APP-&gt;&gt;API: POST /portal/dental-scan {consentGiven: true}
+    API-&gt;&gt;DB: Create DentalScan (status: capturing)
+    API--&gt;&gt;APP: {scanId, status: capturing}
+
+    loop 5 images (front, left, right, upper, lower)
+        APP-&gt;&gt;APP: Show camera with overlay guide
+        P-&gt;&gt;APP: Capture image
+        APP-&gt;&gt;API: PUT /portal/dental-scan/:id/upload {angle, image}
+        API-&gt;&gt;S3: Store image file
+        API-&gt;&gt;DB: Push image to scan.images[]
+        API--&gt;&gt;APP: {uploaded: true, remainingAngles}
+    end
+
+    APP-&gt;&gt;API: POST /portal/dental-scan/:id/analyze
+    API-&gt;&gt;DB: Update scan status → processing
+    API-&gt;&gt;Q: Add job {scanId, tenantSlug}
+    API--&gt;&gt;APP: {status: processing}
+    APP-&gt;&gt;APP: Show "Analyzing..." spinner
+
+    Q-&gt;&gt;W: Process analysis job
+    W-&gt;&gt;DB: Fetch DentalScan
+    W-&gt;&gt;S3: Download 5 images
+    W-&gt;&gt;AIS: analyzeDentalImages(images)
+    AIS-&gt;&gt;AI: Provider-specific call (OpenAI API / Python ML / Gemini)
+    AI--&gt;&gt;AIS: Raw provider response
+    AIS--&gt;&gt;W: Normalized {observations[], summary}
+    W-&gt;&gt;DB: Create DentalScanResult
+    W-&gt;&gt;DB: Update scan status → completed
+    W-&gt;&gt;WS: Emit 'dental-scan:completed' to patient
+    WS--&gt;&gt;APP: dental-scan:completed event
+
+    APP-&gt;&gt;API: GET /portal/dental-scan/:id/result
+    API-&gt;&gt;DB: Fetch DentalScanResult
+    API--&gt;&gt;APP: {observations, summary, disclaimer}
+    APP-&gt;&gt;APP: Display results with disclaimer
+
+    P-&gt;&gt;APP: Tap "View Recommended Dentists"
+    APP-&gt;&gt;API: GET /portal/dental-scan/:id/recommendations
+    API-&gt;&gt;DB: Query doctors by specialization match
+    API--&gt;&gt;APP: {recommendations[]}
+    APP-&gt;&gt;APP: Display doctor cards with "Book" button
+
+    P-&gt;&gt;APP: Tap "Book Consultation"
+    APP-&gt;&gt;API: POST /portal/appointments
+    Note over API: Standard appointment booking flow</div></div><hr>
+<h2><strong>10. Low-Level Design</strong></h2>
+<h3><strong>10.1 Component Architecture</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-5bh4ugx27" class="mermaid">graph LR
+    subgraph "Module: dentalScan"
+        R[dentalScan.routes.js] --&gt; C[dentalScan.controller.js]
+        C --&gt; S[dentalScan.service.js]
+        V[dentalScan.validator.js] --&gt; R
+    end
+
+    subgraph "Models"
+        M1[DentalScan.js]
+        M2[DentalScanResult.js]
+    end
+
+    subgraph "Services"
+        AIS[aiAnalysis.service.js]
+        SS[storage.service.js]
+        NE[notifyAndEmit.js]
+    end
+
+    subgraph "Workers"
+        W[dentalScanAnalysisWorker.js]
+    end
+
+    subgraph "Queues"
+        Q[dentalScanAnalysisQueue]
+    end
+
+    S --&gt; M1
+    S --&gt; M2
+    S --&gt; SS
+    S --&gt; Q
+    W --&gt; M1
+    W --&gt; M2
+    W --&gt; AIS
+    W --&gt; SS
+    W --&gt; NE
+    AIS --&gt;|Provider A| AI_CLOUD[Cloud API<br>OpenAI / Gemini]
+    AIS --&gt;|Provider B| AI_LOCAL[Self-Hosted<br>Python ML Service]</div></div><h3><strong>10.2 AI Analysis Service — Internal Design (Provider-Agnostic)</strong></h3>
+<p>The AI analysis service implements a <strong>strategy pattern</strong> — a common interface with swappable provider implementations. All three approaches return the same output schema, making them interchangeable.</p>
+<h4><strong>10.2.1 Common Interface &amp; Output Contract</strong></h4>
+<pre><code class="hljs plaintext">aiAnalysis.service.js — Public API
+
+  analyzeDentalImages(images: Buffer[], options?)
+    1. Select provider based on AI_VISION_PROVIDER env var
+    2. Delegate to provider-specific implementation
+    3. Validate response against common schema (regardless of provider)
+    4. Return: { observations[], overallSummary, recommendedSpecs[] }
+
+  Common Output Schema (all providers MUST return this):
+    {
+      observations: [
+        {
+          type: 'cavity' | 'plaque' | 'inflammation' | 'discoloration' |
+                'misalignment' | 'gum_recession' | 'other',
+          area: string,             // e.g., "Lower right molar"
+          toothNumbers: number[],   // Universal numbering (1-32)
+          confidence: 'low' | 'medium' | 'high',
+          description: string       // Patient-friendly
+        }
+      ],
+      overallSummary: string,
+      recommendedSpecializations: string[],  // e.g., ['endodontist', 'periodontist']
+      disclaimer: "This is a preliminary visual assessment only..."
+    }
+
+  Provider Selection:
+    const PROVIDER = process.env.AI_VISION_PROVIDER || 'openai';
+    switch (PROVIDER) {
+      case 'openai':      return _analyzeWithOpenAI(images, options);
+      case 'google':      return _analyzeWithGemini(images, options);
+      case 'self-hosted': return _analyzeWithLocalModel(images, options);
+    }</code></pre><h4><strong>10.2.2 Provider A: OpenAI GPT-4 Vision (Cloud API)</strong></h4>
+<pre><code class="hljs plaintext">_analyzeWithOpenAI(images, options)
+
+  1. Construct multi-image prompt with dental analysis instructions
+  2. Call OpenAI GPT-4 Vision API:
+     - model: process.env.OPENAI_MODEL || 'gpt-4o'
+     - messages: [{ role: 'system', content: DENTAL_ANALYSIS_SYSTEM_PROMPT },
+                  { role: 'user', content: [image1, image2, ...image5, textPrompt] }]
+     - response_format: { type: 'json_object' }
+     - max_tokens: 2000
+  3. Parse JSON response into structured observations
+  4. Validate against common schema
+  5. Return normalized result
+
+  Dependencies: openai npm package (or axios)
+  Env vars: OPENAI_API_KEY, OPENAI_MODEL
+  Cost: ~$0.01-0.03 per analysis (5 images)
+  Latency: 3-8 seconds
+
+  DENTAL_ANALYSIS_SYSTEM_PROMPT:
+    "You are a dental visual analysis assistant. Analyze the provided dental
+     images and identify ONLY visual observations. You must NEVER provide
+     medical diagnoses, treatment plans, or prescriptions. Your output is
+     purely observational and informational.
+
+     For each observation, provide:
+     - type: one of [plaque, inflammation, discoloration, misalignment,
+       cavity, gum_recession, other]
+     - area: description of affected area
+     - toothNumbers: array of affected tooth numbers (1-32, universal system)
+     - confidence: low, medium, or high
+     - description: clear, patient-friendly description
+
+     Always include this disclaimer in your summary:
+     'This is a preliminary visual assessment only and not a professional
+      diagnosis. Please consult a licensed dentist for accurate evaluation.'
+
+     Return JSON format:
+     {
+       observations: [...],
+       overallSummary: '...',
+       recommendedSpecializations: [...]
+     }"</code></pre><h4><strong>10.2.3 Provider B: Self-Hosted ML Model (Python Microservice)</strong></h4>
+<pre><code class="hljs plaintext">_analyzeWithLocalModel(images, options)
+
+  1. Convert images to base64 strings
+  2. POST to self-hosted Python FastAPI service:
+     - URL: process.env.ML_SERVICE_URL || 'http://ml-service:8000/analyze'
+     - Body: { images: [base64_1, base64_2, ...], options: { minConfidence: 0.6 } }
+     - Timeout: 30 seconds
+  3. Receive detection + classification results
+  4. Map model output to common schema (model may return bounding boxes, etc.)
+  5. Return normalized result
+
+  Dependencies: axios (HTTP call to internal service)
+  Env vars: ML_SERVICE_URL, ML_SERVICE_API_KEY (internal auth)
+  Cost: GPU infrastructure (~$150-500/month fixed)
+  Latency: 1-3 seconds (GPU), 5-15 seconds (CPU)
+
+  Python Service Stack:
+    - FastAPI (REST API)
+    - PyTorch / TensorFlow (ML framework)
+    - YOLOv8 / ultralytics (object detection)
+    - EfficientNet / ResNet (classification)
+    - OpenCV, Pillow (image preprocessing)
+    - TorchServe or TF Serving (production serving)
+
+  Python Service Contract:
+    POST /analyze
+    Request:  { images: string[], options?: { minConfidence: number } }
+    Response: { observations: [...], overallSummary: string,
+                recommendedSpecializations: string[], modelVersion: string }
+
+  Training Requirements:
+    - 5,000+ labeled dental images (bounding boxes + classification labels)
+    - Labels: cavity, plaque, inflammation, discoloration, misalignment, gum_recession
+    - Training: 2-4 weeks, ongoing retraining with new data
+    - Validation: 80/10/10 train/val/test split, minimum 85% mAP for detection</code></pre><h4><strong>10.2.4 Provider C: Google Gemini Vision (Alternative Cloud API)</strong></h4>
+<pre><code class="hljs plaintext">_analyzeWithGemini(images, options)
+
+  1. Construct multi-image prompt (same dental analysis instructions)
+  2. Call Google Gemini Pro Vision API:
+     - model: 'gemini-pro-vision'
+     - contents: [{ parts: [image1, image2, ..., { text: prompt }] }]
+     - generationConfig: { responseMimeType: 'application/json' }
+  3. Parse JSON response
+  4. Map to common schema (field names may differ)
+  5. Return normalized result
+
+  Dependencies: @google-cloud/vertexai or axios
+  Env vars: GOOGLE_AI_API_KEY, GOOGLE_AI_MODEL
+  Cost: ~$0.005-0.02 per analysis
+  Latency: 3-10 seconds</code></pre><h4><strong>10.2.5 Error Handling (All Providers)</strong></h4>
+<pre><code class="hljs plaintext">Error Handling:
+  - API/service timeout (30s) → throw ApiError.serviceUnavailable('AI analysis timed out')
+  - Invalid response format → throw ApiError.internal('AI response parsing failed')
+  - Rate limit exceeded → retry with exponential backoff (max 3 attempts)
+  - API key invalid / service down → log critical error, throw ApiError.internal
+  - Self-hosted model: health check endpoint at GET /health — monitored by PM2/Docker
+  - All errors surfaced to patient as: "Analysis could not be completed. Please try again."</code></pre><h3><strong>10.3 Recommendation Engine — Scoring Algorithm</strong></h3>
+<pre><code class="hljs plaintext">Input: DentalScanResult.recommendedSpecs[], DentalScanResult.observations[]
+
+Step 1: Query doctors
+  db.users.find({
+    role: 'doctor',
+    specialization: { $in: recommendedSpecs },
+    isActive: true,
+    deletedAt: null
+  })
+
+Step 2: Calculate relevance score per doctor
+  For each doctor:
+    matchedObservations = observations.filter(obs =&gt;
+      specToObservationMap[doctor.specialization].includes(obs.type)
+    )
+    relevanceScore = matchedObservations.length / observations.length
+
+    // Boost by confidence
+    confidenceBoost = sum(matchedObs.map(o =&gt;
+      o.confidence === 'high' ? 0.3 :
+      o.confidence === 'medium' ? 0.2 : 0.1
+    )) / matchedObservations.length
+
+    finalScore = relevanceScore * 0.5 + confidenceBoost * 0.3 + (rating/5) * 0.2
+
+Step 3: Sort by finalScore DESC, limit 5
+
+Step 4: For each doctor, find next available appointment slot
+  Appointment.find({
+    doctor: doctor._id,
+    scheduledAt: { $gte: now },
+    status: { $nin: ['cancelled', 'no_show'] }
+  }).sort({ scheduledAt: 1 }).limit(1)</code></pre><h3><strong>10.4 Scan Status State Machine</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-2m0texpnx" class="mermaid">stateDiagram-v2
+    [*] --&gt; capturing: Patient initiates scan
+    capturing --&gt; capturing: Image uploaded
+    capturing --&gt; processing: All 5 images captured + analyze triggered
+    processing --&gt; completed: AI analysis successful
+    processing --&gt; failed: AI API error or timeout
+    failed --&gt; processing: Patient retries analysis
+    completed --&gt; [*]
+
+    note right of capturing
+      Patient can upload/retake
+      images in any order
+    end note
+
+    note right of processing
+      BullMQ worker handles
+      async AI API call
+    end note
+
+    note right of failed
+      Retry available, images
+      are already stored
+    end note</div></div><hr>
+<h2><strong>11. User Interface Specifications</strong></h2>
+<h3><strong>11.1 Mobile App — Dental Scan Chatbot Screen</strong></h3>
+<p><strong>Screen:</strong> <code>DentalScanScreen.tsx</code>
+<strong>Navigation:</strong> Accessible from Patient Dashboard → "Dental Scan" card or Chatbot tab</p>
+<p><strong>UI Flow:</strong></p>
+<pre><code class="hljs plaintext">┌─────────────────────────────┐
+│  ← Dental Scan              │
+│                              │
+│  ┌────────────────────────┐  │
+│  │  🦷 AI Dental Scan     │  │
+│  │                        │  │
+│  │  Get a quick visual    │  │
+│  │  overview of your      │  │
+│  │  dental health using   │  │
+│  │  your phone camera.    │  │
+│  │                        │  │
+│  │  ⚠️ This is not a     │  │
+│  │  medical diagnosis.    │  │
+│  │                        │  │
+│  │  ☐ I consent to AI     │  │
+│  │    image analysis      │  │
+│  │                        │  │
+│  │  [Start Scan]          │  │
+│  └────────────────────────┘  │
+└─────────────────────────────┘
+
+After consent → Camera capture flow:
+
+┌─────────────────────────────┐
+│  ← Step 1 of 5              │
+│                              │
+│  ┌────────────────────────┐  │
+│  │                        │  │
+│  │    Camera Preview      │  │
+│  │    with overlay guide  │  │
+│  │    (teeth outline)     │  │
+│  │                        │  │
+│  └────────────────────────┘  │
+│                              │
+│  📸 Front View               │
+│  Close teeth, pull lips      │
+│  apart                       │
+│                              │
+│  ● ○ ○ ○ ○  Progress dots   │
+│                              │
+│  [Capture]    [Skip]         │
+└─────────────────────────────┘
+
+After analysis → Results screen:
+
+┌─────────────────────────────┐
+│  ← Scan Results             │
+│                              │
+│  ┌────────────────────────┐  │
+│  │ ✅ Analysis Complete   │  │
+│  │ 2 observations found   │  │
+│  └────────────────────────┘  │
+│                              │
+│  ┌────────────────────────┐  │
+│  │ ⚠️ Plaque Buildup     │  │
+│  │ Confidence: High       │  │
+│  │ Lower front teeth      │  │
+│  │ Visible tartar along...│  │
+│  └────────────────────────┘  │
+│                              │
+│  ┌────────────────────────┐  │
+│  │ ⚠️ Gum Inflammation   │  │
+│  │ Confidence: Medium     │  │
+│  │ Upper right gums       │  │
+│  │ Mild redness detected..│  │
+│  └────────────────────────┘  │
+│                              │
+│  ⚠️ Disclaimer: This is a  │
+│  preliminary assessment...   │
+│                              │
+│  [View Recommended Dentists] │
+└─────────────────────────────┘</code></pre><h3><strong>11.2 Mobile App — Recommendation Cards</strong></h3>
+<pre><code class="hljs plaintext">┌─────────────────────────────┐
+│  ← Recommended Dentists     │
+│                              │
+│  Based on your scan results: │
+│                              │
+│  ┌────────────────────────┐  │
+│  │ 👤 Dr. Priya Sharma   │  │
+│  │ Periodontics           │  │
+│  │ ⭐ 4.8 (42 reviews)   │  │
+│  │ Matches: inflammation, │  │
+│  │ gum recession          │  │
+│  │ Next slot: Mar 10, 10AM│  │
+│  │ [Book Consultation]    │  │
+│  └────────────────────────┘  │
+│                              │
+│  ┌────────────────────────┐  │
+│  │ 👤 Dr. Rajesh Patel   │  │
+│  │ General Dentistry      │  │
+│  │ ⭐ 4.6 (38 reviews)   │  │
+│  │ Matches: plaque        │  │
+│  │ Next slot: Mar 10, 2PM │  │
+│  │ [Book Consultation]    │  │
+│  └────────────────────────┘  │
+└─────────────────────────────┘</code></pre><hr>
+<h2><strong>12. Integration Points</strong></h2>
+<h3><strong>12.1 Integration with Existing Modules</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Existing Module</th>
+<th align="left">Integration</th>
+<th align="left">Direction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Patient Portal</td>
+<td align="left">Scan routes registered under <code>/portal/dental-scan</code></td>
+<td align="left">Extends</td>
+</tr>
+<tr>
+<td align="left">Appointment Module</td>
+<td align="left">Recommendation "Book" action creates appointment</td>
+<td align="left">Calls into</td>
+</tr>
+<tr>
+<td align="left">Notification Module</td>
+<td align="left">Scan completion notification via <code>notifyAndEmit()</code></td>
+<td align="left">Calls into</td>
+</tr>
+<tr>
+<td align="left">Storage Service</td>
+<td align="left">Image upload/download via <code>storage.service.js</code></td>
+<td align="left">Calls into</td>
+</tr>
+<tr>
+<td align="left">User Model</td>
+<td align="left">Doctor query for recommendations by specialization</td>
+<td align="left">Reads from</td>
+</tr>
+<tr>
+<td align="left">Review Model</td>
+<td align="left">Doctor rating aggregation for recommendation sorting</td>
+<td align="left">Reads from</td>
+</tr>
+</tbody></table>
+<h3><strong>12.2 External Integration</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Service</th>
+<th align="left">Purpose</th>
+<th align="left">Protocol</th>
+<th align="left">Required For</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">OpenAI GPT-4 Vision</td>
+<td align="left">Dental image analysis (Approach A)</td>
+<td align="left">HTTPS REST API</td>
+<td align="left">Phase 1</td>
+</tr>
+<tr>
+<td align="left">Google Gemini Vision</td>
+<td align="left">Dental image analysis (Alternative cloud)</td>
+<td align="left">HTTPS REST API</td>
+<td align="left">Optional</td>
+</tr>
+<tr>
+<td align="left">Self-Hosted ML Service</td>
+<td align="left">Dental image analysis (Approach B)</td>
+<td align="left">HTTP (internal)</td>
+<td align="left">Phase 2+</td>
+</tr>
+<tr>
+<td align="left">Firebase FCM</td>
+<td align="left">Push notification on scan completion</td>
+<td align="left">HTTPS</td>
+<td align="left">All phases</td>
+</tr>
+<tr>
+<td align="left">AWS S3</td>
+<td align="left">Production image storage</td>
+<td align="left">AWS SDK</td>
+<td align="left">All phases</td>
+</tr>
+</tbody></table>
+<h3><strong>12.3 New Environment Variables</strong></h3>
+<pre><code class="hljs plaintext"># ─── AI Vision Provider Selection ───────────────────
+AI_VISION_PROVIDER=openai          # 'openai' | 'google' | 'self-hosted'
+
+# ─── Approach A: OpenAI (Phase 1) ──────────────────
+OPENAI_API_KEY=sk-...              # OpenAI API key
+OPENAI_MODEL=gpt-4o               # AI model to use (gpt-4o, gpt-4-vision-preview)
+
+# ─── Approach A (alt): Google Gemini ────────────────
+GOOGLE_AI_API_KEY=...              # Google AI API key (if using Gemini)
+GOOGLE_AI_MODEL=gemini-pro-vision  # Gemini model
+
+# ─── Approach B: Self-Hosted ML ─────────────────────
+ML_SERVICE_URL=http://ml-service:8000  # Internal Python FastAPI service URL
+ML_SERVICE_API_KEY=...                  # Internal service auth key
+
+# ─── Common (all approaches) ───────────────────────
+DENTAL_SCAN_MAX_IMAGES=5           # Number of required angles
+DENTAL_SCAN_ANALYSIS_TIMEOUT=30000 # 30 second timeout</code></pre><hr>
+<hr>
+<h1><strong>Part III: Feature 2 — Automated Prescription Follow-Up &amp; Care Reminder System</strong></h1>
+<hr>
+<h2><strong>13. Feature Overview</strong></h2>
+<h3><strong>13.1 Problem Statement</strong></h3>
+<p>When a doctor creates a prescription or treatment plan, the care instructions are delivered to the patient as a static document. There is no active system to remind patients to follow through on prescribed tasks like taking medication, performing salt-water gargles, or following hygiene routines. This leads to:</p>
+<p> • <strong>Poor treatment compliance</strong> — Patients forget medications, skip care routines
+ • <strong>Slower recovery</strong> — Inconsistent follow-through on post-treatment care
+ • <strong>Increased follow-up burden</strong> — Doctors spend time manually checking if patients followed instructions
+ • <strong>Missed engagement</strong> — No ongoing touchpoint between clinic visits</p>
+<h3><strong>13.2 Solution</strong></h3>
+<p>An automated system that extracts actionable tasks from prescriptions and converts them into scheduled reminders delivered via push notifications, SMS, or automated calls. Patients opt-in when receiving a prescription, and doctors can view compliance dashboards during follow-up visits.</p>
+<h3><strong>13.3 Business Objectives</strong></h3>
+<p> • <strong>Improve patient compliance</strong> with post-treatment care instructions
+ • <strong>Reduce no-show follow-up visits</strong> by maintaining patient engagement
+ • <strong>Reduce manual follow-up calls</strong> by clinic staff
+ • <strong>Provide doctors with data-driven compliance insights</strong> for better care decisions
+ • <strong>Strengthen patient-clinic relationship</strong> through proactive care</p>
+<h3><strong>13.4 User Roles</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Role</th>
+<th align="left">Interaction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Doctor</td>
+<td align="left">Creates prescription (existing flow), views patient compliance dashboard</td>
+</tr>
+<tr>
+<td align="left">Patient</td>
+<td align="left">Opts-in to reminders, receives care reminders, marks tasks done/skipped</td>
+</tr>
+<tr>
+<td align="left">Admin</td>
+<td align="left">Configures reminder delivery channels, views aggregate compliance analytics</td>
+</tr>
+</tbody></table>
+<hr>
+<h2><strong>14. Functional Requirements</strong></h2>
+<h3><strong>14.1 FR-CR-001: Prescription Task Extraction</strong></h3>
+<p> • <strong>[MUST]</strong> When a prescription is created, system parses <code>medications[]</code> array to extract individual care tasks
+ • <strong>[MUST]</strong> Each medication mapped to a <code>PrescriptionTask</code> with: title, instructions, frequency, start date, end date
+ • <strong>[MUST]</strong> Support these task types:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Task Type</th>
+<th align="left">Example</th>
+<th align="left">Source Field</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">medication</td>
+<td align="left">"Take Amoxicillin 500mg"</td>
+<td align="left">medications[].name + dosage</td>
+</tr>
+<tr>
+<td align="left">hygiene</td>
+<td align="left">"Brush with soft toothbrush"</td>
+<td align="left">medications[].instructions</td>
+</tr>
+<tr>
+<td align="left">post_care</td>
+<td align="left">"Salt-water gargle after meals"</td>
+<td align="left">medications[].instructions</td>
+</tr>
+<tr>
+<td align="left">follow_up</td>
+<td align="left">"Follow-up visit in 7 days"</td>
+<td align="left">prescription.followUpDate</td>
+</tr>
+<tr>
+<td align="left">dietary</td>
+<td align="left">"Avoid hard foods for 3 days"</td>
+<td align="left">medications[].instructions</td>
+</tr>
+</tbody></table>
+<p> • <strong>[MUST]</strong> Frequency mapping:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Prescription Frequency</th>
+<th align="left">Reminders/Day</th>
+<th align="left">Default Times</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Once daily</td>
+<td align="left">1</td>
+<td align="left">09:00</td>
+</tr>
+<tr>
+<td align="left">Twice daily</td>
+<td align="left">2</td>
+<td align="left">09:00, 21:00</td>
+</tr>
+<tr>
+<td align="left">Thrice daily / Three times</td>
+<td align="left">3</td>
+<td align="left">08:00, 14:00, 20:00</td>
+</tr>
+<tr>
+<td align="left">Four times daily</td>
+<td align="left">4</td>
+<td align="left">08:00, 12:00, 16:00, 20:00</td>
+</tr>
+<tr>
+<td align="left">After meals</td>
+<td align="left">3</td>
+<td align="left">09:30, 14:30, 20:30</td>
+</tr>
+<tr>
+<td align="left">Before meals</td>
+<td align="left">3</td>
+<td align="left">08:30, 13:30, 19:30</td>
+</tr>
+<tr>
+<td align="left">At bedtime</td>
+<td align="left">1</td>
+<td align="left">21:30</td>
+</tr>
+</tbody></table>
+<p> • <strong>[SHOULD]</strong> Allow patient to customize reminder times after opt-in
+ • <strong>[MAY]</strong> AI-assisted task extraction for free-text instructions</p>
+<h3><strong>14.2 FR-CR-002: Patient Opt-In Flow</strong></h3>
+<p> • <strong>[MUST]</strong> When prescription is delivered (via app notification), show prompt: <em>"Would you like to enable care reminders for this prescription?"</em>
+ • <strong>[MUST]</strong> Patient can select: <strong>Enable</strong> or <strong>Skip</strong>
+ • <strong>[MUST]</strong> If enabled, extract tasks and schedule all reminders
+ • <strong>[MUST]</strong> Store opt-in timestamp on prescription record
+ • <strong>[MUST]</strong> Patient can disable reminders for a specific prescription at any time
+ • <strong>[MUST]</strong> Patient can enable/disable all reminders globally from account settings
+ • <strong>[SHOULD]</strong> Show preview of reminder schedule before enabling</p>
+<h3><strong>14.3 FR-CR-003: Reminder Scheduling &amp; Delivery</strong></h3>
+<p> • <strong>[MUST]</strong> Each reminder scheduled as a delayed BullMQ job with calculated delay
+ • <strong>[MUST]</strong> Primary delivery: in-app push notification via <code>notifyAndEmit()</code>
+ • <strong>[SHOULD]</strong> Secondary delivery: SMS/WhatsApp (if enabled on plan)
+ • <strong>[MAY]</strong> Tertiary delivery: automated voice call for critical medications
+ • <strong>[MUST]</strong> Reminder content includes: task title, instructions, "Mark Done" / "Skip" quick actions
+ • <strong>[MUST]</strong> Safety-net scanner job (every 30 minutes) catches missed reminders
+ • <strong>[MUST]</strong> Reminder not sent if: task deactivated, patient disabled reminders, reminder already sent</p>
+<h3><strong>14.4 FR-CR-004: Patient Response Tracking</strong></h3>
+<p> • <strong>[MUST]</strong> Patient can mark each reminder as <strong>Done</strong> or <strong>Skipped</strong> from app
+ • <strong>[MUST]</strong> Response updates <code>CareReminder.status</code> and increments task counters
+ • <strong>[MUST]</strong> If no response within 4 hours after delivery, status auto-set to <code>missed</code>
+ • <strong>[SHOULD]</strong> Streak tracking: consecutive completed reminders
+ • <strong>[MAY]</strong> Gamification: badges for 7-day, 14-day, 30-day compliance streaks</p>
+<h3><strong>14.5 FR-CR-005: Compliance Dashboard (Doctor)</strong></h3>
+<p> • <strong>[MUST]</strong> Doctor can view patient compliance summary during consultation
+ • <strong>[MUST]</strong> Dashboard shows per-prescription:</p>
+<ul>
+<li>Total tasks and reminders</li>
+<li>Completion rate (percentage)</li>
+<li>Skipped and missed count</li>
+<li>Active tasks vs completed tasks
+ • <strong>[SHOULD]</strong> Visual timeline of daily compliance
+ • <strong>[SHOULD]</strong> Highlight non-compliant areas for doctor review
+ • <strong>[MAY]</strong> Aggregate compliance analytics across all patients for admin</li>
+</ul>
+<h3><strong>14.6 FR-CR-006: Prescription Reminder Lifecycle</strong></h3>
+<p> • <strong>[MUST]</strong> Reminders automatically stop when prescription <code>endDate</code> passes
+ • <strong>[MUST]</strong> If prescription cancelled/voided, all pending reminders cancelled
+ • <strong>[MUST]</strong> If patient disables reminders, all pending jobs removed from queue
+ • <strong>[SHOULD]</strong> Re-enabling reminders reschedules only future reminders (not past ones)</p>
+<hr>
+<h2><strong>15. Non-Functional Requirements</strong></h2>
+<h3><strong>15.1 Performance</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Metric</th>
+<th align="left">Requirement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Task extraction</td>
+<td align="left">&lt; 2 seconds for a prescription with 10 medications</td>
+</tr>
+<tr>
+<td align="left">Reminder scheduling</td>
+<td align="left">&lt; 5 seconds to schedule all reminders for one prescription</td>
+</tr>
+<tr>
+<td align="left">Reminder delivery</td>
+<td align="left">Within 60 seconds of scheduled time</td>
+</tr>
+<tr>
+<td align="left">Compliance query</td>
+<td align="left">&lt; 500ms response time</td>
+</tr>
+</tbody></table>
+<h3><strong>15.2 Scalability</strong></h3>
+<p> • Support 10,000 active reminders per tenant
+ • BullMQ worker concurrency configurable (default: 10)
+ • Reminder scanner processes all tenants within 5 minutes</p>
+<h3><strong>15.3 Reliability</strong></h3>
+<p> • <strong>[MUST]</strong> Failed reminder delivery retried 3 times with exponential backoff
+ • <strong>[MUST]</strong> Prescription task data immutable after creation (audit trail)
+ • <strong>[MUST]</strong> No duplicate reminders for the same task at the same time (BullMQ jobId deduplication)</p>
+<hr>
+<h2><strong>16. Database Schema Design</strong></h2>
+<h3><strong>16.1 PrescriptionTask Model</strong></h3>
+<p><strong>Collection:</strong> <code>prescriptiontasks</code> (Tenant Database)</p>
+<p><strong>Purpose:</strong> Represents an individual care task extracted from a prescription. Each medication or care instruction becomes one task.</p>
+<pre><code class="hljs plaintext">PrescriptionTask {
+  _id:              ObjectId (auto-generated)
+  prescription:     ObjectId (ref: Prescription, required, indexed)
+  patient:          ObjectId (ref: Patient, required, indexed)
+  doctor:           ObjectId (ref: User, indexed)
+  taskType:         String (enum: [medication, hygiene, post_care,
+                      follow_up, dietary], required)
+  title:            String (required, max: 200)
+                    // e.g., "Take Amoxicillin 500mg"
+  instructions:     String (max: 1000)
+                    // e.g., "Take after food with warm water"
+  frequency:        String (enum: [once, twice_daily, thrice_daily,
+                      four_times_daily, after_meals, before_meals,
+                      bedtime, custom], required)
+  customTimes:      [String]
+                    // e.g., ['08:00', '14:00', '20:00'] for custom
+  startDate:        Date (required)
+  endDate:          Date (required)
+  totalReminders:   Number (calculated: remindersPerDay × durationDays)
+  completedCount:   Number (default: 0)
+  skippedCount:     Number (default: 0)
+  missedCount:      Number (default: 0)
+  isActive:         Boolean (default: true)
+  deactivatedAt:    Date
+  createdBy:        ObjectId (ref: User)
+  deletedAt:        Date
+  createdAt:        Date (auto)
+  updatedAt:        Date (auto)
+}
+
+Indexes:
+  - { prescription: 1 }                 // All tasks for a prescription
+  - { patient: 1, isActive: 1 }         // Active tasks for patient
+  - { patient: 1, createdAt: -1 }       // Patient task history
+  - { deletedAt: 1 }
+
+Virtuals:
+  - completionRate = completedCount / totalReminders * 100
+  - remainingReminders = totalReminders - completedCount - skippedCount - missedCount</code></pre><h3><strong>16.2 CareReminder Model</strong></h3>
+<p><strong>Collection:</strong> <code>carereminders</code> (Tenant Database)</p>
+<p><strong>Purpose:</strong> Represents a single scheduled reminder instance. Each PrescriptionTask generates many CareReminder entries (one per scheduled delivery).</p>
+<pre><code class="hljs plaintext">CareReminder {
+  _id:              ObjectId (auto-generated)
+  task:             ObjectId (ref: PrescriptionTask, required, indexed)
+  patient:          ObjectId (ref: Patient, required, indexed)
+  prescription:     ObjectId (ref: Prescription, indexed)
+  scheduledAt:      Date (required, indexed)
+  status:           String (enum: [pending, sent, done, skipped, missed,
+                      cancelled], default: 'pending')
+  sentAt:           Date
+  respondedAt:      Date
+  response:         String (enum: [done, skipped], only set when patient responds)
+  deliveryChannel:  String (enum: [push, sms, email, call])
+  reminderJobId:    String (BullMQ job ID for cancellation)
+  notificationId:   ObjectId (ref: Notification, for in-app link)
+  deletedAt:        Date
+  createdAt:        Date (auto)
+}
+
+Indexes:
+  - { task: 1, scheduledAt: 1 }          // Task's reminder timeline
+  - { patient: 1, status: 1, scheduledAt: 1 }  // Patient's pending reminders
+  - { scheduledAt: 1, status: 1 }        // Scanner query: overdue pending
+  - { reminderJobId: 1 }                 // Job lookup for cancellation
+  - { deletedAt: 1 }</code></pre><h3><strong>16.3 Prescription Model Extension</strong></h3>
+<p><strong>Added fields to existing <code>Prescription</code> schema:</strong></p>
+<pre><code class="hljs plaintext">// Added to existing Prescription model:
+followUpRemindersEnabled: {
+  type: Boolean,
+  default: false
+}
+reminderOptInAt: Date
+tasksExtracted: {
+  type: Boolean,
+  default: false
+}</code></pre><hr>
+<h2><strong>17. API Specification</strong></h2>
+<h3><strong>17.1 Patient Portal Routes</strong></h3>
+<p><strong>Prefix:</strong> <code>/portal</code> (existing patient portal)</p>
+<h4><strong>POST /portal/prescriptions/:id/enable-reminders</strong> — Enable Care Reminders</h4>
+<pre><code class="hljs plaintext">Purpose:  Opt-in to receive care reminders for a prescription
+Auth:     Patient/Guardian role
+Params:   id — Prescription ObjectId
+
+Request:
+  POST /api/v1/portal/prescriptions/65b.../enable-reminders?patientId=PAT-123
+
+Response (200 OK):
+  {
+    "success": true,
+    "message": "Care reminders enabled",
+    "data": {
+      "prescription": "65b...",
+      "tasksCreated": 3,
+      "totalReminders": 45,
+      "firstReminderAt": "2026-03-10T08:00:00.000Z",
+      "lastReminderAt": "2026-03-17T20:00:00.000Z"
+    }
+  }
+
+Errors:
+  400 — Reminders already enabled
+  403 — Not the prescription patient
+  404 — Prescription not found</code></pre><h4><strong>DELETE /portal/prescriptions/:id/disable-reminders</strong> — Disable Care Reminders</h4>
+<pre><code class="hljs plaintext">Purpose:  Opt-out and cancel all pending reminders
+Auth:     Patient/Guardian role
+
+Response (200 OK):
+  {
+    "success": true,
+    "message": "Care reminders disabled",
+    "data": {
+      "cancelledReminders": 32,
+      "cancelledJobs": 32
+    }
+  }</code></pre><h4><strong>GET /portal/care-tasks</strong> — List Active Care Tasks</h4>
+<pre><code class="hljs plaintext">Purpose:  Get all active care tasks for the patient
+Auth:     Patient/Guardian role
+Query:    patientId, status (active/completed/all)
+
+Response (200 OK):
+  {
+    "success": true,
+    "message": "Care tasks retrieved",
+    "data": [
+      {
+        "_id": "task1...",
+        "title": "Take Amoxicillin 500mg",
+        "taskType": "medication",
+        "frequency": "thrice_daily",
+        "startDate": "2026-03-09",
+        "endDate": "2026-03-16",
+        "totalReminders": 21,
+        "completedCount": 5,
+        "skippedCount": 1,
+        "missedCount": 0,
+        "completionRate": 23.8,
+        "isActive": true,
+        "nextReminder": "2026-03-10T14:00:00.000Z"
+      }
+    ]
+  }</code></pre><h4><strong>PUT /portal/care-tasks/:taskId/reminders/:id</strong> — Mark Reminder</h4>
+<pre><code class="hljs plaintext">Purpose:  Patient marks a reminder as done or skipped
+Auth:     Patient/Guardian role
+Body:     { response: 'done' | 'skipped' }
+
+Response (200 OK):
+  {
+    "success": true,
+    "message": "Reminder marked as done",
+    "data": {
+      "reminder": { ... },
+      "task": {
+        "completedCount": 6,
+        "completionRate": 28.6
+      }
+    }
+  }</code></pre><h3><strong>17.2 Doctor Dashboard Routes</strong></h3>
+<p><strong>Prefix:</strong> <code>/doctor</code></p>
+<h4><strong>GET /doctor/patients/:patientId/compliance</strong> — Patient Compliance</h4>
+<pre><code class="hljs plaintext">Purpose:  View care compliance for a specific patient
+Auth:     Doctor role
+
+Response (200 OK):
+  {
+    "success": true,
+    "message": "Patient compliance retrieved",
+    "data": {
+      "patient": { "_id": "...", "name": "John" },
+      "prescriptions": [
+        {
+          "_id": "rx1...",
+          "diagnosis": "Tooth extraction aftercare",
+          "createdAt": "2026-03-05",
+          "tasks": [
+            {
+              "title": "Take Amoxicillin 500mg",
+              "completionRate": 85.7,
+              "completedCount": 18,
+              "totalReminders": 21,
+              "skippedCount": 2,
+              "missedCount": 1
+            }
+          ],
+          "overallComplianceRate": 82.3
+        }
+      ],
+      "averageCompliance": 82.3
+    }
+  }</code></pre><hr>
+<h2><strong>18. High-Level Design</strong></h2>
+<h3><strong>18.1 Sequence Diagram — Care Reminder Flow</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-wrb88azwl" class="mermaid">sequenceDiagram
+    actor D as Doctor
+    participant API as Express API
+    participant DB as Tenant MongoDB
+    actor P as Patient
+    participant APP as Mobile App
+    participant Q as BullMQ Queue
+    participant W as Care Reminder Worker
+    participant WS as Socket.IO
+    participant SMS as SMS/Push
+
+    D-&gt;&gt;API: POST /prescriptions (create prescription)
+    API-&gt;&gt;DB: Save Prescription with medications[]
+    API-&gt;&gt;WS: Emit 'prescription:new' to patient
+    WS--&gt;&gt;APP: prescription:new event
+
+    APP-&gt;&gt;APP: Show "Enable Care Reminders?" prompt
+    P-&gt;&gt;APP: Tap "Enable"
+    APP-&gt;&gt;API: POST /portal/prescriptions/:id/enable-reminders
+
+    API-&gt;&gt;DB: Update Prescription (followUpRemindersEnabled: true)
+    API-&gt;&gt;API: Parse medications[] → extract tasks
+
+    loop For each medication
+        API-&gt;&gt;DB: Create PrescriptionTask
+        loop For each reminder in schedule
+            API-&gt;&gt;DB: Create CareReminder (status: pending)
+            API-&gt;&gt;Q: Add delayed job {reminderId, tenantSlug}
+        end
+    end
+
+    API--&gt;&gt;APP: { tasksCreated: 3, totalReminders: 45 }
+
+    Note over Q,W: At each scheduled time...
+
+    Q-&gt;&gt;W: Process care reminder job
+    W-&gt;&gt;DB: Fetch CareReminder → PrescriptionTask → Patient
+    W-&gt;&gt;DB: Update CareReminder status → sent
+    W-&gt;&gt;WS: Emit 'care-reminder:due' to patient
+    W-&gt;&gt;SMS: Send push notification
+    WS--&gt;&gt;APP: care-reminder:due event
+
+    APP-&gt;&gt;APP: Show reminder notification with actions
+    P-&gt;&gt;APP: Tap "Done"
+    APP-&gt;&gt;API: PUT /portal/care-tasks/:taskId/reminders/:id {response:'done'}
+    API-&gt;&gt;DB: Update CareReminder status → done
+    API-&gt;&gt;DB: Increment PrescriptionTask.completedCount
+    API--&gt;&gt;APP: { completionRate: 28.6 }
+
+    Note over D: During next visit...
+    D-&gt;&gt;API: GET /doctor/patients/:id/compliance
+    API-&gt;&gt;DB: Aggregate task completion stats
+    API--&gt;&gt;D: { averageCompliance: 82.3%, tasks: [...] }</div></div><hr>
+<h2><strong>19. Low-Level Design</strong></h2>
+<h3><strong>19.1 Task Extractor Utility</strong></h3>
+<pre><code class="hljs plaintext">taskExtractor.js
+
+Function: extractTasks(prescription, patient)
+  Input:  Prescription document with medications[] array
+  Output: Array of PrescriptionTask-ready objects
+
+  Algorithm:
+    tasks = []
+    for each med in prescription.medications:
+      task = {
+        prescription: prescription._id,
+        patient: patient._id,
+        doctor: prescription.doctor,
+        taskType: classifyTaskType(med),
+        title: `${med.name} ${med.dosage || ''}`.trim(),
+        instructions: med.instructions || '',
+        frequency: mapFrequency(med.frequency),
+        startDate: prescription.createdAt || new Date(),
+        endDate: calculateEndDate(med.duration, startDate),
+        totalReminders: calculateTotal(frequency, duration)
+      }
+      tasks.push(task)
+
+    // Add follow-up task if followUpDate exists
+    if (prescription.followUpDate):
+      tasks.push({
+        taskType: 'follow_up',
+        title: 'Follow-up visit',
+        frequency: 'once',
+        startDate: dayBefore(prescription.followUpDate),
+        endDate: prescription.followUpDate,
+        totalReminders: 1
+      })
+
+    return tasks
+
+  classifyTaskType(medication):
+    keywords = {
+      medication: ['tablet', 'capsule', 'syrup', 'drops', 'mg', 'ml'],
+      hygiene: ['brush', 'floss', 'rinse', 'mouthwash'],
+      post_care: ['gargle', 'ice', 'compress', 'rest'],
+      dietary: ['avoid', 'diet', 'eat', 'food', 'drink']
+    }
+    // Match by keywords in name + instructions
+    // Default: 'medication'
+
+  mapFrequency(freqString):
+    mapping = {
+      'once daily': 'once',
+      'twice daily': 'twice_daily',
+      'three times': 'thrice_daily',
+      'thrice daily': 'thrice_daily',
+      'after meals': 'after_meals',
+      'before meals': 'before_meals',
+      'at bedtime': 'bedtime',
+      'at night': 'bedtime'
+    }
+    return mapping[freqString.toLowerCase()] || 'once'</code></pre><h3><strong>19.2 Reminder State Machine</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-9ppo2lqds" class="mermaid">stateDiagram-v2
+    [*] --&gt; pending: Reminder created with future scheduledAt
+    pending --&gt; sent: Worker delivers at scheduledAt
+    pending --&gt; cancelled: Task deactivated or patient opts out
+    sent --&gt; done: Patient taps "Done"
+    sent --&gt; skipped: Patient taps "Skip"
+    sent --&gt; missed: No response after 4 hours
+    done --&gt; [*]
+    skipped --&gt; [*]
+    missed --&gt; [*]
+    cancelled --&gt; [*]</div></div><h3><strong>19.3 Component Architecture</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-6r06j9vg9" class="mermaid">graph LR
+    subgraph "Portal Module Extension"
+        PR[portal.routes.js] --&gt; PC[portal.controller.js]
+        PC --&gt; PS[portal.service.js]
+    end
+
+    subgraph "New Module: careReminder"
+        CR_R[careReminder.routes.js] --&gt; CR_C[careReminder.controller.js]
+        CR_C --&gt; CR_S[careReminder.service.js]
+        CR_V[careReminder.validator.js] --&gt; CR_R
+    end
+
+    subgraph "Doctor Dashboard Extension"
+        DR[doctorDashboard.routes.js] --&gt; DC[doctorDashboard.controller.js]
+        DC --&gt; DS[doctorDashboard.service.js]
+    end
+
+    subgraph "Utilities"
+        TE[taskExtractor.js]
+        RS[reminderScheduler.js]
+    end
+
+    subgraph "Models"
+        PT[PrescriptionTask.js]
+        CR[CareReminder.js]
+        RX[Prescription.js +ext]
+    end
+
+    subgraph "Workers"
+        CRW[careReminderWorker.js]
+        CRSW[careReminderScanWorker.js]
+    end
+
+    PS --&gt; TE
+    PS --&gt; RS
+    CR_S --&gt; PT
+    CR_S --&gt; CR
+    DS --&gt; PT
+    CRW --&gt; CR
+    CRW --&gt; PT
+    CRSW --&gt; CR</div></div><hr>
+<h2><strong>20. User Interface Specifications</strong></h2>
+<h3><strong>20.1 Mobile App — Reminder Opt-In Prompt</strong></h3>
+<p>Displayed as a bottom sheet or modal when patient views a new prescription:</p>
+<pre><code class="hljs plaintext">┌─────────────────────────────┐
+│                              │
+│  📋 Care Reminders           │
+│                              │
+│  Your doctor prescribed      │
+│  3 medications for 7 days.   │
+│                              │
+│  Would you like automated    │
+│  reminders to help you       │
+│  follow your care plan?      │
+│                              │
+│  • Amoxicillin 500mg (3x/day)│
+│  • Ibuprofen 200mg (2x/day) │
+│  • Salt-water gargle (3x/day)│
+│                              │
+│  Total: 56 reminders over    │
+│  7 days                      │
+│                              │
+│  [Enable Reminders]          │
+│  [Skip for now]              │
+│                              │
+└─────────────────────────────┘</code></pre><h3><strong>20.2 Mobile App — Care Task Tracker</strong></h3>
+<p>New tab or section in Patient Portal:</p>
+<pre><code class="hljs plaintext">┌─────────────────────────────┐
+│  ← My Care Plan             │
+│                              │
+│  Overall: 78% compliant     │
+│  ████████████░░░░  78%       │
+│                              │
+│  ┌────────────────────────┐  │
+│  │ 💊 Amoxicillin 500mg  │  │
+│  │ 3x daily • Day 4 of 7 │  │
+│  │ ██████████░░░  72%     │  │
+│  │ Next: Today 2:00 PM    │  │
+│  └────────────────────────┘  │
+│                              │
+│  ┌────────────────────────┐  │
+│  │ 🧂 Salt-water gargle  │  │
+│  │ After meals • Day 4/7  │  │
+│  │ █████████████░  85%    │  │
+│  │ Next: Today 2:30 PM    │  │
+│  └────────────────────────┘  │
+│                              │
+│  [Disable All Reminders]     │
+└─────────────────────────────┘</code></pre><h3><strong>20.3 Web Admin — Doctor Compliance View</strong></h3>
+<p>Column or expandable section in patient detail during consultation:</p>
+<pre><code class="hljs plaintext">┌──────────────────────────────────────────────────────────┐
+│  Patient Compliance — John Doe                            │
+│                                                           │
+│  Prescription: Tooth extraction aftercare (Mar 5, 2026)   │
+│  Overall Compliance: 82.3%                                │
+│                                                           │
+│  Task                    Done  Skip  Miss  Rate           │
+│  ─────────────────────────────────────────────────        │
+│  Amoxicillin 500mg       18     2     1    85.7%          │
+│  Ibuprofen 200mg         12     1     1    85.7%          │
+│  Salt-water gargle       14     3     4    66.7%   ⚠️     │
+│                                                           │
+│  ⚠️ Patient skipping salt-water gargles frequently        │
+└──────────────────────────────────────────────────────────┘</code></pre><hr>
+<h2><strong>21. Integration Points</strong></h2>
+<table>
+<thead>
+<tr>
+<th align="left">Existing Module</th>
+<th align="left">Integration</th>
+<th align="left">Direction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Prescription Module</td>
+<td align="left">Extends model with reminder fields; hooks into create flow</td>
+<td align="left">Extends</td>
+</tr>
+<tr>
+<td align="left">Patient Portal</td>
+<td align="left">New routes for opt-in/out and task management</td>
+<td align="left">Extends</td>
+</tr>
+<tr>
+<td align="left">Doctor Dashboard</td>
+<td align="left">New compliance endpoint</td>
+<td align="left">Extends</td>
+</tr>
+<tr>
+<td align="left">Notification Module</td>
+<td align="left">Reminder delivery via <code>notifyAndEmit()</code></td>
+<td align="left">Calls into</td>
+</tr>
+<tr>
+<td align="left">Job Queue System</td>
+<td align="left">New <code>careReminderQueue</code> + <code>careReminderScanQueue</code></td>
+<td align="left">Adds to</td>
+</tr>
+</tbody></table>
+<hr>
+<hr>
+<h1><strong>Part IV: Feature 3 — Clinical Inventory &amp; Procedure Readiness Management System</strong></h1>
+<hr>
+<h2><strong>22. Feature Overview</strong></h2>
+<h3><strong>22.1 Problem Statement</strong></h3>
+<p>When a doctor determines that a patient requires a complex procedure (dental implant, braces installation, surgical extraction), there is no way to verify whether the clinic has the required equipment and materials in stock. This leads to:</p>
+<p> • <strong>Scheduling failures</strong> — Procedures scheduled without confirming material availability
+ • <strong>Patient frustration</strong> — Appointments cancelled or delayed due to missing equipment
+ • <strong>Operational waste</strong> — Staff manually tracking inventory via spreadsheets or memory
+ • <strong>Revenue loss</strong> — Complex high-value procedures delayed unnecessarily</p>
+<h3><strong>22.2 Solution</strong></h3>
+<p>A centralized inventory management system integrated with appointment scheduling. Doctors can verify material availability during consultation, reserve materials for scheduled procedures, and receive automated notifications when restocked items satisfy pending procedure requirements.</p>
+<h3><strong>22.3 Business Objectives</strong></h3>
+<p> • <strong>Zero procedure cancellations</strong> due to material unavailability
+ • <strong>Automated stock monitoring</strong> replacing manual spreadsheet tracking
+ • <strong>Doctor confidence</strong> — real-time visibility into equipment readiness
+ • <strong>Operational efficiency</strong> — automated alerts for low stock and expiring items
+ • <strong>Cost control</strong> — usage analytics and wastage tracking</p>
+<h3><strong>22.4 User Roles</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Role</th>
+<th align="left">Interaction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Doctor</td>
+<td align="left">Checks material availability, reserves materials for procedures</td>
+</tr>
+<tr>
+<td align="left">Staff/Receptionist</td>
+<td align="left">Manages inventory (add, update, restock), handles low-stock alerts</td>
+</tr>
+<tr>
+<td align="left">Admin</td>
+<td align="left">Views inventory reports, configures thresholds, manages procedure templates</td>
+</tr>
+</tbody></table>
+<hr>
+<h2><strong>23. Functional Requirements</strong></h2>
+<h3><strong>23.1 FR-INV-001: Inventory Item Management</strong></h3>
+<p> • <strong>[MUST]</strong> Staff can create, update, and soft-delete inventory items
+ • <strong>[MUST]</strong> Each item tracked with: name, code (unique), category, current stock, reserved stock, minimum threshold, cost, unit, supplier, branch, expiry date
+ • <strong>[MUST]</strong> Items categorized by type:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Category</th>
+<th align="left">Examples</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">braces</td>
+<td align="left">Metal brackets, ceramic brackets, self-ligating, lingual</td>
+</tr>
+<tr>
+<td align="left">implants</td>
+<td align="left">Titanium implants, abutments, healing caps</td>
+</tr>
+<tr>
+<td align="left">prosthetics</td>
+<td align="left">Crowns, bridges, dentures, veneers</td>
+</tr>
+<tr>
+<td align="left">surgical_kits</td>
+<td align="left">Extraction kits, bone grafting kits, suture kits</td>
+</tr>
+<tr>
+<td align="left">consumables</td>
+<td align="left">Anesthetics, bonding agents, impression materials</td>
+</tr>
+<tr>
+<td align="left">instruments</td>
+<td align="left">Scalers, elevators, forceps, handpieces</td>
+</tr>
+<tr>
+<td align="left">orthodontic</td>
+<td align="left">Arch wires, elastic bands, retainers</td>
+</tr>
+<tr>
+<td align="left">endodontic</td>
+<td align="left">Root canal files, gutta percha, sealers</td>
+</tr>
+<tr>
+<td align="left">periodontal</td>
+<td align="left">Curettes, probes, membranes</td>
+</tr>
+<tr>
+<td align="left">imaging</td>
+<td align="left">X-ray films, sensors, phosphor plates</td>
+</tr>
+<tr>
+<td align="left">sterilization</td>
+<td align="left">Autoclave pouches, indicators, solutions</td>
+</tr>
+</tbody></table>
+<p> • <strong>[MUST]</strong> Branch-level inventory isolation (each branch has own stock)
+ • <strong>[SHOULD]</strong> Clinic-wide aggregate view for admin
+ • <strong>[MUST]</strong> Virtual fields: <code>availableStock</code> = currentStock - reservedStock
+ • <strong>[MUST]</strong> Virtual fields: <code>isLowStock</code> = availableStock &lt;= minimumThreshold</p>
+<h3><strong>23.2 FR-INV-002: Procedure Templates</strong></h3>
+<p> • <strong>[MUST]</strong> Admin can create reusable procedure templates defining required materials
+ • <strong>[MUST]</strong> Template includes: name, code, category, list of required materials (item + quantity), estimated duration
+ • <strong>[MUST]</strong> Required materials can be marked as optional or mandatory
+ • <strong>[SHOULD]</strong> Templates linked to departments</p>
+<h3><strong>23.3 FR-INV-003: Availability Check</strong></h3>
+<p> • <strong>[MUST]</strong> Doctor can check material availability for a procedure template
+ • <strong>[MUST]</strong> System checks each required material against branch inventory
+ • <strong>[MUST]</strong> Response indicates:</p>
+<ul>
+<li><code>ready: true</code> — all mandatory materials available, procedure can be scheduled</li>
+<li><code>ready: false</code> — missing items listed with required vs available quantities</li>
+</ul>
+<h3><strong>23.4 FR-INV-004: Material Reservation</strong></h3>
+<p> • <strong>[MUST]</strong> When scheduling a procedure with available materials, system reserves required quantities
+ • <strong>[MUST]</strong> Reserved stock deducted from available (not current) stock
+ • <strong>[MUST]</strong> Each reservation linked to: appointment, patient, procedure template, items with quantities
+ • <strong>[MUST]</strong> <code>InventoryTransaction</code> (type: <code>reserved</code>) created for audit trail
+ • <strong>[MUST]</strong> Reservation auto-released if appointment is cancelled:</p>
+<ul>
+<li>Reserved quantities added back to available stock</li>
+<li><code>InventoryTransaction</code> (type: <code>released</code>) created</li>
+<li>Reservation status updated to <code>released</code>
+ • <strong>[SHOULD]</strong> When procedure completed, reservation status → <code>used</code> and <code>InventoryTransaction</code> (type: <code>stock_out</code>) created</li>
+</ul>
+<h3><strong>23.5 FR-INV-005: Restocking &amp; Alerts</strong></h3>
+<p> • <strong>[MUST]</strong> Staff can restock items (increase currentStock)
+ • <strong>[MUST]</strong> <code>InventoryTransaction</code> (type: <code>stock_in</code>) created on restock
+ • <strong>[MUST]</strong> Low-stock alert triggered when <code>availableStock &lt;= minimumThreshold</code>
+ • <strong>[MUST]</strong> Expiry alert for items expiring within 30 days
+ • <strong>[MUST]</strong> When restocked item satisfies a pending procedure's requirement, notify the doctor:
+   <em>"Materials for [Patient]'s [Procedure] are now available. Ready to schedule."</em>
+ • <strong>[SHOULD]</strong> Dashboard widget showing items below threshold</p>
+<h3><strong>23.6 FR-INV-006: Inventory Reports</strong></h3>
+<p> • <strong>[SHOULD]</strong> Usage trends: monthly/quarterly consumption per item
+ • <strong>[SHOULD]</strong> Most consumed materials (ranked list)
+ • <strong>[SHOULD]</strong> Wastage tracking (expired items)
+ • <strong>[SHOULD]</strong> Cost analysis per procedure type
+ • <strong>[MAY]</strong> Branch-wise inventory comparison</p>
+<hr>
+<h2><strong>24. Non-Functional Requirements</strong></h2>
+<h3><strong>24.1 Performance</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Metric</th>
+<th align="left">Requirement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Availability check</td>
+<td align="left">&lt; 500ms for a procedure with 20 required items</td>
+</tr>
+<tr>
+<td align="left">Reservation creation</td>
+<td align="left">&lt; 1 second (including transaction logging)</td>
+</tr>
+<tr>
+<td align="left">Low-stock query</td>
+<td align="left">&lt; 300ms</td>
+</tr>
+<tr>
+<td align="left">Inventory list</td>
+<td align="left">&lt; 500ms for 500 items with pagination</td>
+</tr>
+</tbody></table>
+<h3><strong>24.2 Data Integrity</strong></h3>
+<p> • <strong>[MUST]</strong> All stock changes recorded in <code>InventoryTransaction</code> (immutable audit trail)
+ • <strong>[MUST]</strong> Concurrent reservations handled with MongoDB atomic operations (<code>$inc</code>)
+ • <strong>[MUST]</strong> Race condition prevention: use <code>findOneAndUpdate</code> with <code>{ returnOriginal: false }</code> and post-check validation</p>
+<h3><strong>24.3 Security</strong></h3>
+<p> • <strong>[MUST]</strong> Only authorized roles can modify inventory (Staff, Admin)
+ • <strong>[MUST]</strong> Doctors can only read inventory and create reservations
+ • <strong>[MUST]</strong> Transaction log is append-only (no updates/deletes)</p>
+<hr>
+<h2><strong>25. Database Schema Design</strong></h2>
+<h3><strong>25.1 InventoryItem Model</strong></h3>
+<p><strong>Collection:</strong> <code>inventoryitems</code> (Tenant Database)</p>
+<pre><code class="hljs plaintext">InventoryItem {
+  _id:                ObjectId (auto-generated)
+  name:               String (required, maxlength: 200, indexed)
+  code:               String (unique, uppercase, required, maxlength: 30)
+  category:           String (enum: [braces, implants, prosthetics,
+                        surgical_kits, consumables, instruments, orthodontic,
+                        endodontic, periodontal, imaging, sterilization, other],
+                        required)
+  description:        String (maxlength: 500)
+  unit:               String (default: 'piece')
+                      // e.g., piece, set, ml, pack, box
+  currentStock:       Number (required, min: 0)
+  reservedStock:      Number (default: 0, min: 0)
+  minimumThreshold:   Number (default: 5, min: 0)
+  costPerUnit:        Number (min: 0)
+  currency:           String (default: 'INR')
+  supplier: {
+    name:             String (maxlength: 200)
+    contactPhone:     String (maxlength: 20)
+    contactEmail:     String (maxlength: 100)
+    leadTimeDays:     Number (min: 0)
+  }
+  expiryDate:         Date (indexed, for consumables)
+  branch:             ObjectId (ref: Branch, required, indexed)
+  lastRestockedAt:    Date
+  lastRestockedBy:    ObjectId (ref: User)
+  isActive:           Boolean (default: true)
+  createdBy:          ObjectId (ref: User)
+  deletedAt:          Date
+  createdAt:          Date (auto)
+  updatedAt:          Date (auto)
+}
+
+Indexes:
+  - { code: 1 }                        (unique)
+  - { branch: 1, category: 1 }         (branch + category filter)
+  - { branch: 1, isActive: 1 }         (active items per branch)
+  - { expiryDate: 1 }                  (expiry alerts)
+  - { deletedAt: 1 }
+  - text: { name: 'text' }             (search)
+
+Virtuals:
+  - availableStock: this.currentStock - this.reservedStock
+  - isLowStock: this.availableStock &lt;= this.minimumThreshold
+  - isExpiringSoon: this.expiryDate &amp;&amp; this.expiryDate &lt;= Date.now() + 30days</code></pre><h3><strong>25.2 InventoryTransaction Model</strong></h3>
+<p><strong>Collection:</strong> <code>inventorytransactions</code> (Tenant Database)</p>
+<p><strong>Purpose:</strong> Immutable audit log of all stock changes.</p>
+<pre><code class="hljs plaintext">InventoryTransaction {
+  _id:                ObjectId (auto-generated)
+  item:               ObjectId (ref: InventoryItem, required, indexed)
+  type:               String (enum: [stock_in, stock_out, reserved, released,
+                        adjustment, expired, damaged], required)
+  quantity:           Number (required)
+                      // Positive for stock_in/released, negative for stock_out/reserved
+  previousStock:      Number (required)
+  newStock:           Number (required)
+  previousReserved:   Number
+  newReserved:        Number
+  reason:             String (maxlength: 500)
+  reference:          ObjectId
+  referenceModel:     String (enum: [Appointment, MaterialReservation])
+  branch:             ObjectId (ref: Branch, indexed)
+  performedBy:        ObjectId (ref: User, required)
+  createdAt:          Date (auto)
+}
+
+Indexes:
+  - { item: 1, createdAt: -1 }         (item transaction history)
+  - { type: 1, createdAt: -1 }         (filter by transaction type)
+  - { branch: 1, createdAt: -1 }       (branch transaction log)
+
+Immutability Guards:
+  - Block all updateOne, updateMany, findOneAndUpdate operations
+  - Block all deleteOne, deleteMany operations
+  - Only allow insertOne / create (write-once)</code></pre><h3><strong>25.3 ProcedureTemplate Model</strong></h3>
+<p><strong>Collection:</strong> <code>proceduretemplates</code> (Tenant Database)</p>
+<pre><code class="hljs plaintext">ProcedureTemplate {
+  _id:                ObjectId (auto-generated)
+  name:               String (required, maxlength: 200)
+                      // e.g., "Dental Implant Placement"
+  code:               String (unique, uppercase, maxlength: 30)
+  category:           String (enum: [surgery, orthodontic, prosthetic,
+                        endodontic, periodontal, cosmetic, diagnostic, other])
+  description:        String (maxlength: 1000)
+  requiredMaterials: [{
+    item:             ObjectId (ref: InventoryItem, required)
+    itemName:         String (denormalized for display)
+    quantity:         Number (required, min: 1)
+    isOptional:       Boolean (default: false)
+  }]
+  estimatedDuration:  Number (minutes, min: 10)
+  estimatedCost:      Number (min: 0)
+  department:         ObjectId (ref: Department)
+  isActive:           Boolean (default: true)
+  createdBy:          ObjectId (ref: User)
+  deletedAt:          Date
+  createdAt:          Date (auto)
+  updatedAt:          Date (auto)
+}
+
+Indexes:
+  - { code: 1 }                        (unique)
+  - { category: 1, isActive: 1 }       (template search)
+  - { deletedAt: 1 }</code></pre><h3><strong>25.4 MaterialReservation Model</strong></h3>
+<p><strong>Collection:</strong> <code>materialreservations</code> (Tenant Database)</p>
+<pre><code class="hljs plaintext">MaterialReservation {
+  _id:                ObjectId (auto-generated)
+  appointment:        ObjectId (ref: Appointment, required, indexed)
+  patient:            ObjectId (ref: Patient, required, indexed)
+  procedure:          ObjectId (ref: ProcedureTemplate, required)
+  items: [{
+    item:             ObjectId (ref: InventoryItem, required)
+    itemName:         String (denormalized)
+    quantity:         Number (required, min: 1)
+    status:           String (enum: [reserved, used, released],
+                        default: 'reserved')
+  }]
+  status:             String (enum: [reserved, partially_used, used,
+                        released, cancelled], default: 'reserved')
+  reservedAt:         Date (default: Date.now)
+  releasedAt:         Date
+  usedAt:             Date
+  reservedBy:         ObjectId (ref: User, required)
+  branch:             ObjectId (ref: Branch, required, indexed)
+  notes:              String (maxlength: 500)
+  deletedAt:          Date
+  createdAt:          Date (auto)
+  updatedAt:          Date (auto)
+}
+
+Indexes:
+  - { appointment: 1 }                 (one reservation per appointment)
+  - { patient: 1, status: 1 }          (patient's active reservations)
+  - { branch: 1, status: 1 }           (branch reservations)
+  - { 'items.item': 1, status: 1 }     (find reservations for an item)
+  - { deletedAt: 1 }</code></pre><hr>
+<h2><strong>26. API Specification</strong></h2>
+<h3><strong>26.1 Inventory Management Routes</strong></h3>
+<p><strong>Prefix:</strong> <code>/inventory</code>
+<strong>Auth:</strong> <code>authenticate()</code> → <code>tenantResolver()</code></p>
+<pre><code class="hljs plaintext">GET    /inventory                    → listItems
+       authorize(INVENTORY_READ)
+       Query: branch, category, search, lowStock, expiring, page, limit
+
+POST   /inventory                    → createItem
+       authorize(INVENTORY_CREATE)
+       Body: { name, code, category, unit, currentStock, minimumThreshold,
+               costPerUnit, supplier, expiryDate, branch }
+
+GET    /inventory/:id                → getItem
+       authorize(INVENTORY_READ)
+
+PUT    /inventory/:id                → updateItem
+       authorize(INVENTORY_UPDATE)
+       Body: { name, category, minimumThreshold, costPerUnit, supplier, ... }
+       Note: Cannot directly modify currentStock/reservedStock (use restock)
+
+DELETE /inventory/:id                → softDeleteItem
+       authorize(INVENTORY_DELETE)
+
+PUT    /inventory/:id/restock        → restockItem
+       authorize(INVENTORY_UPDATE)
+       Body: { quantity, reason, supplierNote }
+       Side effects:
+         - Creates InventoryTransaction (type: stock_in)
+         - Checks pending reservations needing this item
+         - Notifies relevant doctors if pending procedures now satisfiable
+
+GET    /inventory/low-stock          → getLowStockAlerts
+       authorize(INVENTORY_READ)
+       Returns: items where availableStock &lt;= minimumThreshold
+
+GET    /inventory/expiring           → getExpiringItems
+       authorize(INVENTORY_READ)
+       Query: days (default: 30)
+       Returns: items where expiryDate &lt;= now + days
+
+GET    /inventory/reports            → getInventoryReports
+       authorize(INVENTORY_READ)
+       Query: type (usage, cost, wastage), from, to, branch</code></pre><h3><strong>26.2 Procedure Template Routes</strong></h3>
+<p><strong>Prefix:</strong> <code>/procedures</code>
+<strong>Auth:</strong> <code>authenticate()</code> → <code>tenantResolver()</code></p>
+<pre><code class="hljs plaintext">GET    /procedures                            → listTemplates
+       authorize(PROCEDURE_READ)
+
+POST   /procedures                            → createTemplate
+       authorize(PROCEDURE_CREATE)
+       Body: { name, code, category, requiredMaterials[], estimatedDuration }
+
+PUT    /procedures/:id                        → updateTemplate
+       authorize(PROCEDURE_UPDATE)
+
+GET    /procedures/:id/check-availability     → checkMaterialAvailability
+       authorize(PROCEDURE_READ)
+       Query: branch (required)
+       Returns: { ready: true/false, items: [{item, required, available, sufficient}],
+                  missingItems: [{item, required, available, deficit}] }</code></pre><h3><strong>26.3 Material Reservation Routes</strong></h3>
+<p><strong>Prefix:</strong> <code>/reservations</code>
+<strong>Auth:</strong> <code>authenticate()</code> → <code>tenantResolver()</code></p>
+<pre><code class="hljs plaintext">POST   /reservations                          → reserveMaterials
+       authorize(RESERVATION_CREATE)
+       Body: { appointmentId, procedureId, branch }
+       Side effects:
+         - Checks all materials available
+         - Atomically increments reservedStock on each item
+         - Creates InventoryTransaction (type: reserved) per item
+         - Creates MaterialReservation
+
+GET    /reservations/:appointmentId           → getReservation
+       authorize(RESERVATION_READ)
+
+DELETE /reservations/:id                      → releaseReservation
+       authorize(RESERVATION_RELEASE)
+       Side effects:
+         - Atomically decrements reservedStock
+         - Creates InventoryTransaction (type: released)
+         - Updates reservation status → released</code></pre><hr>
+<h2><strong>27. High-Level Design</strong></h2>
+<h3><strong>27.1 Sequence Diagram — Procedure Readiness Check &amp; Reservation</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-00w03voyy" class="mermaid">sequenceDiagram
+    actor D as Doctor
+    participant API as Express API
+    participant DB as Tenant MongoDB
+    actor S as Staff
+    participant WS as Socket.IO
+
+    D-&gt;&gt;API: GET /procedures/implant-001/check-availability?branch=br1
+    API-&gt;&gt;DB: Fetch ProcedureTemplate.requiredMaterials
+    API-&gt;&gt;DB: Query InventoryItem for each material in branch
+    API-&gt;&gt;API: Compare required vs available quantities
+
+    alt All Materials Available
+        API--&gt;&gt;D: { ready: true, items: [...all sufficient] }
+        D-&gt;&gt;API: POST /reservations {appointmentId, procedureId, branch}
+
+        loop For each required material
+            API-&gt;&gt;DB: InventoryItem.findOneAndUpdate($inc reservedStock)
+            API-&gt;&gt;DB: Create InventoryTransaction (type: reserved)
+        end
+
+        API-&gt;&gt;DB: Create MaterialReservation (status: reserved)
+        API--&gt;&gt;D: { reservation: {...}, status: reserved }
+        API-&gt;&gt;WS: Emit 'inventory:reservation-created' to staff
+
+    else Materials Unavailable
+        API--&gt;&gt;D: { ready: false, missing: [{titanium implant: need 1, have 0}] }
+        Note over D: Doctor informs patient, schedules for later
+    end
+
+    Note over S: Later, staff restocks...
+    S-&gt;&gt;API: PUT /inventory/:id/restock {quantity: 10}
+    API-&gt;&gt;DB: Update InventoryItem.currentStock
+    API-&gt;&gt;DB: Create InventoryTransaction (type: stock_in)
+    API-&gt;&gt;DB: Query pending procedures needing this item
+
+    alt Pending procedure now satisfiable
+        API-&gt;&gt;WS: Emit 'inventory:procedure-ready' to doctor
+        Note over D: "Materials for John's implant are now available"
+    end
+
+    Note over API: If appointment cancelled...
+    API-&gt;&gt;DB: Find MaterialReservation for appointment
+    loop For each reserved item
+        API-&gt;&gt;DB: InventoryItem.findOneAndUpdate($inc reservedStock: -qty)
+        API-&gt;&gt;DB: Create InventoryTransaction (type: released)
+    end
+    API-&gt;&gt;DB: Update reservation status → released</div></div><hr>
+<h2><strong>28. Low-Level Design</strong></h2>
+<h3><strong>28.1 Inventory Stock State Machine</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-cwe73xx2c" class="mermaid">stateDiagram-v2
+    [*] --&gt; InStock: Item created with currentStock &gt; threshold
+    [*] --&gt; LowStock: Item created with currentStock &lt;= threshold
+
+    InStock --&gt; LowStock: Stock consumed or reserved below threshold
+    InStock --&gt; Reserved: Material reserved for procedure
+    LowStock --&gt; InStock: Restocked above threshold
+    LowStock --&gt; OutOfStock: availableStock reaches 0
+    OutOfStock --&gt; LowStock: Partially restocked
+    OutOfStock --&gt; InStock: Fully restocked
+    Reserved --&gt; Released: Appointment cancelled
+    Reserved --&gt; Used: Procedure completed, stock consumed
+    InStock --&gt; Expired: expiryDate passed
+    LowStock --&gt; Expired: expiryDate passed
+
+    note right of Reserved
+      reservedStock incremented
+      availableStock decremented
+      currentStock unchanged
+    end note
+
+    note right of Released
+      reservedStock decremented
+      availableStock restored
+    end note</div></div><h3><strong>28.2 Atomic Stock Operations</strong></h3>
+<pre><code class="hljs plaintext">Reserve Materials (prevent race conditions):
+
+  async function reserveItemStock(itemId, quantity, session) {
+    const result = await InventoryItem.findOneAndUpdate(
+      {
+        _id: itemId,
+        deletedAt: null,
+        $expr: {
+          $gte: [
+            { $subtract: ['$currentStock', '$reservedStock'] },
+            quantity
+          ]
+        }
+      },
+      {
+        $inc: { reservedStock: quantity }
+      },
+      {
+        new: true,
+        session  // MongoDB transaction
+      }
+    );
+
+    if (!result) {
+      throw ApiError.conflict('Insufficient stock for reservation');
+    }
+
+    return result;
+  }
+
+Release Materials:
+
+  async function releaseItemStock(itemId, quantity, session) {
+    await InventoryItem.findOneAndUpdate(
+      { _id: itemId },
+      { $inc: { reservedStock: -quantity } },
+      { session }
+    );
+  }
+
+Note: Use MongoDB transactions (session) to ensure atomicity
+across multiple items in a single reservation.</code></pre><h3><strong>28.3 Component Architecture</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-gi52ugjci" class="mermaid">graph LR
+    subgraph "Module: inventory"
+        IR[inventory.routes.js] --&gt; IC[inventory.controller.js]
+        IC --&gt; IS[inventory.service.js]
+        IV[inventory.validator.js] --&gt; IR
+    end
+
+    subgraph "Module: procedure"
+        PR[procedure.routes.js] --&gt; PC[procedure.controller.js]
+        PC --&gt; PS[procedure.service.js]
+        PV[procedure.validator.js] --&gt; PR
+    end
+
+    subgraph "Models"
+        II[InventoryItem.js]
+        IT[InventoryTransaction.js]
+        PT[ProcedureTemplate.js]
+        MR[MaterialReservation.js]
+    end
+
+    subgraph "Hooks (in appointment.service.js)"
+        AH[onAppointmentCancelled]
+        AC[onAppointmentCompleted]
+    end
+
+    IS --&gt; II
+    IS --&gt; IT
+    PS --&gt; PT
+    PS --&gt; MR
+    PS --&gt; II
+    PS --&gt; IT
+    AH --&gt; MR
+    AH --&gt; IS
+    AC --&gt; MR
+    AC --&gt; IS</div></div><hr>
+<h2><strong>29. User Interface Specifications</strong></h2>
+<h3><strong>29.1 Web Admin — Inventory Dashboard</strong></h3>
+<pre><code class="hljs plaintext">┌──────────────────────────────────────────────────────────────┐
+│  📦 Inventory Management                    [+ Add Item]     │
+│                                                               │
+│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌───────────┐         │
+│  │ Total   │ │Low Stock│ │Expiring │ │ Reserved  │         │
+│  │  247    │ │   12 ⚠️ │ │   5 🔴  │ │    23     │         │
+│  └─────────┘ └─────────┘ └─────────┘ └───────────┘         │
+│                                                               │
+│  Search: [____________] Category: [All ▾] Branch: [Main ▾]  │
+│                                                               │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ Code    │ Name              │ Stock │ Reserved │ Avail  │  │
+│  │─────────┼───────────────────┼───────┼──────────┼────── │  │
+│  │ IMP-001 │ Titanium Implant  │   15  │    3     │  12   │  │
+│  │ BRC-002 │ Ceramic Brackets  │    8  │    2     │   6   │  │
+│  │ ANE-003 │ Lidocaine 2%      │    3  │    0     │   3 ⚠️│  │
+│  │ SUT-004 │ Vicryl Sutures    │   50  │    5     │  45   │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                                                               │
+│  ⚠️ = Below minimum threshold                                │
+└──────────────────────────────────────────────────────────────┘</code></pre><h3><strong>29.2 Web Admin — Procedure Availability Check</strong></h3>
+<pre><code class="hljs plaintext">┌──────────────────────────────────────────────────────────────┐
+│  🔍 Check Procedure Readiness                                │
+│                                                               │
+│  Procedure: [Dental Implant Placement ▾]                     │
+│  Branch:    [Main Branch ▾]                                  │
+│                                                               │
+│  [Check Availability]                                        │
+│                                                               │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ ✅ READY — All materials available                     │  │
+│  │                                                        │  │
+│  │ Material            │ Required │ Available │ Status    │  │
+│  │─────────────────────┼──────────┼───────────┼───────── │  │
+│  │ Titanium Implant    │    1     │    12     │ ✅       │  │
+│  │ Healing Cap         │    1     │     8     │ ✅       │  │
+│  │ Surgical Kit        │    1     │     3     │ ✅       │  │
+│  │ Lidocaine 2%        │    2     │     3     │ ✅       │  │
+│  │ Vicryl Sutures      │    1     │    45     │ ✅       │  │
+│  │                                                        │  │
+│  │ [Reserve Materials &amp; Schedule]                         │  │
+│  └────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘</code></pre><hr>
+<h2><strong>30. Integration Points</strong></h2>
+<table>
+<thead>
+<tr>
+<th align="left">Existing Module</th>
+<th align="left">Integration</th>
+<th align="left">Direction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Appointment Module</td>
+<td align="left">Auto-release reservation on cancel; consume on complete</td>
+<td align="left">Hooks into</td>
+</tr>
+<tr>
+<td align="left">Branch Module</td>
+<td align="left">Inventory scoped to branches</td>
+<td align="left">Reads from</td>
+</tr>
+<tr>
+<td align="left">Department Module</td>
+<td align="left">Procedure templates linked to departments</td>
+<td align="left">Reads from</td>
+</tr>
+<tr>
+<td align="left">Notification Module</td>
+<td align="left">Low-stock, expiry, and procedure-ready alerts</td>
+<td align="left">Calls into</td>
+</tr>
+<tr>
+<td align="left">Permission System</td>
+<td align="left">New permission keys added to <code>permissions.js</code></td>
+<td align="left">Extends</td>
+</tr>
+<tr>
+<td align="left">Route Registry</td>
+<td align="left">New <code>/inventory</code>, <code>/procedures</code>, <code>/reservations</code> prefixes</td>
+<td align="left">Extends</td>
+</tr>
+</tbody></table>
+<hr>
+<hr>
+<h1><strong>Part V: Cross-Feature Architecture</strong></h1>
+<hr>
+<h2><strong>31. System Architecture Upgrade</strong></h2>
+<h3><strong>31.1 Updated System Component Diagram</strong></h3>
+<p>The three new features add 5 new modules, 8 new models, 3 new BullMQ queues, and 4 new workers to the existing architecture:</p>
+<pre><code class="hljs plaintext">Before (Current):
+  34 modules │ 30+ tenant models │ 9 queues │ 8 workers
+
+After (With New Features):
+  39 modules │ 38+ tenant models │ 12 queues │ 12 workers
+  + 1 external AI service integration</code></pre><h3><strong>31.2 New Queues &amp; Workers</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Queue</th>
+<th align="left">Worker</th>
+<th align="left">Frequency</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>dentalScanAnalysisQueue</code></td>
+<td align="left"><code>dentalScanAnalysisWorker</code></td>
+<td align="left">Event-driven</td>
+<td align="left">AI image analysis</td>
+</tr>
+<tr>
+<td align="left"><code>careReminderQueue</code></td>
+<td align="left"><code>careReminderWorker</code></td>
+<td align="left">Delayed jobs</td>
+<td align="left">Deliver care reminders</td>
+</tr>
+<tr>
+<td align="left"><code>careReminderScanQueue</code></td>
+<td align="left"><code>careReminderScanWorker</code></td>
+<td align="left">Every 30 min</td>
+<td align="left">Catch missed reminders</td>
+</tr>
+<tr>
+<td align="left">(existing <code>emailQueue</code>)</td>
+<td align="left">(existing <code>emailWorker</code>)</td>
+<td align="left">Event-driven</td>
+<td align="left">Email delivery for all features</td>
+</tr>
+</tbody></table>
+<h3><strong>31.3 New Route Prefixes</strong></h3>
+<p>Added to <code>src/routes/index.js</code>:</p>
+<pre><code class="hljs plaintext">router.use('/inventory',        inventoryRoutes);
+router.use('/procedures',       procedureRoutes);
+router.use('/reservations',     reservationRoutes);
+// Portal dental scan routes registered under /portal/dental-scan
+// Care reminder routes registered under /portal/care-tasks
+// Doctor compliance routes registered under /doctor/patients/:id/compliance</code></pre><hr>
+<h2><strong>32. Combined Database Schema Relationships</strong></h2>
+<div class="mermaid-container"><div id="mermaid-diagram-dzegoypnl" class="mermaid">erDiagram
+    Patient ||--o{ DentalScan : "has scans"
+    DentalScan ||--|| DentalScanResult : "produces"
+    DentalScanResult }o--o{ User : "recommends doctors"
+
+    Patient ||--o{ Prescription : "receives"
+    Prescription ||--o{ PrescriptionTask : "generates tasks"
+    PrescriptionTask ||--o{ CareReminder : "schedules reminders"
+
+    InventoryItem ||--o{ InventoryTransaction : "tracks changes"
+    ProcedureTemplate }o--o{ InventoryItem : "requires materials"
+    Appointment ||--o| MaterialReservation : "reserves for"
+    MaterialReservation }o--o{ InventoryItem : "reserves items"
+    ProcedureTemplate ||--o{ MaterialReservation : "defines requirements"
+    Branch ||--o{ InventoryItem : "stocks items"
+
+    Patient {
+        ObjectId _id PK
+        String patientId UK
+        String name
+        ObjectId user FK
+    }
+
+    DentalScan {
+        ObjectId _id PK
+        ObjectId patient FK
+        String status
+        Array images
+        Date completedAt
+    }
+
+    DentalScanResult {
+        ObjectId _id PK
+        ObjectId scan FK
+        ObjectId patient FK
+        Array observations
+        Array recommendedSpecs
+    }
+
+    Prescription {
+        ObjectId _id PK
+        ObjectId patient FK
+        ObjectId doctor FK
+        Array medications
+        Boolean followUpRemindersEnabled
+    }
+
+    PrescriptionTask {
+        ObjectId _id PK
+        ObjectId prescription FK
+        ObjectId patient FK
+        String taskType
+        String frequency
+        Number totalReminders
+        Number completedCount
+    }
+
+    CareReminder {
+        ObjectId _id PK
+        ObjectId task FK
+        ObjectId patient FK
+        Date scheduledAt
+        String status
+    }
+
+    InventoryItem {
+        ObjectId _id PK
+        String code UK
+        String category
+        Number currentStock
+        Number reservedStock
+        Number minimumThreshold
+        ObjectId branch FK
+    }
+
+    InventoryTransaction {
+        ObjectId _id PK
+        ObjectId item FK
+        String type
+        Number quantity
+        Number previousStock
+        Number newStock
+    }
+
+    ProcedureTemplate {
+        ObjectId _id PK
+        String code UK
+        String category
+        Array requiredMaterials
+    }
+
+    MaterialReservation {
+        ObjectId _id PK
+        ObjectId appointment FK
+        ObjectId procedure FK
+        Array items
+        String status
+        ObjectId branch FK
+    }</div></div><hr>
+<h2><strong>33. Job Queue Infrastructure</strong></h2>
+<h3><strong>33.1 Updated Queue Configuration</strong></h3>
+<p>All new queues added to <code>src/jobs/queues.js</code> following the existing lazy singleton pattern:</p>
+<pre><code class="hljs plaintext">New queue entries in _createQueues():
+
+  dentalScanAnalysisQueue: new Queue('dentalScanAnalysis', {
+    connection,
+    defaultJobOptions: {
+      attempts: 3,
+      backoff: { type: 'exponential', delay: 5000 },
+      removeOnComplete: { count: 100 },
+      removeOnFail: { count: 200 },
+    },
+  }),
+
+  careReminderQueue: new Queue('careReminder', {
+    connection,
+    defaultJobOptions: {
+      attempts: 3,
+      backoff: { type: 'exponential', delay: 3000 },
+      removeOnComplete: { count: 500 },
+      removeOnFail: { count: 500 },
+    },
+  }),
+
+  careReminderScanQueue: new Queue('careReminderScan', {
+    connection,
+    defaultJobOptions: {
+      attempts: 1,
+      removeOnComplete: { count: 50 },
+      removeOnFail: { count: 100 },
+    },
+  }),</code></pre><h3><strong>33.2 Updated Worker Bootstrap</strong></h3>
+<p>In <code>src/jobs/index.js</code> <code>startWorkers()</code>:</p>
+<pre><code class="hljs plaintext">// Add after existing workers:
+const createDentalScanWorker = require('./workers/dentalScanAnalysisWorker');
+const createCareReminderWorker = require('./workers/careReminderWorker');
+const createCareReminderScanWorker = require('./workers/careReminderScanWorker');
+
+workers.push(
+  createDentalScanWorker(),
+  createCareReminderWorker(),
+  createCareReminderScanWorker(),
+);
+
+// Schedule repeatable care reminder scan (every 30 minutes)
+const { careReminderScanQueue } = require('./queues');
+careReminderScanQueue.add(
+  'care-reminder-scan', {},
+  { repeat: { every: 30 * 60 * 1000 }, jobId: 'care-reminder-scan-repeatable' }
+).catch(err =&gt; logger.error('Failed to schedule care reminder scan: %s', err.message));</code></pre><hr>
+<h2><strong>34. Security &amp; Authorization</strong></h2>
+<h3><strong>34.1 New Permissions</strong></h3>
+<p>Added to <code>src/config/permissions.js</code>:</p>
+<pre><code class="hljs plaintext">// Feature 1: Dental Scan
+DENTAL_SCAN_CREATE:     'dental_scan:create'
+DENTAL_SCAN_READ_OWN:   'dental_scan:read_own'
+DENTAL_SCAN_READ:       'dental_scan:read'
+
+// Feature 2: Care Reminders
+CARE_REMINDER_CREATE:   'care_reminder:create'
+CARE_REMINDER_READ_OWN: 'care_reminder:read_own'
+CARE_REMINDER_READ:     'care_reminder:read'
+
+// Feature 3: Inventory
+INVENTORY_READ:         'inventory:read'
+INVENTORY_CREATE:       'inventory:create'
+INVENTORY_UPDATE:       'inventory:update'
+INVENTORY_DELETE:       'inventory:delete'
+PROCEDURE_READ:         'procedure:read'
+PROCEDURE_CREATE:       'procedure:create'
+PROCEDURE_UPDATE:       'procedure:update'
+RESERVATION_CREATE:     'reservation:create'
+RESERVATION_READ:       'reservation:read'
+RESERVATION_RELEASE:    'reservation:release'</code></pre><h3><strong>34.2 Role-Permission Mapping</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Permission</th>
+<th align="left">Patient</th>
+<th align="left">Doctor</th>
+<th align="left">Receptionist</th>
+<th align="left">Admin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">dental_scan:create</td>
+<td align="left">Yes</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left">dental_scan:read_own</td>
+<td align="left">Yes</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left">dental_scan:read</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">care_reminder:create</td>
+<td align="left">Yes</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left">care_reminder:read_own</td>
+<td align="left">Yes</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left">care_reminder:read</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">inventory:read</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">inventory:create</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">inventory:update</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">inventory:delete</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">procedure:read</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">procedure:create</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">procedure:update</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">reservation:create</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">reservation:read</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr>
+<td align="left">reservation:release</td>
+<td align="left">—</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+</tbody></table>
+<h3><strong>34.3 Multi-Tenancy Compliance</strong></h3>
+<p> • All new models stored in tenant databases (not platform DB)
+ • All routes protected by <code>tenantResolver()</code> middleware
+ • AI API calls include no patient PII — only images (no names, IDs, or clinic identifiers sent to external AI providers)
+ • Self-hosted ML approach (Approach B) keeps all data on-premise — zero external transmission
+ • Inventory data isolated per branch within tenant</p>
+<hr>
+<h2><strong>35. Deployment &amp; Migration Strategy</strong></h2>
+<h3><strong>35.1 Database Migration</strong></h3>
+<p>No migrations needed for new collections (MongoDB is schemaless — collections created on first insert). For the Prescription model extension:</p>
+<pre><code class="hljs plaintext">// One-time migration script:
+// Set default values for existing prescriptions
+db.prescriptions.updateMany(
+  { followUpRemindersEnabled: { $exists: false } },
+  { $set: {
+    followUpRemindersEnabled: false,
+    tasksExtracted: false
+  }}
+);</code></pre><h3><strong>35.2 Environment Variables</strong></h3>
+<p>New environment variables to add:</p>
+<pre><code class="hljs plaintext"># Feature 1: AI Dental Scan — Provider Selection
+AI_VISION_PROVIDER=openai              # 'openai' | 'google' | 'self-hosted'
+AI_VISION_FALLBACK=                    # Optional fallback provider (e.g., 'openai' when self-hosted is primary)
+
+# Approach A: OpenAI
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o
+
+# Approach A (alt): Google Gemini
+GOOGLE_AI_API_KEY=
+GOOGLE_AI_MODEL=gemini-pro-vision
+
+# Approach B: Self-Hosted ML
+ML_SERVICE_URL=http://ml-service:8000
+ML_SERVICE_API_KEY=
+
+# Common
+DENTAL_SCAN_MAX_IMAGES=5
+DENTAL_SCAN_ANALYSIS_TIMEOUT=30000
+
+# Feature 2: Care Reminders
+CARE_REMINDER_MISSED_THRESHOLD_HOURS=4
+CARE_REMINDER_SCAN_INTERVAL_MS=1800000
+
+# Feature 3: Inventory (no new env vars required)</code></pre><h3><strong>35.3 Deployment Sequence</strong></h3>
+<ol>
+<li>Deploy database model files (no migration needed for new collections)</li>
+<li>Run Prescription migration script for existing data</li>
+<li>Deploy new modules, services, workers</li>
+<li>Deploy updated <code>queues.js</code> and <code>jobs/index.js</code></li>
+<li>Deploy updated <code>routes/index.js</code> and <code>permissions.js</code></li>
+<li>Deploy updated frontend (web + mobile)</li>
+<li>Verify: Redis queues created, workers running, API endpoints responding</li>
+</ol>
+<h3><strong>35.4 Rollback Plan</strong></h3>
+<p> • Feature flags can disable new features without code revert
+ • New modules are additive — no existing functionality modified (except Prescription model extension)
+ • New queues/workers can be stopped independently via PM2</p>
+<hr>
+<h2><strong>36. AI Vision Provider Strategy &amp; Phased Roadmap</strong></h2>
+<h3><strong>36.1 Strategy Overview</strong></h3>
+<p>The dental image analysis system is designed with a <strong>provider-agnostic architecture</strong> to allow the AI backend to evolve independently of the rest of the application. A single file (<code>src/services/aiAnalysis.service.js</code>) acts as the provider boundary. Everything above it (routes, controllers, services, queues, workers, models, mobile app, web dashboard) is completely unaware of which AI engine is being used.</p>
+<h3><strong>36.2 Approach Comparison Matrix</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Criteria</th>
+<th align="left">Approach A: Cloud API</th>
+<th align="left">Approach B: Self-Hosted ML</th>
+<th align="left">Approach C: Hybrid</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Time to ship</strong></td>
+<td align="left">Days</td>
+<td align="left">3-6 months</td>
+<td align="left">Days (Phase 1) → Months (Phase 2)</td>
+</tr>
+<tr>
+<td align="left"><strong>Upfront cost</strong></td>
+<td align="left">$0</td>
+<td align="left">$5K-20K (GPU + labeling + training)</td>
+<td align="left">$0 initially</td>
+</tr>
+<tr>
+<td align="left"><strong>Per-analysis cost</strong></td>
+<td align="left">~$0.01-0.03</td>
+<td align="left">~$0.001 (fixed infra)</td>
+<td align="left">Decreases over time</td>
+</tr>
+<tr>
+<td align="left"><strong>Data privacy</strong></td>
+<td align="left">Images sent to OpenAI/Google servers</td>
+<td align="left">Images never leave your infra</td>
+<td align="left">Phase 1: external, Phase 2+: internal</td>
+</tr>
+<tr>
+<td align="left"><strong>Accuracy</strong></td>
+<td align="left">High (general purpose, not dental-specific)</td>
+<td align="left">Very high (dental-specific, improves with data)</td>
+<td align="left">Best of both worlds</td>
+</tr>
+<tr>
+<td align="left"><strong>Dependencies</strong></td>
+<td align="left">Vendor API uptime &amp; pricing</td>
+<td align="left">Your own GPU infra + ML team</td>
+<td align="left">Managed transition</td>
+</tr>
+<tr>
+<td align="left"><strong>Maintenance</strong></td>
+<td align="left">Minimal — vendor handles model updates</td>
+<td align="left">Ongoing — retraining, monitoring, versioning</td>
+<td align="left">Moderate</td>
+</tr>
+<tr>
+<td align="left"><strong>Offline capability</strong></td>
+<td align="left">None</td>
+<td align="left">Can run on-premise / air-gapped</td>
+<td align="left">Partial</td>
+</tr>
+<tr>
+<td align="left"><strong>Customization</strong></td>
+<td align="left">Limited to prompt engineering</td>
+<td align="left">Full control — custom classes, thresholds</td>
+<td align="left">Full control (Phase 2+)</td>
+</tr>
+<tr>
+<td align="left"><strong>Node.js changes</strong></td>
+<td align="left"><code>openai</code> npm package</td>
+<td align="left"><code>axios</code> (HTTP to Python service)</td>
+<td align="left">Both</td>
+</tr>
+<tr>
+<td align="left"><strong>New infrastructure</strong></td>
+<td align="left">None</td>
+<td align="left">Python FastAPI + GPU server + Docker</td>
+<td align="left">Python (Phase 2+)</td>
+</tr>
+</tbody></table>
+<h3><strong>36.3 Phased Implementation Roadmap</strong></h3>
+<div class="mermaid-container"><div id="mermaid-diagram-v1165tsuh" class="mermaid">gantt
+    title AI Vision Provider Roadmap
+    dateFormat YYYY-MM
+    axisFormat %b %Y
+
+    section Phase 1: Cloud API
+    Integrate OpenAI GPT-4 Vision            :p1a, 2026-04, 2w
+    Ship dental scan feature (MVP)           :p1b, after p1a, 1w
+    Monitor accuracy &amp; collect feedback      :p1c, after p1b, 8w
+
+    section Phase 2: Data Collection
+    Collect dental images from real usage     :p2a, 2026-06, 12w
+    Label images (bounding boxes + classes)   :p2b, 2026-07, 10w
+    Set up ML training infrastructure         :p2c, 2026-07, 4w
+
+    section Phase 3: Model Training
+    Train YOLOv8 detection model              :p3a, 2026-09, 4w
+    Train EfficientNet classification model   :p3b, 2026-09, 4w
+    Validate against OpenAI baseline          :p3c, after p3a, 2w
+
+    section Phase 4: Shadow Mode
+    Deploy Python ML service                  :p4a, 2026-11, 2w
+    Run both providers in parallel            :p4b, after p4a, 4w
+    Compare accuracy metrics                  :p4c, after p4a, 4w
+
+    section Phase 5: Cutover
+    Switch AI_VISION_PROVIDER to self-hosted  :p5a, 2026-12, 1w
+    Decommission OpenAI API key               :p5b, after p5a, 1w</div></div><h3><strong>36.4 Phase Details</strong></h3>
+<h4><strong>Phase 1: Cloud API (Months 1-3)</strong></h4>
+<p> • Ship the dental scan feature using OpenAI GPT-4 Vision (or Gemini)
+ • Set <code>AI_VISION_PROVIDER=openai</code> in production <code>.env</code>
+ • Monitor: analysis accuracy, patient feedback, API costs, latency
+ • Begin logging all scan images and AI responses for future training data</p>
+<h4><strong>Phase 2: Data Collection &amp; Labeling (Months 3-6)</strong></h4>
+<p> • Store all submitted dental images in a labeling pipeline (e.g., Label Studio, CVAT)
+ • Hire / contract dental professionals to validate AI observations and add labels
+ • Target: 5,000+ labeled images across all observation types
+ • Label format: COCO bounding boxes for detection, class labels for classification
+ • Store labeled dataset in versioned storage (DVC or S3 with tags)</p>
+<h4><strong>Phase 3: Model Training (Months 6-9)</strong></h4>
+<p> • Train <strong>YOLOv8</strong> for object detection (cavity, plaque, inflammation regions)
+ • Train <strong>EfficientNet-B4</strong> for observation classification (type + severity)
+ • Validation metrics target:</p>
+<ul>
+<li>Detection <a href="mailto:mAP@0.5">mAP@0.5</a>: ≥ 85%</li>
+<li>Classification accuracy: ≥ 88%</li>
+<li>False positive rate: ≤ 5%
+ • Compare model output against OpenAI responses on 500 held-out scans</li>
+</ul>
+<h4><strong>Phase 4: Shadow Mode (Months 9-10)</strong></h4>
+<p> • Deploy Python FastAPI service alongside existing stack
+ • <code>aiAnalysis.service.js</code> calls <strong>both</strong> providers, stores both results
+ • Dashboard compares: observation match rate, confidence distribution, latency
+ • No patient-facing changes — still showing OpenAI results</p>
+<pre><code class="hljs plaintext">// Shadow mode implementation in aiAnalysis.service.js
+async function analyzeDentalImages(images, options) {
+  const primary = await _analyzeWithOpenAI(images, options);
+
+  // Shadow: run self-hosted in background, log comparison
+  _analyzeWithLocalModel(images, options)
+    .then(shadow =&gt; _logComparison(primary, shadow))
+    .catch(err =&gt; logger.warn('Shadow model error: %s', err.message));
+
+  return primary; // Patient always sees cloud result during shadow mode
+}</code></pre><h4><strong>Phase 5: Cutover (Month 10+)</strong></h4>
+<p> • Once self-hosted accuracy meets/exceeds cloud API:</p>
+<ul>
+<li>Set <code>AI_VISION_PROVIDER=self-hosted</code></li>
+<li>Monitor for 2 weeks, keep OpenAI as instant fallback</li>
+<li>Remove OpenAI API key from production
+ • Ongoing: retrain model quarterly with new labeled data</li>
+</ul>
+<h3><strong>36.5 Self-Hosted ML Service — Deployment Architecture</strong></h3>
+<pre><code class="hljs plaintext">Docker Compose (production):
+┌─────────────────────────────────────────────┐
+│  docker-compose.yml                         │
+│                                             │
+│  ┌───────────────┐  ┌────────────────────┐  │
+│  │ node-api      │  │ ml-service         │  │
+│  │ (Express.js)  │──│ (FastAPI + PyTorch)│  │
+│  │ Port 5001     │  │ Port 8000          │  │
+│  └───────┬───────┘  └────────┬───────────┘  │
+│          │                   │              │
+│  ┌───────┴───────┐  ┌───────┴───────────┐  │
+│  │ redis         │  │ ml-model-volume   │  │
+│  │ (BullMQ)      │  │ (model weights)   │  │
+│  └───────────────┘  └───────────────────┘  │
+│                                             │
+│  ┌───────────────┐                          │
+│  │ mongodb       │                          │
+│  └───────────────┘                          │
+└─────────────────────────────────────────────┘</code></pre><p><strong>Python service Dockerfile:</strong></p>
+<pre><code class="hljs plaintext">FROM python:3.11-slim
+RUN pip install fastapi uvicorn torch torchvision ultralytics opencv-python-headless pillow
+COPY ./ml_service /app
+WORKDIR /app
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]</code></pre><p><strong>GPU requirement:</strong>
+ • Training: NVIDIA A10G / V100 (AWS <code>g5.xlarge</code> or GCP <code>n1-standard-4</code> + T4)
+ • Inference: NVIDIA T4 is sufficient (<del>100-200ms per image)
+ • CPU fallback: possible but 5-10x slower (</del>1-3 seconds per image)</p>
+<h3><strong>36.6 Cost Comparison Over 12 Months</strong></h3>
+<p>Assumptions: 500 scans/month, 5 images per scan = 2,500 images/month</p>
+<table>
+<thead>
+<tr>
+<th align="left">Cost Item</th>
+<th align="left">Cloud API (12 months)</th>
+<th align="left">Self-Hosted (12 months)</th>
+<th align="left">Hybrid</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">API calls</td>
+<td align="left">500 × $0.02 × 12 = <strong>$120</strong></td>
+<td align="left">$0</td>
+<td align="left">$60 (6 months)</td>
+</tr>
+<tr>
+<td align="left">GPU inference server</td>
+<td align="left">$0</td>
+<td align="left">~$200/month × 6 = <strong>$1,200</strong></td>
+<td align="left">$1,200 (Phase 2+)</td>
+</tr>
+<tr>
+<td align="left">Labeling (5K images)</td>
+<td align="left">$0</td>
+<td align="left">~$2,500 (contract)</td>
+<td align="left">$2,500</td>
+</tr>
+<tr>
+<td align="left">ML engineering</td>
+<td align="left">$0</td>
+<td align="left">~$5,000-10,000</td>
+<td align="left">$5,000-10,000</td>
+</tr>
+<tr>
+<td align="left"><strong>Total</strong></td>
+<td align="left"><strong>~$120</strong></td>
+<td align="left"><strong>~$8,700-13,700</strong></td>
+<td align="left"><strong>~$8,760-13,760</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>Per-scan cost (month 12)</strong></td>
+<td align="left"><strong>$0.02</strong></td>
+<td align="left"><strong>~$0.004</strong></td>
+<td align="left"><strong>~$0.004</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>Break-even point</strong></td>
+<td align="left">—</td>
+<td align="left">~5,000+ scans/month</td>
+<td align="left">~5,000+ scans/month</td>
+</tr>
+</tbody></table>
+<p><strong>Conclusion:</strong> Cloud API is cost-effective at low volume. Self-hosted becomes cheaper at scale (5,000+ scans/month) and provides data privacy + full control.</p>
+<hr>
+<hr>
+<h1><strong>Part VI: Appendices</strong></h1>
+<hr>
+<h2><strong>36. Glossary</strong></h2>
+<table>
+<thead>
+<tr>
+<th align="left">Term</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Tenant</td>
+<td align="left">A single clinic registered on the DCM SaaS platform</td>
+</tr>
+<tr>
+<td align="left">Tenant Database</td>
+<td align="left">Isolated MongoDB instance for a specific clinic</td>
+</tr>
+<tr>
+<td align="left">Platform Database</td>
+<td align="left">Shared MongoDB instance for SaaS management</td>
+</tr>
+<tr>
+<td align="left">BullMQ</td>
+<td align="left">Redis-backed job queue library for Node.js</td>
+</tr>
+<tr>
+<td align="left">Worker</td>
+<td align="left">Background process that executes queued jobs</td>
+</tr>
+<tr>
+<td align="left">Soft Delete</td>
+<td align="left">Setting <code>deletedAt</code> timestamp instead of physical deletion</td>
+</tr>
+<tr>
+<td align="left">Immutable Log</td>
+<td align="left">Append-only data store that blocks updates and deletes</td>
+</tr>
+<tr>
+<td align="left">RBAC</td>
+<td align="left">Role-Based Access Control</td>
+</tr>
+<tr>
+<td align="left">Feature Guard</td>
+<td align="left">Middleware that checks if a feature is enabled on the tenant's plan</td>
+</tr>
+<tr>
+<td align="left">Observation</td>
+<td align="left">A visual finding from the AI dental scan (not a diagnosis)</td>
+</tr>
+<tr>
+<td align="left">PrescriptionTask</td>
+<td align="left">An individual care action extracted from a prescription</td>
+</tr>
+<tr>
+<td align="left">CareReminder</td>
+<td align="left">A single scheduled notification instance for a care task</td>
+</tr>
+<tr>
+<td align="left">MaterialReservation</td>
+<td align="left">Equipment/materials set aside for a scheduled procedure</td>
+</tr>
+<tr>
+<td align="left">Procedure Template</td>
+<td align="left">Reusable definition of a complex procedure and its required materials</td>
+</tr>
+<tr>
+<td align="left">Compliance Rate</td>
+<td align="left">Percentage of care reminders completed out of total scheduled</td>
+</tr>
+</tbody></table>
+<hr>
+<h2><strong>37. File Manifest</strong></h2>
+<h3><strong>37.1 Feature 1 — AI Dental Scan (8 new files)</strong></h3>
+<pre><code class="hljs plaintext">src/models/tenant/DentalScan.js
+src/models/tenant/DentalScanResult.js
+src/modules/dentalScan/dentalScan.routes.js
+src/modules/dentalScan/dentalScan.controller.js
+src/modules/dentalScan/dentalScan.service.js
+src/modules/dentalScan/dentalScan.validator.js
+src/services/aiAnalysis.service.js
+src/jobs/workers/dentalScanAnalysisWorker.js</code></pre><h3><strong>37.2 Feature 2 — Care Reminders (9 new files)</strong></h3>
+<pre><code class="hljs plaintext">src/models/tenant/PrescriptionTask.js
+src/models/tenant/CareReminder.js
+src/modules/careReminder/careReminder.routes.js
+src/modules/careReminder/careReminder.controller.js
+src/modules/careReminder/careReminder.service.js
+src/modules/careReminder/careReminder.validator.js
+src/utils/taskExtractor.js
+src/jobs/workers/careReminderWorker.js
+src/jobs/workers/careReminderScanWorker.js</code></pre><h3><strong>37.3 Feature 3 — Inventory Management (11 new files)</strong></h3>
+<pre><code class="hljs plaintext">src/models/tenant/InventoryItem.js
+src/models/tenant/InventoryTransaction.js
+src/models/tenant/ProcedureTemplate.js
+src/models/tenant/MaterialReservation.js
+src/modules/inventory/inventory.routes.js
+src/modules/inventory/inventory.controller.js
+src/modules/inventory/inventory.service.js
+src/modules/inventory/inventory.validator.js
+src/modules/procedure/procedure.routes.js
+src/modules/procedure/procedure.controller.js
+src/modules/procedure/procedure.service.js</code></pre><h3><strong>37.4 Modified Existing Files (5 files)</strong></h3>
+<pre><code class="hljs plaintext">src/jobs/queues.js                    — Add 3 new queue definitions
+src/jobs/index.js                     — Register 3 new workers + 1 repeatable job
+src/routes/index.js                   — Mount 3 new route prefixes
+src/config/permissions.js             — Add 16 new permission keys
+src/models/tenant/Prescription.js     — Add reminder fields (3 fields)</code></pre><h3><strong>37.5 Self-Hosted ML Service — Approach B (Phase 2+ only, 5 new files)</strong></h3>
+<pre><code class="hljs plaintext">ml_service/main.py                    — FastAPI entrypoint with /analyze and /health endpoints
+ml_service/models/detector.py         — YOLOv8 dental detection model wrapper
+ml_service/models/classifier.py       — EfficientNet observation classifier wrapper
+ml_service/preprocessing.py           — Image resize, normalize, enhance (OpenCV/Pillow)
+ml_service/Dockerfile                 — Python 3.11 + PyTorch + CUDA image
+ml_service/requirements.txt           — FastAPI, uvicorn, torch, ultralytics, opencv, pillow
+docker-compose.ml.yml                 — Docker Compose for ML service + GPU passthrough</code></pre><p><strong>Phase 1 Total: 28 new files + 5 modified files = 33 file changes</strong>
+<strong>Phase 2+ Total: +7 Python/Docker files = 40 file changes</strong></p>
+<hr>
+<h2><strong>38. Risk Assessment</strong></h2>
+<h3><strong>38.1 General Risks</strong></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Risk</th>
+<th align="left">Impact</th>
+<th align="left">Probability</th>
+<th align="left">Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">AI hallucination (false observations)</td>
+<td align="left">Patient alarm from incorrect observations</td>
+<td align="left">Medium</td>
+<td align="left">Prominent disclaimer, confidence scores, limit to visual-only observations</td>
+</tr>
+<tr>
+<td align="left">High reminder volume overloads Redis</td>
+<td align="left">Delayed reminder delivery</td>
+<td align="left">Low</td>
+<td align="left">Configure BullMQ concurrency, monitor queue depth, rate-limit reminder creation</td>
+</tr>
+<tr>
+<td align="left">Concurrent stock reservations cause overselling</td>
+<td align="left">Procedures scheduled without materials</td>
+<td align="left">Medium</td>
+<td align="left">MongoDB atomic <code>$inc</code> operations with availability pre-check in same query</td>
+</tr>
+<tr>
+<td align="left">Patient disables reminders after partial delivery</td>
+<td align="left">Orphaned reminder jobs in Redis</td>
+<td align="left">Low</td>
+<td align="left">Bulk job cancellation on opt-out, scanner cleans up missed items</td>
+</tr>
+<tr>
+<td align="left">Large dental images exceed upload limits</td>
+<td align="left">Upload failures on slow networks</td>
+<td align="left">Medium</td>
+<td align="left">Client-side compression, chunked upload, 5MB limit per image</td>
+</tr>
+</tbody></table>
+<h3><strong>38.2 AI Provider — Approach-Specific Risks</strong></h3>
+<h4><strong>Approach A: Cloud API (OpenAI / Gemini / Azure)</strong></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Risk</th>
+<th align="left">Impact</th>
+<th align="left">Probability</th>
+<th align="left">Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">API downtime / rate limiting</td>
+<td align="left">Scan analysis unavailable</td>
+<td align="left">Low</td>
+<td align="left">BullMQ retry with exponential backoff (3 attempts), patient notified to retry later</td>
+</tr>
+<tr>
+<td align="left">API pricing change / cost escalation</td>
+<td align="left">Unexpected infrastructure costs</td>
+<td align="left">Medium</td>
+<td align="left">Per-tenant scan limits, usage tracking, cost alerts, budget caps in billing dashboard</td>
+</tr>
+<tr>
+<td align="left">Data privacy concerns (images sent to third-party)</td>
+<td align="left">Regulatory non-compliance, patient distrust</td>
+<td align="left">Medium</td>
+<td align="left">No PII sent with images, patient consent screen, privacy policy disclosure</td>
+</tr>
+<tr>
+<td align="left">Vendor deprecates model</td>
+<td align="left">Must migrate to new model version</td>
+<td align="left">Low</td>
+<td align="left">Provider-agnostic interface allows quick swap; pin model version in env var</td>
+</tr>
+<tr>
+<td align="left">Response format changes</td>
+<td align="left">Parsing failures in <code>aiAnalysis.service.js</code></td>
+<td align="left">Low</td>
+<td align="left">Schema validation layer catches format issues; version-pin API calls</td>
+</tr>
+</tbody></table>
+<h4><strong>Approach B: Self-Hosted ML Model</strong></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Risk</th>
+<th align="left">Impact</th>
+<th align="left">Probability</th>
+<th align="left">Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Insufficient training data</td>
+<td align="left">Low model accuracy, unusable results</td>
+<td align="left">High (initially)</td>
+<td align="left">Use cloud API for Phase 1 while collecting data; augmentation techniques</td>
+</tr>
+<tr>
+<td align="left">GPU infrastructure failure</td>
+<td align="left">Scan analysis unavailable</td>
+<td align="left">Medium</td>
+<td align="left">Fallback to cloud API provider (<code>AI_VISION_FALLBACK=openai</code> env var)</td>
+</tr>
+<tr>
+<td align="left">Model drift over time</td>
+<td align="left">Accuracy degradation as dental patterns evolve</td>
+<td align="left">Medium</td>
+<td align="left">Quarterly retraining schedule, accuracy monitoring dashboard</td>
+</tr>
+<tr>
+<td align="left">ML expertise dependency</td>
+<td align="left">Cannot maintain/improve model without specialist</td>
+<td align="left">Medium</td>
+<td align="left">Document training pipeline, use standard frameworks (YOLOv8, EfficientNet)</td>
+</tr>
+<tr>
+<td align="left">Python service memory leak / crash</td>
+<td align="left">Worker crashes under load</td>
+<td align="left">Low</td>
+<td align="left">Docker health checks, auto-restart via PM2/Docker, resource limits</td>
+</tr>
+<tr>
+<td align="left">High upfront investment with uncertain ROI</td>
+<td align="left">Sunk cost if scan feature has low adoption</td>
+<td align="left">Medium</td>
+<td align="left">Hybrid approach — only invest in Phase 2 after validating demand with Phase 1</td>
+</tr>
+</tbody></table>
+<h4><strong>Approach C: Hybrid (Recommended)</strong></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Risk</th>
+<th align="left">Impact</th>
+<th align="left">Probability</th>
+<th align="left">Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Shadow mode adds latency</td>
+<td align="left">Slightly slower analysis during comparison phase</td>
+<td align="left">Low</td>
+<td align="left">Shadow call is fire-and-forget (async), does not block patient response</td>
+</tr>
+<tr>
+<td align="left">Cutover timing misjudged</td>
+<td align="left">Self-hosted model not ready, forced to stay on cloud</td>
+<td align="left">Low</td>
+<td align="left">Keep cloud API active as fallback; no hard deadline for cutover</td>
+</tr>
+<tr>
+<td align="left">Dual infrastructure cost during transition</td>
+<td align="left">Paying for both cloud API + GPU server</td>
+<td align="left">Low</td>
+<td align="left">Shadow phase is temporary (4-8 weeks); cloud API cost is minimal</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>End of Document</strong></p>
+<hr>
+<p><em>DCM Feature SRS v2.0 — March 9, 2026</em>
+<em>Prepared for the DCM Development Team</em></p>
+
+  </article>
+</body>
+</html>
