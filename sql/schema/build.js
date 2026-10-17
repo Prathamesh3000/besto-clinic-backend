@@ -429,6 +429,39 @@ const isMapWildcard = (p) => p.includes('$*');
  */
 const CONTAINER_TYPES = new Set(['Map', 'Mixed', 'Array']);
 
+/**
+ * The dotted sub-paths inside an embedded-object JSONB column that hold Dates.
+ *
+ * JSON has no date type. A `Date` inside an embedded array survives the trip to
+ * PostgreSQL as an ISO-8601 *string*, and comes back as one — so
+ * `user.fcmTokens[0].updatedAt` is a Date on MongoDB and a string on SQL. Every
+ * consumer that calls `.getTime()` on it works against one database and throws
+ * against the other, and nothing in between reports a problem. CP-6 caught this
+ * on `fcmTokens`; there are 108 JSONB columns and no reason to think it is the
+ * only one.
+ *
+ * Recorded here, from the Mongoose sub-schema, rather than guessed at read time.
+ * Reviving any string that merely looks like a timestamp would convert genuine
+ * string fields that happen to hold one — the same divergence, in the other
+ * direction, and harder to find.
+ *
+ * Nested sub-schemas are walked, so `a.b.when` is recorded as `a.b.when`.
+ */
+function jsonbDatePaths(schema, prefix = '') {
+  if (!schema || !schema.paths) return [];
+  const out = [];
+  for (const [name, type] of Object.entries(schema.paths)) {
+    if (name === '_id' || name === '__v') continue;
+    const full = prefix ? `${prefix}.${name}` : name;
+    if (type.instance === 'Date') out.push(full);
+    // An array of sub-documents, or a single nested one: same dotted path
+    // either way, because the reviver walks arrays element-wise.
+    const nested = type.schema || (type.caster && type.caster.schema);
+    if (nested) out.push(...jsonbDatePaths(nested, full));
+  }
+  return out;
+}
+
 function buildTable(model, profile, registry) {
   const { scope, modelName, collection, schema } = model;
   const table = typeMap.tableName(modelName, collection);
@@ -490,17 +523,36 @@ function buildTable(model, profile, registry) {
      * until something tried to follow a reference to the row.
      */
     if (mongoPath === '_id') {
+      /**
+       * Almost every model leaves `_id` implicit, and Mongoose reports it as an
+       * ObjectId. A few declare it explicitly as something else: `Counter` uses
+       * `_id: { type: String }` because its key is a sequence name ('opd'), not
+       * an entity reference.
+       *
+       * Hardcoding the ObjectId domain here typed that column wrong, and the
+       * consequence was silent rather than loud - the ETL's ObjectId converter
+       * rejected 'opd', the row never loaded, and only a row-count check caught
+       * it. Read the declared instance instead, and fall back to ObjectId for
+       * the implicit case.
+       */
+      const declared = pathType.instance === 'String'
+        ? typeMap.INSTANCE_TO_PG.String
+        : typeMap.OBJECTID_DOMAIN;
+      const isObjectId = declared === typeMap.OBJECTID_DOMAIN;
+
       const idCol = {
         column: 'id',
         mongoPath: '_id',
-        type: typeMap.OBJECTID_DOMAIN,
+        type: declared,
         typeSource: 'schema',
         notNull: true,
         primaryKey: true,
         nullReason: 'primary key — the Mongo _id, preserved rather than regenerated',
         enum: null,
         ref: null,
-        notes: ['No default: the ETL supplies the original ObjectId.'],
+        notes: [isObjectId
+          ? 'No default: the ETL supplies the original ObjectId.'
+          : 'No default: the ETL supplies the original _id, which this model declares as a string.'],
       };
       columns.push(idCol);
       columnByPath[mongoPath] = idCol;
@@ -543,6 +595,16 @@ function buildTable(model, profile, registry) {
           ? 'Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).'
           : 'Scalar array kept as JSONB.'
       );
+      if (pathType.schema) {
+        const dates = jsonbDatePaths(pathType.schema);
+        if (dates.length) {
+          col.jsonbDatePaths = dates;
+          col.notes.push(
+            `Dates inside this column (${dates.join(', ')}) are revived on read — `
+            + 'JSON has no date type, so they are stored as ISO strings.'
+          );
+        }
+      }
       columns.push(col);
       columnByPath[mongoPath] = col;
       return;
@@ -551,6 +613,26 @@ function buildTable(model, profile, registry) {
     const col = typeMap.mapColumn(mongoPath, pathType, evidenceFor(mongoPath), ov);
     if (ov && ov.coerce) col.coerce = ov.coerce;
     if (ov && ov.sensitive) col.sensitive = true;
+
+    /**
+     * `select: false` means Mongoose withholds the field unless a query asks for
+     * it by name. Four models rely on it for secrets - password hashes, password
+     * reset tokens, email verification tokens, encrypted OAuth credentials - and
+     * back it with a second `toJSON` transform that deletes them from responses.
+     *
+     * Neither protection exists in SQL. The repository selects `table.*`, so a
+     * module ported without this would return password hashes to API clients,
+     * and nothing would fail: the response would simply have more fields in it
+     * than before.
+     *
+     * Recorded on the column so the repository can withhold it by default and
+     * callers that genuinely need it - authentication comparing a hash - opt in
+     * explicitly, which is the same contract Mongoose offers.
+     */
+    if (pathType.options && pathType.options.select === false) {
+      col.hidden = true;
+      col.hiddenReason = 'select:false in the Mongoose schema — withheld unless requested by name';
+    }
 
     // Foreign keys. A reference the data already violates is emitted NOT VALID:
     // enforced for every new row, tolerant of the existing damage, and promotable

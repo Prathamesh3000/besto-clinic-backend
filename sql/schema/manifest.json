@@ -341,7 +341,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (uploadedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "uploadedAt"
           ]
         },
         {
@@ -359,6 +363,64 @@
           "notes": []
         },
         {
+          "column": "migration_sql_entities",
+          "mongoPath": "migration.sqlEntities",
+          "type": "jsonb",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "default": "'[]'::jsonb",
+          "notes": [
+            "Scalar array kept as JSONB."
+          ]
+        },
+        {
+          "column": "migration_cutover_at",
+          "mongoPath": "migration.cutoverAt",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "migration_rolled_back_at",
+          "mongoPath": "migration.rolledBackAt",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "migration_rollback_reason",
+          "mongoPath": "migration.rollbackReason",
+          "type": "text",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "migration_last_verified_at",
+          "mongoPath": "migration.lastVerifiedAt",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
           "column": "db_uri",
           "mongoPath": "dbUri",
           "type": "text",
@@ -368,7 +430,9 @@
           "enum": null,
           "ref": null,
           "notes": [],
-          "sensitive": true
+          "sensitive": true,
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "status",
@@ -2363,7 +2427,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (uploadedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "uploadedAt"
           ]
         },
         {
@@ -2377,7 +2445,13 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (frames.uploadedAt, serverValidation.validatedAt, completedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "frames.uploadedAt",
+            "serverValidation.validatedAt",
+            "completedAt"
           ]
         },
         {
@@ -4799,7 +4873,9 @@
           "nullReason": "required, and present in 100% of 1 documents",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "name",
@@ -4834,7 +4910,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (connectedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "connectedAt"
           ]
         },
         {
@@ -4997,7 +5077,9 @@
           "nullReason": "required, and present in 100% of 1 documents",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "role",
@@ -5665,7 +5747,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (redeemedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "redeemedAt"
           ]
         },
         {
@@ -5886,7 +5972,12 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (startedAt, completedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "startedAt",
+            "completedAt"
           ]
         },
         {
@@ -6417,7 +6508,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (timestamp) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "timestamp"
           ]
         },
         {
@@ -8411,7 +8506,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (sentAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "sentAt"
           ]
         },
         {
@@ -8926,6 +9025,20 @@
             },
             {
               "column": "scheduled_at",
+              "desc": false
+            }
+          ]
+        },
+        {
+          "kind": "btree",
+          "name": "appointments_patient_id_checked_in_at_idx",
+          "columns": [
+            {
+              "column": "patient_id",
+              "desc": false
+            },
+            {
+              "column": "checked_in_at",
               "desc": false
             }
           ]
@@ -10617,7 +10730,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (at) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "at"
           ]
         },
         {
@@ -12752,6 +12869,94 @@
     },
     {
       "scope": "tenant",
+      "model": "Counter",
+      "collection": "counters",
+      "table": "counters",
+      "profiled": false,
+      "documentsProfiled": 0,
+      "profiledScopes": [],
+      "columns": [
+        {
+          "column": "clinic_id",
+          "mongoPath": null,
+          "type": "objectid",
+          "typeSource": "tenancy-rule",
+          "notNull": true,
+          "nullReason": "plan section 2.2 rule 1 — present on every tenant table from day one",
+          "enum": null,
+          "ref": "Clinic",
+          "notes": [
+            "Denormalised tenant discriminator. One distinct value per schema. Not used for filtering while the model is schema-per-clinic."
+          ]
+        },
+        {
+          "column": "id",
+          "mongoPath": "_id",
+          "type": "text",
+          "typeSource": "schema",
+          "notNull": true,
+          "primaryKey": true,
+          "nullReason": "primary key — the Mongo _id, preserved rather than regenerated",
+          "enum": null,
+          "ref": null,
+          "notes": [
+            "No default: the ETL supplies the original _id, which this model declares as a string."
+          ]
+        },
+        {
+          "column": "seq",
+          "mongoPath": "seq",
+          "type": "numeric",
+          "typeSource": "schema",
+          "notNull": true,
+          "nullReason": "schema requires it; no data profiled to contradict it",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "created_at",
+          "mongoPath": "createdAt",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "updated_at",
+          "mongoPath": "updatedAt",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        }
+      ],
+      "childTables": [],
+      "junctionTables": [],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "kind": "btree",
+          "name": "counters_clinic_id_idx",
+          "columns": [
+            {
+              "column": "clinic_id",
+              "desc": false
+            }
+          ],
+          "note": "Supports the consolidation path in plan section 2.2 rule 1 without a later rebuild."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "scope": "tenant",
       "model": "CreditNote",
       "collection": "creditnotes",
       "table": "credit_notes",
@@ -13250,7 +13455,12 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (uploadedAt, validationFeedback.timestamp) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "uploadedAt",
+            "validationFeedback.timestamp"
           ]
         },
         {
@@ -13824,7 +14034,9 @@
           "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "id",
@@ -14255,7 +14467,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (scheduledAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "scheduledAt"
           ]
         },
         {
@@ -14269,7 +14485,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (prescribedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "prescribedAt"
           ]
         },
         {
@@ -14283,7 +14503,12 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (acceptedAt, revokedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "acceptedAt",
+            "revokedAt"
           ]
         },
         {
@@ -15390,7 +15615,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (at) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "at"
           ]
         },
         {
@@ -17089,7 +17318,9 @@
           "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "encrypted_client_id",
@@ -17100,7 +17331,9 @@
           "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "encrypted_client_secret",
@@ -17111,7 +17344,9 @@
           "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "encrypted_access_token",
@@ -17122,7 +17357,9 @@
           "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "encrypted_refresh_token",
@@ -17133,7 +17370,9 @@
           "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "token_expires_at",
@@ -19943,6 +20182,17 @@
           "notes": []
         },
         {
+          "column": "opd_number",
+          "mongoPath": "opdNumber",
+          "type": "text",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
           "column": "name",
           "mongoPath": "name",
           "type": "text",
@@ -20501,6 +20751,17 @@
             }
           ],
           "where": "external_id is not null"
+        },
+        {
+          "kind": "unique",
+          "name": "patients_opd_number_key",
+          "columns": [
+            {
+              "column": "opd_number",
+              "desc": false
+            }
+          ],
+          "where": "opd_number is not null"
         },
         {
           "kind": "btree",
@@ -23035,7 +23296,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (changedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "changedAt"
           ]
         },
         {
@@ -25637,6 +25902,491 @@
     },
     {
       "scope": "tenant",
+      "model": "TreatmentPlan",
+      "collection": "treatmentplans",
+      "table": "treatment_plans",
+      "profiled": false,
+      "documentsProfiled": 0,
+      "profiledScopes": [],
+      "columns": [
+        {
+          "column": "clinic_id",
+          "mongoPath": null,
+          "type": "objectid",
+          "typeSource": "tenancy-rule",
+          "notNull": true,
+          "nullReason": "plan section 2.2 rule 1 — present on every tenant table from day one",
+          "enum": null,
+          "ref": "Clinic",
+          "notes": [
+            "Denormalised tenant discriminator. One distinct value per schema. Not used for filtering while the model is schema-per-clinic."
+          ]
+        },
+        {
+          "column": "patient_id",
+          "mongoPath": "patient",
+          "type": "objectid",
+          "typeSource": "schema",
+          "notNull": true,
+          "nullReason": "schema requires it; no data profiled to contradict it",
+          "enum": null,
+          "ref": "Patient",
+          "notes": []
+        },
+        {
+          "column": "doctor_id",
+          "mongoPath": "doctor",
+          "type": "objectid",
+          "typeSource": "schema",
+          "notNull": true,
+          "nullReason": "schema requires it; no data profiled to contradict it",
+          "enum": null,
+          "ref": "User",
+          "notes": []
+        },
+        {
+          "column": "title",
+          "mongoPath": "title",
+          "type": "text",
+          "typeSource": "schema",
+          "notNull": true,
+          "nullReason": "schema requires it; no data profiled to contradict it",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "diagnosis",
+          "mongoPath": "diagnosis",
+          "type": "text",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "teeth",
+          "mongoPath": "teeth",
+          "type": "jsonb",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "default": "'[]'::jsonb",
+          "notes": [
+            "Scalar array kept as JSONB."
+          ]
+        },
+        {
+          "column": "total_sittings",
+          "mongoPath": "totalSittings",
+          "type": "numeric",
+          "typeSource": "schema",
+          "notNull": true,
+          "nullReason": "schema requires it; no data profiled to contradict it",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "planned_steps",
+          "mongoPath": "plannedSteps",
+          "type": "jsonb",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "default": "'[]'::jsonb",
+          "notes": [
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+          ]
+        },
+        {
+          "column": "estimated_cost",
+          "mongoPath": "estimatedCost",
+          "type": "numeric",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "start_date",
+          "mongoPath": "startDate",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "expected_end_date",
+          "mongoPath": "expectedEndDate",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "status",
+          "mongoPath": "status",
+          "type": "text",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": [
+            "planned",
+            "in_progress",
+            "completed",
+            "abandoned"
+          ],
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "status_history",
+          "mongoPath": "statusHistory",
+          "type": "jsonb",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "default": "'[]'::jsonb",
+          "notes": [
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (changedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "changedAt"
+          ]
+        },
+        {
+          "column": "consent_given",
+          "mongoPath": "consent.given",
+          "type": "boolean",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "consent_date",
+          "mongoPath": "consent.date",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "consent_notes",
+          "mongoPath": "consent.notes",
+          "type": "text",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "consent_recorded_by_id",
+          "mongoPath": "consent.recordedBy",
+          "type": "objectid",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": "User",
+          "notes": []
+        },
+        {
+          "column": "addenda",
+          "mongoPath": "addenda",
+          "type": "jsonb",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "default": "'[]'::jsonb",
+          "notes": [
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (createdAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "createdAt"
+          ]
+        },
+        {
+          "column": "completed_at",
+          "mongoPath": "completedAt",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "closure_reason",
+          "mongoPath": "closureReason",
+          "type": "text",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "created_by_id",
+          "mongoPath": "createdBy",
+          "type": "objectid",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": "User",
+          "notes": []
+        },
+        {
+          "column": "updated_by_id",
+          "mongoPath": "updatedBy",
+          "type": "objectid",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": "User",
+          "notes": []
+        },
+        {
+          "column": "deleted_at",
+          "mongoPath": "deletedAt",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "id",
+          "mongoPath": "_id",
+          "type": "objectid",
+          "typeSource": "schema",
+          "notNull": true,
+          "primaryKey": true,
+          "nullReason": "primary key — the Mongo _id, preserved rather than regenerated",
+          "enum": null,
+          "ref": null,
+          "notes": [
+            "No default: the ETL supplies the original ObjectId."
+          ]
+        },
+        {
+          "column": "created_at",
+          "mongoPath": "createdAt",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "updated_at",
+          "mongoPath": "updatedAt",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        }
+      ],
+      "childTables": [],
+      "junctionTables": [],
+      "foreignKeys": [
+        {
+          "column": "patient_id",
+          "references": "Patient",
+          "referencesTable": "patients",
+          "referencesScope": "tenant",
+          "crossSchema": false,
+          "onDelete": "restrict",
+          "notValid": false,
+          "finding": null,
+          "measured": null,
+          "decision": null
+        },
+        {
+          "column": "doctor_id",
+          "references": "User",
+          "referencesTable": "users",
+          "referencesScope": "tenant",
+          "crossSchema": false,
+          "onDelete": "restrict",
+          "notValid": false,
+          "finding": null,
+          "measured": null,
+          "decision": null
+        },
+        {
+          "column": "consent_recorded_by_id",
+          "references": "User",
+          "referencesTable": "users",
+          "referencesScope": "tenant",
+          "crossSchema": false,
+          "onDelete": "set null",
+          "notValid": false,
+          "finding": null,
+          "measured": null,
+          "decision": null
+        },
+        {
+          "column": "created_by_id",
+          "references": "User",
+          "referencesTable": "users",
+          "referencesScope": "tenant",
+          "crossSchema": false,
+          "onDelete": "set null",
+          "notValid": false,
+          "finding": null,
+          "measured": null,
+          "decision": null
+        },
+        {
+          "column": "updated_by_id",
+          "references": "User",
+          "referencesTable": "users",
+          "referencesScope": "tenant",
+          "crossSchema": false,
+          "onDelete": "set null",
+          "notValid": false,
+          "finding": null,
+          "measured": null,
+          "decision": null
+        }
+      ],
+      "indexes": [
+        {
+          "kind": "btree",
+          "name": "treatment_plans_patient_id_idx",
+          "columns": [
+            {
+              "column": "patient_id",
+              "desc": false
+            }
+          ]
+        },
+        {
+          "kind": "btree",
+          "name": "treatment_plans_doctor_id_idx",
+          "columns": [
+            {
+              "column": "doctor_id",
+              "desc": false
+            }
+          ]
+        },
+        {
+          "kind": "btree",
+          "name": "treatment_plans_status_idx",
+          "columns": [
+            {
+              "column": "status",
+              "desc": false
+            }
+          ]
+        },
+        {
+          "kind": "btree",
+          "name": "treatment_plans_patient_id_created_at_idx",
+          "columns": [
+            {
+              "column": "patient_id",
+              "desc": false
+            },
+            {
+              "column": "created_at",
+              "desc": true
+            }
+          ]
+        },
+        {
+          "kind": "btree",
+          "name": "treatment_plans_doctor_id_status_idx",
+          "columns": [
+            {
+              "column": "doctor_id",
+              "desc": false
+            },
+            {
+              "column": "status",
+              "desc": false
+            }
+          ]
+        },
+        {
+          "kind": "btree",
+          "name": "treatment_plans_deleted_at_idx",
+          "columns": [
+            {
+              "column": "deleted_at",
+              "desc": false
+            }
+          ]
+        },
+        {
+          "kind": "btree",
+          "name": "treatment_plans_live_idx",
+          "columns": [
+            {
+              "column": "deleted_at",
+              "desc": false
+            }
+          ],
+          "where": "deleted_at is null",
+          "note": "Partial index over live rows — the soft-delete filter the pre(/^find/) hooks apply implicitly."
+        },
+        {
+          "kind": "btree",
+          "name": "treatment_plans_clinic_id_idx",
+          "columns": [
+            {
+              "column": "clinic_id",
+              "desc": false
+            }
+          ],
+          "note": "Supports the consolidation path in plan section 2.2 rule 1 without a later rebuild."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "scope": "tenant",
       "model": "TreatmentRecord",
       "collection": "treatmentrecords",
       "table": "treatment_records",
@@ -26014,6 +26764,109 @@
           ]
         },
         {
+          "column": "plan_id",
+          "mongoPath": "plan",
+          "type": "objectid",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": "TreatmentPlan",
+          "notes": []
+        },
+        {
+          "column": "sitting_number",
+          "mongoPath": "sittingNumber",
+          "type": "numeric",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "patient_attended",
+          "mongoPath": "patientAttended",
+          "type": "boolean",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "pain_level",
+          "mongoPath": "painLevel",
+          "type": "numeric",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "complaints",
+          "mongoPath": "complaints",
+          "type": "jsonb",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "default": "'[]'::jsonb",
+          "notes": [
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (reportedAt, resolvedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "reportedAt",
+            "resolvedAt"
+          ]
+        },
+        {
+          "column": "locked",
+          "mongoPath": "locked",
+          "type": "boolean",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "locked_at",
+          "mongoPath": "lockedAt",
+          "type": "timestamptz",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "notes": []
+        },
+        {
+          "column": "addenda",
+          "mongoPath": "addenda",
+          "type": "jsonb",
+          "typeSource": "schema",
+          "notNull": false,
+          "nullReason": "schema does not require it; no data profiled",
+          "enum": null,
+          "ref": null,
+          "default": "'[]'::jsonb",
+          "notes": [
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (createdAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "createdAt"
+          ]
+        },
+        {
           "column": "status",
           "mongoPath": "status",
           "type": "text",
@@ -26091,7 +26944,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (uploadedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "uploadedAt"
           ]
         },
         {
@@ -26264,6 +27121,18 @@
           "decision": null
         },
         {
+          "column": "plan_id",
+          "references": "TreatmentPlan",
+          "referencesTable": "treatment_plans",
+          "referencesScope": "tenant",
+          "crossSchema": false,
+          "onDelete": "set null",
+          "notValid": false,
+          "finding": null,
+          "measured": null,
+          "decision": null
+        },
+        {
           "column": "created_by_id",
           "references": "User",
           "referencesTable": "users",
@@ -26283,6 +27152,30 @@
           "columns": [
             {
               "column": "patient_id",
+              "desc": false
+            }
+          ]
+        },
+        {
+          "kind": "btree",
+          "name": "treatment_records_plan_id_idx",
+          "columns": [
+            {
+              "column": "plan_id",
+              "desc": false
+            }
+          ]
+        },
+        {
+          "kind": "btree",
+          "name": "treatment_records_plan_id_sitting_number_idx",
+          "columns": [
+            {
+              "column": "plan_id",
+              "desc": false
+            },
+            {
+              "column": "sitting_number",
               "desc": false
             }
           ]
@@ -26432,7 +27325,9 @@
           "nullReason": "required, and present in 100% of 159 documents",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "role",
@@ -26682,7 +27577,9 @@
           "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "password_reset_token",
@@ -26693,7 +27590,9 @@
           "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "password_reset_expires",
@@ -26704,7 +27603,9 @@
           "nullReason": "schema does not require it; no data profiled",
           "enum": null,
           "ref": null,
-          "notes": []
+          "notes": [],
+          "hidden": true,
+          "hiddenReason": "select:false in the Mongoose schema — withheld unless requested by name"
         },
         {
           "column": "fcm_tokens",
@@ -26717,7 +27618,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (updatedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "updatedAt"
           ]
         },
         {
@@ -27591,7 +28496,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (timestamp) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "timestamp"
           ]
         },
         {
@@ -27605,7 +28514,11 @@
           "ref": null,
           "default": "'[]'::jsonb",
           "notes": [
-            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js)."
+            "Embedded object array kept as JSONB — nothing aggregates across it (see overrides.js).",
+            "Dates inside this column (uploadedAt) are revived on read — JSON has no date type, so they are stored as ISO strings."
+          ],
+          "jsonbDatePaths": [
+            "uploadedAt"
           ]
         },
         {

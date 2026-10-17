@@ -43,8 +43,29 @@ function sqlEntities() {
 
 const cache = new Map();
 
-/** True when this entity's reads and writes go to PostgreSQL. */
+/**
+ * True when this entity's reads and writes go to PostgreSQL for this request.
+ *
+ * Two sources, deliberately ordered:
+ *
+ * 1. The clinic's own `migration.sqlEntities`, carried on the request context.
+ *    This is how a real cutover happens — one clinic at a time, reversible for
+ *    that clinic alone, without redeploying or touching the others.
+ * 2. `SQL_ENTITIES` in the environment, which applies to every clinic. It stays
+ *    because parity harnesses and CP-6 need to force a backend without writing
+ *    to the registry, but it is not how production cuts over.
+ *
+ * The union rather than a precedence rule: a clinic cut over to PostgreSQL must
+ * not be silently pulled back to Mongo because an environment variable happens
+ * to omit that entity. Rolling a clinic back is an explicit act on its record,
+ * not a side effect of configuration.
+ */
 function isSqlBacked(modelName) {
+  const { currentSqlEntities } = require('./context');
+
+  const perClinic = currentSqlEntities();
+  if (perClinic.includes('*') || perClinic.includes(modelName)) return true;
+
   const entities = sqlEntities();
   return entities === '*' || entities.has(modelName);
 }
@@ -77,8 +98,47 @@ function bothBackends(modelName) {
   return { mongo: new MongoRepository(modelName), sql: new SqlRepository(modelName) };
 }
 
+/**
+ * Run several writes as one unit.
+ *
+ *   await transaction(async () => {
+ *     const invoice = await repo('Invoice').create(data);
+ *     await repo('Payment').create({ invoice: invoice._id, ... });
+ *   });
+ *
+ * Both writes commit, or neither does. Without this each repository call opens
+ * its own transaction, and a failure between them leaves the first committed —
+ * an invoice with no payment against it, which reconciles to the wrong number
+ * and looks like a complete record.
+ *
+ * On the Mongo side this is a no-op passthrough rather than a session-backed
+ * transaction. Replica-set transactions are available but nothing in the
+ * application uses them today, and quietly introducing them here would change
+ * the failure behaviour of every existing multi-write path at the moment a
+ * module is ported — which is precisely when nobody would be looking for it.
+ * Services get atomicity as they move to SQL, not before.
+ */
+async function transaction(fn) {
+  const { getPool } = require('./sqlConnection');
+  const { runWithTransaction, currentTransaction, requireTenant } = require('./context');
+  const { schemaFor } = require('../../../sql/tenant/naming');
+
+  // Already inside one: join it rather than nesting. A service must not be able
+  // to commit half of its own operation.
+  if (currentTransaction()) return fn();
+
+  const tenant = requireTenant();
+  const schema = schemaFor(tenant.slug);
+
+  return getPool().transaction(async (trx) => {
+    await trx.raw('set local search_path to ??, public', [schema]);
+    return runWithTransaction(trx, fn);
+  });
+}
+
 module.exports = {
   repo,
+  transaction,
   isSqlBacked,
   sqlEntities,
   bothBackends,

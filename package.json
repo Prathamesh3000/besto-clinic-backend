@@ -1,7 +1,7 @@
 {
   "name": "bestoclinic-backend",
   "version": "1.0.0",
-  "description": "BestoClinic \u2014 Multi-tenant SaaS backend for dental clinic management",
+  "description": "BestoClinic — Multi-tenant SaaS backend for dental clinic management",
   "main": "server.js",
   "engines": {
     "node": ">=18.0.0"
@@ -43,7 +43,19 @@
     "sql:baseline:timezone": "node scripts/sql/verify-timezone.js --baseline",
     "sql:test:parity": "node scripts/sql/verify-parity.js",
     "sql:test:regression": "node scripts/sql/verify-no-regression.js",
-    "sql:audit:orphans": "node scripts/sql/audit-orphans.js"
+    "sql:audit:orphans": "node scripts/sql/audit-orphans.js",
+    "sql:validate:constraints": "node scripts/sql/validate-constraints.js",
+    "sql:validate:constraints:dry": "node scripts/sql/validate-constraints.js --dry-run",
+    "sql:hooks": "node scripts/sql/inventory-hooks.js",
+    "sql:hooks:full": "node scripts/sql/inventory-hooks.js --full",
+    "sql:aggregations": "node scripts/sql/inventory-aggregations.js",
+    "sql:aggregations:full": "node scripts/sql/inventory-aggregations.js --full",
+    "sql:test:aggregations": "node scripts/sql/verify-aggregations.js",
+    "sql:test:aggregations:fixtures": "node scripts/sql/verify-aggregations.js --fixtures",
+    "sql:test:filters": "node scripts/sql/verify-filters.js",
+    "sql:test:writes": "node scripts/sql/verify-writes.js",
+    "sql:cutover": "node scripts/sql/cutover.js",
+    "sql:cutover:list": "node scripts/sql/cutover.js --list"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

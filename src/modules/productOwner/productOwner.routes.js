@@ -136,6 +136,7 @@ router.post('/subscriptions/:id/extend-trial', validate(v.extendTrialSchema), as
 // ─── Platform Users ─────────────────────────────────────
 router.get('/users', asyncHandler(subCtrl.listPlatformUsers));
 router.post('/users', validate(v.createPlatformUserSchema), asyncHandler(subCtrl.createPlatformUser));
+router.put('/users/me', validate(v.updateMyPlatformProfileSchema), asyncHandler(subCtrl.updateMyPlatformProfile));
 
 // ─── Job Portal Admin ───────────────────────────────────
 const jobPortalAdminCtrl = require('./jobPortalAdmin.controller');

@@ -395,6 +395,35 @@ async function createPlatformUser(data) {
   return PlatformUser.create(data);
 }
 
+/**
+ * Update the signed-in platform owner's own profile.
+ *
+ * Takes the id from the token, not the URL, so a platform user can only ever
+ * edit themselves. Password is not accepted here - there is a dedicated flow
+ * for that - and role is not a field on PlatformUser at all.
+ *
+ * Unlike the tenant equivalent there is no UserDirectory to keep in step:
+ * platform accounts log in at /auth/platform/login against this collection
+ * directly and are never resolved through the email to clinic index.
+ */
+async function updateMyPlatformProfile(userId, data) {
+  const user = await PlatformUser.findById(userId);
+  if (!user) throw ApiError.unauthorized('Your account is no longer available - please log in again');
+
+  if (data.email) {
+    const next = data.email.toLowerCase().trim();
+    if (next !== user.email) {
+      const clash = await PlatformUser.findOne({ email: next, _id: { $ne: user._id } });
+      if (clash) throw ApiError.conflict('That email is already used by another platform account');
+    }
+    user.email = next;
+  }
+  if (data.name !== undefined) user.name = data.name;
+
+  await user.save();
+  return user;
+}
+
 module.exports = {
   // Tenants
   listTenants,
@@ -420,4 +449,5 @@ module.exports = {
   // Platform Users
   listPlatformUsers,
   createPlatformUser,
+  updateMyPlatformProfile,
 };

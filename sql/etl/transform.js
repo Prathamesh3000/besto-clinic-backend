@@ -39,6 +39,24 @@ function toObjectId(value) {
 }
 
 /**
+ * A document's primary key as PostgreSQL stores it.
+ *
+ * Almost every `_id` is an ObjectId and becomes its hex string. A model may
+ * declare it as something else - `Counter` uses the sequence name ('opd') -
+ * and the schema generator now types that column to match, so the key has to
+ * be read the same way here.
+ *
+ * Assuming ObjectId produced `undefined`, which then failed to match any row
+ * and reported it as missing from PostgreSQL even when it had loaded correctly.
+ */
+function toPrimaryKey(value) {
+  const asObjectId = toObjectId(value);
+  if (asObjectId !== undefined && asObjectId !== null) return asObjectId;
+  if (typeof value === 'string' || typeof value === 'number') return String(value);
+  return undefined;
+}
+
+/**
  * Dates pass through as Date objects and the driver writes the instant.
  *
  * No timezone arithmetic anywhere in this file, deliberately. `scheduledAt` holds
@@ -339,6 +357,7 @@ function buildJunctionRows(junction, doc, parentId, { clinicId } = {}) {
 }
 
 module.exports = {
+  toPrimaryKey,
   toObjectId,
   toTimestamp,
   toNumeric,

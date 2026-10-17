@@ -123,7 +123,25 @@ Platform-wide data (clinics, plans, subscriptions) lives in the `platform` schem
 | `npm run sql:verify:timezone` | **CP-5** | Every sampled appointment displays the same wall-clock time |
 | `npm run sql:test:parity` | **CP-6** | Ported modules return equivalent results from either database |
 | `npm run sql:test:regression` | **CP-7** | The Mongo application still boots and passes its suite |
+| `npm run sql:test:aggregations` | **CP-8** | Ported pipelines return identical rows. Add `-- --fixtures` to seed, compare and remove test data |
+| `npm run sql:test:filters` | **CP-9** | The same Mongo filter selects the same rows from either database |
+| `npm run sql:test:writes` | **CP-10** | `updateOne`, `updateMany`, `insertMany` and `distinct` agree across backends |
 | `npm run sql:gates` | all | The board — every gate, one line each |
+| `npm run sql:cutover:list` | — | Which clinics read which entities from PostgreSQL |
+| `npm run sql:cutover` | — | Cut one clinic over, or roll it back. See [CUTOVER.md](CUTOVER.md) |
+
+### Companion documents
+
+| | |
+|---|---|
+| [PORTING.md](PORTING.md) | Phases 3-4 — how to port a module, what the seam can express, and the mistakes already made |
+| [CUTOVER.md](CUTOVER.md) | Phase 7 — per-clinic cutover and rollback, and the rehearsal that was run |
+| [AGGREGATIONS.md](AGGREGATIONS.md) | Phase 5 — the 97 pipelines, and the GST report blocked on a business decision |
+| [HOOKS.md](HOOKS.md) | Phase 2 — every Mongoose hook and where its behaviour now lives |
+| [FINDINGS.md](FINDINGS.md) | What profiling the real data turned up |
+| [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) | The plan, phase by phase |
+
+---
 
 ### Profiler options
 

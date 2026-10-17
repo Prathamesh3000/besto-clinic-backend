@@ -10,7 +10,7 @@ const { authLimiter } = require('../../middleware/rateLimiter');
 const {
   registerSchema, loginSchema, refreshSchema,
   forgotPasswordSchema, resetPasswordSchema, registerDeviceSchema,
-  reminderSettingsSchema, testNotificationSchema,
+  reminderSettingsSchema, testNotificationSchema, updateProfileSchema,
 } = require('./auth.validator');
 
 // Platform login (NO tenant context required)
@@ -34,6 +34,7 @@ router.post('/reset-password',  authLimiter(), validate(resetPasswordSchema),  a
 // The earlier router.use(tenantResolver()) cannot perform this check because
 // req.user does not exist yet at that point.
 router.get('/me',              authenticate(), tenantResolver(), asyncHandler(ctrl.me));
+router.put('/me',               authenticate(), tenantResolver(), validate(updateProfileSchema), asyncHandler(ctrl.updateMe));
 router.post('/logout',          authenticate(), tenantResolver(), asyncHandler(ctrl.logout));
 router.post('/register-device', authenticate(), tenantResolver(), validate(registerDeviceSchema), asyncHandler(ctrl.registerDevice));
 router.put('/reminder-settings', authenticate(), tenantResolver(), validate(reminderSettingsSchema), asyncHandler(ctrl.updateReminderSettings));

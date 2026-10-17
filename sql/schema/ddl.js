@@ -259,6 +259,40 @@ function revokeSensitiveColumns(schema, table, columns, roleName) {
   return [`revoke select (${sensitive.map(ident).join(', ')}) on ${qualified(schema, table)} from ${ident(roleName)};`];
 }
 
+/**
+ * Tables the application may only ever append to.
+ *
+ * Derived from the model hooks: `FinancialAuditLog` and `PatientLedger` each
+ * register nine `pre()` guards blocking every Mongoose write path — updateOne,
+ * updateMany, findOneAndUpdate, findOneAndReplace, replaceOne, deleteOne,
+ * deleteMany, findOneAndDelete, and save-on-an-existing-document. Nine, because
+ * that is how many ways Mongoose offers to write, and each has to be blocked
+ * separately.
+ *
+ * `node scripts/sql/inventory-hooks.js` finds them, and will find any model that
+ * adopts the same pattern later.
+ */
+const APPEND_ONLY_TABLES = ['financial_audit_logs', 'patient_ledgers'];
+
+/**
+ * Enforce append-only at the grant, not in the application.
+ *
+ * This is stronger than the hooks it replaces. A `pre('deleteOne')` guard is
+ * bypassed by anything that reaches the driver directly - a migration script, a
+ * console session, a library that builds its own query. A revoked privilege
+ * cannot be bypassed by the application at all, because the permission is not
+ * there to use.
+ *
+ * One of the few places where porting a behaviour improves it rather than merely
+ * preserving it.
+ */
+function revokeAppendOnly(schema, roleName) {
+  const role = ident(roleName);
+  return APPEND_ONLY_TABLES.map(
+    (t) => `revoke update, delete on ${qualified(schema, t)} from ${role};`,
+  );
+}
+
 /* ── Whole-schema emission ─────────────────────────────────── */
 
 /**
@@ -358,6 +392,8 @@ module.exports = {
   createTenantRole,
   dropTenantRole,
   revokeSensitiveColumns,
+  revokeAppendOnly,
+  APPEND_ONLY_TABLES,
   emitScope,
   OBJECTID_SCHEMA,
 };

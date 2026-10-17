@@ -40,7 +40,8 @@ router.use((req, res, next) => {
     path.startsWith('/public') ||
     path.startsWith('/platform') ||
     path.startsWith('/subscriptions') ||
-    path.startsWith('/monitoring')
+    path.startsWith('/monitoring') ||
+    path.startsWith('/contact')
   ) {
     return next();
   }
@@ -92,6 +93,7 @@ router.use('/queue',          require('../modules/queue/queue.routes'));
 
 // ── Prescriptions ───────────────────────────────
 router.use('/prescriptions',  require('../modules/prescription/prescription.routes'));
+router.use('/treatment-plans', require('../modules/treatmentPlan/treatmentPlan.routes'));
 
 // ── Consent Management ──────────────────────────
 router.use('/consents',       require('../modules/consent/consent.routes'));
@@ -144,6 +146,9 @@ router.use('/public',        require('../modules/public/public.routes'));
 
 // ── Platform (Product Owner) routes ─────────────
 router.use('/platform',      require('../modules/productOwner/productOwner.routes'));
+
+// ── Contact (Landing page) routes ─────────────
+router.use('/contact',      require('../modules/productOwner/contactRoutes'));
 
 // ── 404 handler for unmatched API routes ────────
 router.use((_req, res) => {

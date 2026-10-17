@@ -15,7 +15,7 @@
 
 const knexLib = require('knex');
 
-const { requireTenant } = require('./context');
+const { requireTenant, currentTransaction } = require('./context');
 const { schemaFor } = require('../../../sql/tenant/naming');
 
 let pool = null;
@@ -69,6 +69,19 @@ function getPool() {
 function withTenantScope(fn) {
   const tenant = requireTenant();
   const schema = schemaFor(tenant.slug);
+
+  /**
+   * Reuse a transaction a service has already opened.
+   *
+   * Opening a fresh one per repository call would make a multi-write operation
+   * non-atomic — the invoice commits, the payment fails, and the books are
+   * wrong in a way that looks right. `search_path` is already set on the
+   * outer transaction, so nothing more is needed here.
+   */
+  const ambient = currentTransaction();
+  if (ambient) {
+    return fn(ambient, { schema, clinicId: tenant.clinicId, slug: tenant.slug });
+  }
 
   return getPool().transaction(async (trx) => {
     // `public` stays on the path for the shared `objectid` domain.

@@ -349,6 +349,29 @@ const PRESCRIPTION_STATUS = Object.freeze({
   CANCELLED: 'cancelled',
 });
 
+/**
+ * Treatment plan lifecycle.
+ *
+ * ABANDONED is deliberately distinct from CANCELLED: a plan the patient stopped
+ * attending is the clinic's evidence in a dispute, and collapsing it into a
+ * generic cancellation would lose the very distinction the record exists for.
+ */
+const TREATMENT_PLAN_STATUS = Object.freeze({
+  PLANNED:     'planned',
+  IN_PROGRESS: 'in_progress',
+  COMPLETED:   'completed',
+  ABANDONED:   'abandoned',
+});
+
+/** What a doctor decided after a patient reported continuing pain. */
+const COMPLAINT_ACTION = Object.freeze({
+  REEXAMINATION: 'reexamination',
+  EXTRA_SITTING: 'extra_sitting',
+  MEDICATION:    'medication',
+  REFERRAL:      'referral',
+  NONE:          'none',
+});
+
 /** Care task types (extracted from prescriptions + dynamic consultation tasks) */
 const CARE_TASK_TYPE = Object.freeze({
   MEDICATION: 'medication',
@@ -790,6 +813,8 @@ module.exports = {
   UPLOAD_STATUS,
   UPLOAD_ENTITY_TYPE,
   PRESCRIPTION_STATUS,
+  TREATMENT_PLAN_STATUS,
+  COMPLAINT_ACTION,
   CONSENT_STATUS,
   CONSENT_TYPE,
   QUEUE_STATUS,

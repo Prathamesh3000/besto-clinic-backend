@@ -1,99 +1,120 @@
 'use strict';
 
+/**
+ * Branches — ported to the repository seam (Phase 3).
+ *
+ * Same shape as the Department pilot: no `getTenantConnection`, no query syntax
+ * belonging to either engine, and tenant identity from request-scoped context
+ * rather than a threaded argument.
+ *
+ * Two things stay on Mongo deliberately, and are not oversights:
+ *
+ * - `Clinic` holds the plan limits and the usage counter. It is platform data,
+ *   not tenant data, and is not part of the per-clinic port.
+ * - `FeaturedDoctor` is also platform-scoped. The denormalised branch name it
+ *   carries has to be kept in step wherever the branch itself lives.
+ *
+ * So a branch write touches two databases until the platform schema moves too.
+ * That is visible here rather than hidden, because it is the reason a failure
+ * midway can leave the counter and the rows disagreeing — which the decrement
+ * on the error path exists to limit.
+ */
+
 const mongoose = require('mongoose');
 const ApiError = require('../../utils/ApiError');
 const { parsePagination } = require('../../utils/pagination');
-const { getTenantConnection } = require('../../db/tenantConnectionManager');
+const { repo, currentTenant } = require('../../db/repository');
 const FeaturedDoctor = require('../../models/platform/FeaturedDoctor');
 const logger = require('../../utils/logger');
 
-async function listBranches(query, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Branch = conn.model('Branch');
+/** Populated exactly as before, so responses are unchanged either side of the port. */
+const WITH_REFS = [{ path: 'manager', select: ['name', 'email'] }];
+
+async function listBranches(query) {
+  const branches = repo('Branch');
   const { skip, limit, page, sort } = parsePagination(query);
 
-  const filter = { deletedAt: null };
+  const filter = {};
   if (query.status === 'active' || query.isActive === 'true') {
     filter.isActive = true;
   } else if (query.status === 'inactive' || query.isActive === 'false') {
     filter.isActive = false;
   }
-  if (query.search) {
-    const escaped = query.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    filter.$or = [
-      { name: { $regex: escaped, $options: 'i' } },
-      { code: { $regex: escaped, $options: 'i' } },
-      { 'address.city': { $regex: escaped, $options: 'i' } },
-    ];
-  }
 
-  const [items, total] = await Promise.all([
-    Branch.find(filter).sort(sort).skip(skip).limit(limit).populate('manager', 'name email'),
-    Branch.countDocuments(filter),
-  ]);
+  // `search` is passed through rather than built into a regex here: Mongo does
+  // $regex, PostgreSQL does ILIKE, and choosing is the seam's job. `address.city`
+  // is a nested path in Mongo and the flattened `address_city` column in SQL;
+  // the mapper resolves it either way.
+  const { items, total } = await branches.find(filter, {
+    sort,
+    skip,
+    limit,
+    search: query.search,
+    searchFields: ['name', 'code', 'address.city'],
+    populate: WITH_REFS,
+  });
 
   return { items, total, page, limit };
 }
 
-async function getBranchById(id, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Branch = conn.model('Branch');
-  const branch = await Branch.findById(id).populate('manager', 'name email');
+async function getBranchById(id) {
+  const branch = await repo('Branch').findById(id, { populate: WITH_REFS });
   if (!branch) throw ApiError.notFound('Branch not found');
   return branch;
 }
 
-async function createBranch(data, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Branch = conn.model('Branch');
+async function createBranch(data) {
+  const { slug } = currentTenant();
   const Clinic = mongoose.model('Clinic');
 
-  // Atomic limit enforcement: increment first, then check
+  /**
+   * Increment first, then check.
+   *
+   * Reading the count and then writing would let two concurrent creates both
+   * see room for one more. `$inc` is applied by the server, so the second
+   * caller sees the first one's value and the rollback below is what keeps the
+   * counter honest when the limit is hit.
+   */
   const clinic = await Clinic.findOneAndUpdate(
-    { slug: tenantSlug },
+    { slug },
     { $inc: { 'usage.branchesCount': 1 } },
     { new: true },
   );
 
   try {
     if (clinic.features?.maxBranches && clinic.usage.branchesCount > clinic.features.maxBranches) {
-      await Clinic.findOneAndUpdate(
-        { slug: tenantSlug },
-        { $inc: { 'usage.branchesCount': -1 } },
-      );
+      await Clinic.findOneAndUpdate({ slug }, { $inc: { 'usage.branchesCount': -1 } });
       throw ApiError.forbidden('Branch limit reached. Upgrade your plan.');
     }
 
-    const branch = await Branch.create(data);
-    return branch;
+    return await repo('Branch').create(data);
   } catch (err) {
+    // A 403 already rolled its own increment back above; decrementing again
+    // would take the counter below the real number of branches.
     if (!(err instanceof ApiError && err.statusCode === 403)) {
-      await Clinic.findOneAndUpdate(
-        { slug: tenantSlug },
-        { $inc: { 'usage.branchesCount': -1 } },
-      );
+      await Clinic.findOneAndUpdate({ slug }, { $inc: { 'usage.branchesCount': -1 } });
     }
     throw err;
   }
 }
 
-async function updateBranch(id, data, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Branch = conn.model('Branch');
-  const branch = await Branch.findByIdAndUpdate(id, data, {
-    new: true,
-    runValidators: true,
-  });
+async function updateBranch(id, data) {
+  const { slug } = currentTenant();
+
+  const branch = await repo('Branch').updateById(id, data);
   if (!branch) throw ApiError.notFound('Branch not found');
 
-  // Sync denormalized branch fields to FeaturedDoctor records
+  // FeaturedDoctor carries a copy of the branch name and code for the public
+  // directory. Left unsynced, a renamed branch shows its old name to patients
+  // browsing doctors — wrong, but not worth failing the rename over, so the
+  // error is logged and the update stands.
   if (data.name || data.code) {
     try {
       const updates = {};
       if (data.name) updates.branchName = branch.name;
       if (data.code) updates.branchCode = branch.code;
       await FeaturedDoctor.updateMany(
-        { clinicSlug: tenantSlug, branchId: String(id), isActive: true },
+        { clinicSlug: slug, branchId: String(id), isActive: true },
         { $set: updates },
       );
     } catch (err) {
@@ -104,28 +125,23 @@ async function updateBranch(id, data, tenantSlug) {
   return branch;
 }
 
-async function deleteBranch(id, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const Branch = conn.model('Branch');
+async function deleteBranch(id) {
+  const { slug } = currentTenant();
   const Clinic = mongoose.model('Clinic');
 
-  // Only delete if not already deleted — prevents double-decrement
-  const branch = await Branch.findOneAndUpdate(
-    { _id: id, deletedAt: null },
-    { deletedAt: new Date() },
-    { new: true },
-  );
+  // softDeleteById returns null for a branch already deleted, which is what
+  // stops a repeated call decrementing the counter twice.
+  const branch = await repo('Branch').softDeleteById(id);
   if (!branch) throw ApiError.notFound('Branch not found or already deleted');
 
   await Clinic.findOneAndUpdate(
-    { slug: tenantSlug, 'usage.branchesCount': { $gt: 0 } },
+    { slug, 'usage.branchesCount': { $gt: 0 } },
     { $inc: { 'usage.branchesCount': -1 } },
   );
 
-  // Clear branch reference from FeaturedDoctor records
   try {
     await FeaturedDoctor.updateMany(
-      { clinicSlug: tenantSlug, branchId: String(id), isActive: true },
+      { clinicSlug: slug, branchId: String(id), isActive: true },
       { $set: { branchId: null, branchName: null, branchCode: null } },
     );
   } catch (err) {
@@ -135,16 +151,25 @@ async function deleteBranch(id, tenantSlug) {
   return branch;
 }
 
-async function bulkCreateBranches(rows, tenantSlug) {
-  const results = { totalReceived: rows.length, successCount: 0, errorCount: 0, errors: [], created: [] };
+/**
+ * Sequential rather than parallel, deliberately.
+ *
+ * Each create checks the plan limit against a counter the previous one moved.
+ * Running them concurrently would let a batch of ten past a limit of five,
+ * because all ten would read the count before any of them wrote it.
+ */
+async function bulkCreateBranches(rows) {
+  const results = {
+    totalReceived: rows.length, successCount: 0, errorCount: 0, errors: [], created: [],
+  };
 
-  for (let i = 0; i < rows.length; i++) {
+  for (let i = 0; i < rows.length; i += 1) {
     try {
-      const branch = await createBranch(rows[i], tenantSlug);
-      results.successCount++;
+      const branch = await createBranch(rows[i]);
+      results.successCount += 1;
       results.created.push(branch);
     } catch (err) {
-      results.errorCount++;
+      results.errorCount += 1;
       results.errors.push({ row: i + 1, message: err.message || 'Unknown error' });
     }
   }
@@ -152,4 +177,11 @@ async function bulkCreateBranches(rows, tenantSlug) {
   return results;
 }
 
-module.exports = { listBranches, getBranchById, createBranch, updateBranch, deleteBranch, bulkCreateBranches };
+module.exports = {
+  listBranches,
+  getBranchById,
+  createBranch,
+  updateBranch,
+  deleteBranch,
+  bulkCreateBranches,
+};

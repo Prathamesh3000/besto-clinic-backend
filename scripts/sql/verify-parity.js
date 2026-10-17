@@ -60,6 +60,35 @@ function record(ok, name, detail) {
  */
 const CASES = [
   {
+    model: 'Branch',
+    name: 'list, default sort',
+    run: (r) => r.find({}, { limit: 20, sort: { createdAt: -1 } }),
+  },
+  {
+    model: 'Branch',
+    name: 'list with populate(manager)',
+    run: (r) => r.find({}, {
+      limit: 20,
+      sort: { createdAt: -1 },
+      populate: [{ path: 'manager', select: ['name', 'email'] }],
+    }),
+  },
+  {
+    model: 'Branch',
+    name: 'list active only',
+    run: (r) => r.find({ isActive: true }, { limit: 20 }),
+  },
+  {
+    // Exercises the nested path: `address.city` in Mongo, the flattened
+    // `address_city` column in SQL. The mapper has to resolve both to the same
+    // result or a branch search silently stops matching on city.
+    model: 'Branch',
+    name: 'search across name, code and address.city',
+    run: (r) => r.find({}, {
+      limit: 20, search: 'a', searchFields: ['name', 'code', 'address.city'],
+    }),
+  },
+  {
     model: 'Department',
     name: 'list, default sort',
     run: (r) => r.find({}, { limit: 20, sort: { createdAt: -1 } }),
@@ -98,6 +127,75 @@ const CASES = [
     name: 'count of active roles',
     run: (r) => r.count({ isActive: true }),
   },
+
+  /*
+   * The second wave of ported modules — notification, user, consent, doctor.
+   *
+   * Each case is the query the ported service actually issues, not an invented
+   * one. `listDoctors` really does filter by role, populate two references and
+   * search two fields in the same call, and it is the combination that has to
+   * agree: each part passing alone says nothing about the statement the module
+   * emits.
+   */
+  {
+    model: 'User',
+    name: 'doctor.listDoctors — role filter, two populates, search',
+    run: (r) => r.find({ role: 'doctor' }, {
+      limit: 20,
+      sort: { createdAt: -1 },
+      search: 'a',
+      searchFields: ['name', 'email'],
+      populate: [{ path: 'branch', select: ['name'] }, { path: 'department', select: ['name'] }],
+    }),
+  },
+  {
+    model: 'User',
+    name: 'user.listUsers — search across name and email',
+    run: (r) => r.find({}, {
+      limit: 20, sort: { createdAt: -1 }, search: 'a', searchFields: ['name', 'email'],
+    }),
+  },
+  {
+    // The password column is `select: false` in Mongoose and hidden in the SQL
+    // repository. Both must withhold it; a leak here would be invisible in the
+    // response shape until someone read it.
+    model: 'User',
+    name: 'user list withholds the password hash',
+    run: async (r) => {
+      const { items } = await r.find({}, { limit: 20, sort: { createdAt: -1 } });
+      // Shaped as `items` so the harness counts rows: a case that returns a
+      // summary object looks like an empty result to it, and is reported as
+      // uncompared rather than passing — which is the behaviour that caught
+      // the first version of this case.
+      return { items: items.map((u) => ({ _id: u._id, exposesPassword: u.password !== undefined })) };
+    },
+  },
+  {
+    model: 'Notification',
+    name: 'notification.listNotifications — unread, newest first',
+    run: (r) => r.find({ isRead: false }, { limit: 20, sort: { createdAt: -1 } }),
+  },
+  {
+    model: 'Notification',
+    name: 'notification.getUnreadCount',
+    run: (r) => r.count({ isRead: false }),
+  },
+  {
+    model: 'Notification',
+    name: 'notification type filter ($in)',
+    // 'appointment' is the only type this clinic has actually produced. A pair
+    // of plausible-looking types that match nothing would make the case go
+    // uncompared, which proves less than not writing it.
+    run: (r) => r.find({ type: { $in: ['appointment', 'system'] } }, { limit: 20, sort: { createdAt: -1 } }),
+  },
+
+  /*
+   * Consent is ported but NOT covered here: this clinic has no consent records,
+   * so both backends return nothing and the comparison would assert only that
+   * two queries ran. The case is left out rather than left failing — an
+   * uncompared case dressed as a passing one is the failure mode this gate
+   * exists to avoid. Add it the moment the clinic has consents to compare.
+   */
 ];
 
 /* ── Comparison ────────────────────────────────────────────── */

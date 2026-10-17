@@ -109,6 +109,12 @@ async function provision(slug) {
       }
     }
 
+    // Append-only tables: enforced by withholding the privilege rather than by
+    // the nine Mongoose guards this replaces. See sql/HOOKS.md.
+    for (const sql of ddl.revokeAppendOnly(schema, role)) {
+      await knex.raw(sql);
+    }
+
     const { rows } = await knex.raw(
       'select count(*)::int as n from information_schema.tables where table_schema = ?',
       [schema]

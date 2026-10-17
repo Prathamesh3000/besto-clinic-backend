@@ -44,12 +44,52 @@ function fromNumeric(v) {
   return Number.isFinite(n) ? n : v;
 }
 
+/**
+ * Turn the ISO strings inside a JSONB value back into Dates.
+ *
+ * JSON has no date type, so a `Date` in an embedded object array is stored as an
+ * ISO-8601 string and read back as one. Mongo returns a real Date for the same
+ * field, so without this `user.fcmTokens[0].updatedAt.getTime()` works against
+ * one database and throws against the other — with nothing in between reporting
+ * a problem. CP-6 found it on `fcmTokens`; there are 108 JSONB columns.
+ *
+ * Only the paths the manifest recorded from the Mongoose sub-schema are revived.
+ * Reviving anything that looks like a timestamp would convert genuine string
+ * fields that happen to hold one, which is the same bug pointing the other way.
+ */
+function reviveDates(value, paths) {
+  if (!value || !paths || !paths.length) return value;
+
+  const walk = (node, segments) => {
+    if (node === null || node === undefined) return node;
+    if (Array.isArray(node)) return node.map((el) => walk(el, segments));
+    if (!segments.length) {
+      if (typeof node === 'string') {
+        const d = new Date(node);
+        return Number.isNaN(d.getTime()) ? node : d;
+      }
+      return node;
+    }
+    if (typeof node !== 'object') return node;
+    const [head, ...rest] = segments;
+    if (!(head in node)) return node;
+    return { ...node, [head]: walk(node[head], rest) };
+  };
+
+  let out = value;
+  for (const path of paths) out = walk(out, path.split('.'));
+  return out;
+}
+
 function convertOut(col, value) {
   if (value === null || value === undefined) return null;
   switch (col.type) {
     case 'objectid': return trimId(value);
     case 'numeric': return fromNumeric(value);
-    case 'jsonb': return typeof value === 'string' ? safeParse(value) : value;
+    case 'jsonb': {
+      const parsed = typeof value === 'string' ? safeParse(value) : value;
+      return reviveDates(parsed, col.jsonbDatePaths);
+    }
     default: return value;
   }
 }

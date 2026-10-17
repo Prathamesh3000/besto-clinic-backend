@@ -114,6 +114,74 @@ class MongoRepository {
     const Model = await this.model();
     return Model.findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true }).lean(LEAN.lean);
   }
+
+  /**
+   * Update the first document matching `filter`, or null.
+   *
+   * Distinct from `upsertOne`: this one never inserts. Most call sites use it to
+   * scope a write by ownership as well as id — `{ _id: id, recipient: userId }`
+   * — so the filter is a security boundary and must reach the write itself.
+   */
+  async updateOne(filter, patch) {
+    const Model = await this.model();
+    return Model.findOneAndUpdate(filter, patch, { new: true, runValidators: true })
+      .lean(LEAN.lean);
+  }
+
+  /**
+   * Update every document matching `filter`.
+   *
+   * `deletedAt: null` is added here rather than left to the model's
+   * `pre(/^find/)` hook, because that regex does not match `updateMany` — it
+   * covers `find`, `findOne` and `findOneAndUpdate` and stops there. Relying on
+   * it would have this method update soft-deleted documents while the SQL side,
+   * which applies the predicate itself, skipped them. Nothing would fail; the
+   * two databases would simply drift apart one bulk update at a time.
+   */
+  async updateMany(filter, patch) {
+    const Model = await this.model();
+    const scoped = Model.schema.path('deletedAt') && filter.deletedAt === undefined
+      ? { ...filter, deletedAt: null }
+      : filter;
+    const result = await Model.updateMany(scoped, { $set: patch });
+    return { modifiedCount: result.modifiedCount };
+  }
+
+  async insertMany(docs = []) {
+    if (!Array.isArray(docs) || !docs.length) return [];
+    const Model = await this.model();
+    // Not `insertMany`, which bypasses `pre('save')`. Several models depend on
+    // those hooks for sequence numbers and password hashing, and a bulk path
+    // that skipped them would write rows the single-document path never could.
+    const created = [];
+    for (const data of docs) {
+      // eslint-disable-next-line no-await-in-loop
+      created.push((await Model.create(data)).toObject());
+    }
+    return created;
+  }
+
+  async distinct(field, filter = {}) {
+    const Model = await this.model();
+    return Model.distinct(field, filter);
+  }
+
+  /**
+   * Update the row matching `filter`, or insert it if there is none.
+   *
+   * For the singleton configuration documents several modules keep — a clinic's
+   * booking policy, its branding — where "create it the first time someone
+   * saves" is the whole lifecycle and a separate create call would race with
+   * itself on first use.
+   */
+  async upsertOne(filter, patch) {
+    const Model = await this.model();
+    return Model.findOneAndUpdate(
+      filter,
+      { $set: patch },
+      { new: true, upsert: true, runValidators: true },
+    ).lean(LEAN.lean);
+  }
 }
 
 module.exports = { MongoRepository };

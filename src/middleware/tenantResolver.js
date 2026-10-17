@@ -74,7 +74,26 @@ function tenantResolver() {
      * the async continuation of every handler — sees it. Calling it outside would
      * bind the context to this function and nothing else.
      */
-    return runWithTenant({ slug: sanitized, clinicId: req.clinicId || null }, () => next());
+    /**
+     * The clinic's cutover list rides along with its identity.
+     *
+     * Routing between Mongo and PostgreSQL is decided synchronously on every
+     * repository call, so it cannot await a lookup. Resolving the list once
+     * here — cached in Redis, like subscription status — keeps that decision
+     * free for every query the request goes on to make.
+     *
+     * Missing means "not cut over", which is the safe default: a clinic whose
+     * record did not load reads from Mongo rather than from a PostgreSQL schema
+     * that may never have been populated.
+     */
+    const { getCutoverEntities } = require('../db/repository/cutover');
+
+    return getCutoverEntities(sanitized)
+      .then((sqlEntities) => runWithTenant(
+        { slug: sanitized, clinicId: req.clinicId || null, sqlEntities },
+        () => next(),
+      ))
+      .catch((err) => next(err));
   };
 }
 

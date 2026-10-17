@@ -407,6 +407,58 @@ async function _syncUserDirectory(email, tenantSlug, userId, role) {
 }
 
 /**
+ * Update the signed-in user's own profile.
+ *
+ * Self-service by design: it takes the id from the token rather than the URL,
+ * so any authenticated user can edit their own record and nobody can edit
+ * anyone else's. That is why this lives here and not behind USER_UPDATE in the
+ * user module, which only roles that administer *other* people hold.
+ *
+ * An email change has to touch three places or it half-works:
+ *   1. the tenant user record   - what login checks
+ *   2. the platform UserDirectory - the email to clinic index behind unified
+ *      login; the OLD row must be deleted, or the previous address keeps
+ *      resolving to this clinic while the new one does not resolve at all
+ *   3. clinics.superAdmin        - a denormalised copy of the owner's identity
+ *      shown on the platform tenant page, which otherwise drifts out of date
+ */
+async function updateProfile(userId, data, tenantSlug) {
+  const conn = await getTenantConnection(tenantSlug);
+  const User = conn.model('User');
+
+  const user = await User.findById(userId);
+  if (!user) throw ApiError.unauthorized('Your account is no longer available - please log in again');
+
+  const prevEmail = user.email;
+  const nextEmail = data.email ? data.email.toLowerCase().trim() : prevEmail;
+
+  if (nextEmail !== prevEmail) {
+    const clash = await User.findOne({ email: nextEmail, _id: { $ne: user._id } });
+    if (clash) throw ApiError.conflict('That email is already used by another account in this clinic');
+  }
+
+  if (data.name !== undefined) user.name = data.name;
+  if (data.phone !== undefined) user.phone = data.phone || null;
+  user.email = nextEmail;
+  await user.save();
+
+  if (nextEmail !== prevEmail) {
+    await removeFromUserDirectory(prevEmail, tenantSlug);
+  }
+  await _syncUserDirectory(nextEmail, tenantSlug, user._id.toString(), user.role);
+
+  if (user.role === 'super_admin') {
+    await Clinic.updateOne(
+      { slug: tenantSlug },
+      { $set: { 'superAdmin.name': user.name, 'superAdmin.email': user.email } },
+    );
+  }
+
+  require('../../utils/logger').info('Profile updated for %s (%s)', user.email, tenantSlug);
+  return user;
+}
+
+/**
  * Remove a user from the UserDirectory (called on soft-delete).
  */
 async function removeFromUserDirectory(email, tenantSlug) {
@@ -802,6 +854,7 @@ module.exports = {
   resetPassword,
   syncUserDirectory: _syncUserDirectory,
   removeFromUserDirectory,
+  updateProfile,
   registerDeviceToken,
   updateReminderSettings,
 };

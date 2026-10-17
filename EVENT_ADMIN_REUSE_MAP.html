@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Event Admin Reuse Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground:      #F7F8FA;
+    --card:        #FFFFFF;
+    --ink:         #171A21;
+    --ink-soft:    #3D4450;
+    --muted:       #5C6472;
+    --faint:       #8B93A1;
+    --border:      #E2E5EB;
+    --border-soft: #EDEFF3;
+    --accent:      #2F4A7D;
+    --accent-soft: #E8EDF6;
+
+    --reuse:       #14746A;
+    --reuse-bg:    #E2F1EE;
+    --adapt:       #A06A12;
+    --adapt-bg:    #F7EEDC;
+    --build:       #B23F2B;
+    --build-bg:    #F9E7E3;
+
+    --sans:  'Archivo', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --mono:  'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #13151A;
+      --card:        #1B1E25;
+      --ink:         #E8EAEE;
+      --ink-soft:    #C3C8D1;
+      --muted:       #99A1AE;
+      --faint:       #737B89;
+      --border:      #2A2F39;
+      --border-soft: #232830;
+      --accent:      #8FAEDD;
+      --accent-soft: #1E2735;
+
+      --reuse:       #4FBFA8;
+      --reuse-bg:    #16302C;
+      --adapt:       #D9A441;
+      --adapt-bg:    #322717;
+      --build:       #E37760;
+      --build-bg:    #34201B;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #13151A;
+    --card:        #1B1E25;
+    --ink:         #E8EAEE;
+    --ink-soft:    #C3C8D1;
+    --muted:       #99A1AE;
+    --faint:       #737B89;
+    --border:      #2A2F39;
+    --border-soft: #232830;
+    --accent:      #8FAEDD;
+    --accent-soft: #1E2735;
+
+    --reuse:       #4FBFA8;
+    --reuse-bg:    #16302C;
+    --adapt:       #D9A441;
+    --adapt-bg:    #322717;
+    --build:       #E37760;
+    --build-bg:    #34201B;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 16.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 61rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  /* ── Masthead ─────────────────────────────── */
+  .masthead { display: flex; flex-direction: column; gap: 1rem; }
+
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  h1 {
+    font-family: var(--sans);
+    font-size: clamp(2rem, 5vw, 2.9rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  /* ── Tally ────────────────────────────────── */
+  .tally {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .tally-cell {
+    background: var(--card);
+    padding: 1.5rem 1.5rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .tally-fig {
+    font-family: var(--sans);
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tally-cell.is-reuse .tally-fig { color: var(--reuse); }
+  .tally-cell.is-adapt .tally-fig { color: var(--adapt); }
+  .tally-cell.is-build .tally-fig { color: var(--build); }
+  .tally-cell.is-total .tally-fig { color: var(--ink); }
+
+  .tally-label {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .tally-note {
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  /* ── Prose ────────────────────────────────── */
+  h2 {
+    font-family: var(--sans);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.9rem;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+
+  p { margin: 0 0 1rem; max-width: 68ch; }
+  p:last-child { margin-bottom: 0; }
+
+  section > p, .prose p { color: var(--ink-soft); }
+
+  strong { font-weight: 600; color: var(--ink); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.83em;
+    background: var(--border-soft);
+    padding: 0.12em 0.36em;
+    border-radius: 3px;
+    color: var(--ink-soft);
+  }
+
+  /* ── Ledger ───────────────────────────────── */
+  .ledger { display: flex; flex-direction: column; gap: 2.25rem; }
+
+  .group-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 0;
+  }
+
+  .group-num {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .group-name {
+    font-family: var(--sans);
+    font-size: 1.08rem;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+  }
+
+  .group-count {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--faint);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .scroller { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    min-width: 40rem;
+  }
+
+  tbody tr { border-bottom: 1px solid var(--border-soft); }
+  tbody tr:last-child { border-bottom: none; }
+
+  td { padding: 0.85rem 0.9rem 0.85rem 0; vertical-align: top; }
+  td:last-child { padding-right: 0; }
+
+  .c-cap { width: 38%; font-weight: 500; color: var(--ink); }
+  .c-status { width: 6.5rem; white-space: nowrap; }
+  .c-ev { color: var(--muted); font-size: 0.83rem; line-height: 1.5; }
+  .c-ev code { font-size: 0.95em; background: none; padding: 0; color: var(--muted); }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38em;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.24em 0.6em 0.26em;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .chip::before {
+    content: "";
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .chip.reuse { color: var(--reuse); background: var(--reuse-bg); }
+  .chip.adapt { color: var(--adapt); background: var(--adapt-bg); }
+  .chip.build { color: var(--build); background: var(--build-bg); }
+
+  /* ── Callout ──────────────────────────────── */
+  .callout {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.6rem 1.75rem;
+  }
+
+  .callout h3 { color: var(--accent); }
+
+  /* ── Free layer ───────────────────────────── */
+  .free {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 0.55rem;
+    font-family: var(--sans);
+    font-size: 0.87rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .free li {
+    display: flex;
+    gap: 0.55rem;
+    align-items: baseline;
+    color: var(--ink-soft);
+  }
+
+  .free li::before {
+    content: "";
+    flex: none;
+    width: 5px; height: 5px;
+    margin-top: 0.45em;
+    border-radius: 50%;
+    background: var(--reuse);
+  }
+
+  /* ── Build queue ──────────────────────────── */
+  .queue { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+
+  .queue-row {
+    background: var(--card);
+    padding: 1rem 1.35rem;
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+  }
+
+  .queue-rank {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--faint);
+    flex: none;
+    width: 1.5rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .queue-name { font-weight: 600; flex: none; width: 13rem; color: var(--ink); }
+  .queue-why { color: var(--muted); font-size: 0.85rem; }
+
+  @media (max-width: 44rem) {
+    .queue-row { flex-wrap: wrap; gap: 0.35rem 1rem; }
+    .queue-name { width: auto; }
+    .queue-why { width: 100%; padding-left: 2.5rem; }
+  }
+
+  footer {
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    color: var(--faint);
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+    max-width: 68ch;
+  }
+
+  a { color: var(--accent); }
+</style>
+<style>
+  html { color-scheme: light dark; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Codebase audit &middot; BestoClinic &rarr; Event Management</div>
+    <h1>Event Admin Reuse Map</h1>
+    <p class="standfirst">Your 11-section admin panel spec, broken into 42 capabilities and checked against what the BestoClinic codebase actually contains &mdash; 48 backend modules, 54 tenant models, 20 background workers.</p>
+  </header>
+
+  <div class="tally">
+    <div class="tally-cell is-reuse">
+      <div class="tally-fig">12</div>
+      <div class="tally-label">Reuse</div>
+      <div class="tally-note">Working today. Needs renaming and configuration, not engineering.</div>
+    </div>
+    <div class="tally-cell is-adapt">
+      <div class="tally-fig">20</div>
+      <div class="tally-label">Adapt</div>
+      <div class="tally-note">The mechanism exists; the domain model changes underneath it.</div>
+    </div>
+    <div class="tally-cell is-build">
+      <div class="tally-fig">10</div>
+      <div class="tally-label">Build</div>
+      <div class="tally-note">Nothing to start from. Genuinely new work.</div>
+    </div>
+    <div class="tally-cell is-total">
+      <div class="tally-fig">42</div>
+      <div class="tally-label">Total</div>
+      <div class="tally-note">Every discrete capability named in your spec.</div>
+    </div>
+  </div>
+
+  <section class="prose">
+    <h2>The short answer</h2>
+    <p>Roughly <strong>three quarters of your spec already has working machinery behind it</strong>. An event booking and a clinic appointment are the same shape: a time slot, against a resource that can only be in one place at once, for a client, generating an invoice, with reminders and a cancellation path. That shape is built, tested, and running in production.</p>
+    <p>The ten Build items cluster in two places &mdash; <strong>payment gateways beyond Razorpay</strong>, and <strong>the genuinely event-specific features</strong> (guest lists, seating, venue amenities). Nothing in the Build column is architecturally hard.</p>
+  </section>
+
+  <div class="ledger">
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">01</span>
+        <span class="group-name">Dashboard &amp; Overview</span>
+        <span class="group-count">0 reuse &middot; 2 adapt &middot; 0 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Summary widgets &mdash; upcoming, bookings, revenue, pending tasks</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>dashboard</code> and <code>analytics</code> modules already aggregate these; the entities they count change</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Quick stats &mdash; clients, active events, cancellations</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev">Same aggregation pipelines, different labels</td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">02</span>
+        <span class="group-name">Event &amp; Date Management</span>
+        <span class="group-count">1 reuse &middot; 3 adapt &middot; 0 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Create, edit, delete events</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>appointment</code> module &mdash; full CRUD, soft delete, audit trail</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Calendar view with date scheduling</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>schedule</code>, <code>calendarFeed</code>, <code>holiday</code> &mdash; including iCal subscription feeds</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Conflict detection &mdash; no double-booked venues or vendors</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev">A whole <code>conflictResolution</code> module: <code>detectConflicts</code>, <code>detectLeaveConflicts</code>, <code>getNextAvailableSlots</code>, plus a hard guard in <code>appointment.service.js</code></td>
+        </tr>
+        <tr>
+          <td class="c-cap">Status tracking &mdash; draft, confirmed, ongoing, completed, cancelled</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev">Status enum and transitions exist; the values are renamed</td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">03</span>
+        <span class="group-name">Booking &amp; Client Management</span>
+        <span class="group-count">0 reuse &middot; 2 adapt &middot; 1 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Client database &mdash; contact, booking history, preferences</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>Patient</code> model becomes Client: contacts, address, history, preferences, soft delete</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Accept, reject, modify booking requests</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>appointment</code> + <code>bookingPolicy</code> already gate and approve requests</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Communication log &mdash; emails, calls, notes per client</td>
+          <td class="c-status"><span class="chip build">Build</span></td>
+          <td class="c-ev">The <code>notification</code> module sends but does not keep a per-client thread</td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">04</span>
+        <span class="group-name">Payment Management</span>
+        <span class="group-count">4 reuse &middot; 1 adapt &middot; 2 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Automatic invoice generation</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev"><code>invoice</code> module with <code>autoInvoiceWorker</code> and <code>invoiceWorker</code> running on BullMQ</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Payment status &mdash; paid, pending, partial, overdue</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev"><code>Payment</code>, <code>PatientLedger</code>, <code>FinancialAuditLog</code></td>
+        </tr>
+        <tr>
+          <td class="c-cap">Razorpay integration</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev">Live dependency, webhook handling, referenced across 30 files</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Stripe integration</td>
+          <td class="c-status"><span class="chip build">Build</span></td>
+          <td class="c-ev">Only an unused enum value in <code>Payment.js</code> &mdash; no SDK, no code</td>
+        </tr>
+        <tr>
+          <td class="c-cap">PayPal integration</td>
+          <td class="c-status"><span class="chip build">Build</span></td>
+          <td class="c-ev">Not present anywhere</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Refund and cancellation handling</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev"><code>cancelWithRefund</code>, <code>cancelWithCredit</code>, <code>cancelUnpaid</code>, <code>CreditNote</code></td>
+        </tr>
+        <tr>
+          <td class="c-cap">Advance / deposit tracking</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev">Partial payments and running balances exist in <code>PatientLedger</code></td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">05</span>
+        <span class="group-name">Vendor &amp; Staff Management</span>
+        <span class="group-count">1 reuse &middot; 2 adapt &middot; 1 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Vendor database &mdash; caterers, decorators, photographers, DJs</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev"><code>Vendor</code> model: contact person, company, GST number, address, branch. Categories are data, not schema</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Assign vendors to specific events</td>
+          <td class="c-status"><span class="chip build">Build</span></td>
+          <td class="c-ev">Vendors currently attach to purchase orders, not to bookings. Needs a join and availability check</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Staff scheduling and role assignment</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>staff</code>, <code>schedule</code>, <code>DoctorSchedule</code>, <code>DoctorLeave</code>, <code>ScheduleOverride</code></td>
+        </tr>
+        <tr>
+          <td class="c-cap">Track vendor payments</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>purchaseOrder</code> + <code>Payment</code> already model money owed to a vendor</td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">06</span>
+        <span class="group-name">Venue Management</span>
+        <span class="group-count">0 reuse &middot; 1 adapt &middot; 1 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Venue listing with availability calendar</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>Branch</code> is already the bookable location, with holidays and hours attached</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Capacity, pricing and amenities per venue</td>
+          <td class="c-status"><span class="chip build">Build</span></td>
+          <td class="c-ev"><code>Branch</code> carries none of these fields</td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">07</span>
+        <span class="group-name">Package &amp; Pricing</span>
+        <span class="group-count">0 reuse &middot; 2 adapt &middot; 0 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Service packages &mdash; Basic, Premium, Custom</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>Plan</code> plus a working Custom Plan Builder UI, and <code>ServiceItem</code> / <code>ProcedureTemplate</code> for line items</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Add-on services with individual pricing</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev">Subscription add-ons and per-item pricing already priced server-side</td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">08</span>
+        <span class="group-name">Notifications &amp; Reminders</span>
+        <span class="group-count">1 reuse &middot; 2 adapt &middot; 1 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Automated email reminders</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev"><code>emailWorker</code>, <code>appointmentReminderWorker</code>, <code>careReminderWorker</code> on nodemailer + BullMQ</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Automated SMS reminders</td>
+          <td class="c-status"><span class="chip build">Build</span></td>
+          <td class="c-ev"><code>sms.service.js</code> exists but <code>stubs.js</code> declares it unwired &mdash; no Twilio / MSG91 / SNS provider. Call sites are ready; the provider is not</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Payment due alerts</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>subscriptionLifecycleWorker</code>, <code>complianceAlertWorker</code></td>
+        </tr>
+        <tr>
+          <td class="c-cap">Event countdown notifications</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>appointmentReminderScanWorker</code> is exactly this, keyed to a different date</td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">09</span>
+        <span class="group-name">Reports &amp; Analytics</span>
+        <span class="group-count">1 reuse &middot; 1 adapt &middot; 1 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Revenue reports, monthly and yearly</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev"><code>analytics</code> module, revenue dashboards, <code>reportWorker</code> for scheduled exports</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Event performance analytics</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev">Same aggregation layer, new dimensions</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Client acquisition source tracking</td>
+          <td class="c-status"><span class="chip build">Build</span></td>
+          <td class="c-ev">No referral or source field is captured today</td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">10</span>
+        <span class="group-name">Document Management</span>
+        <span class="group-count">1 reuse &middot; 2 adapt &middot; 1 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Contract upload</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev">Upload paths exist but write to local disk &mdash; <code>stubs.js</code> flags S3 as unwired. Needs object storage before production</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Contract generation</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>pdfkit</code> is a live dependency generating invoice PDFs</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Digital signature support</td>
+          <td class="c-status"><span class="chip build">Build</span></td>
+          <td class="c-ev"><code>Consent</code> records an IP address and timestamp but captures no signature</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Invoice and receipt storage</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev"><code>invoice</code> module plus <code>ShareToken</code> for expiring client-facing links</td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+    <div>
+      <div class="group-head">
+        <span class="group-num">11</span>
+        <span class="group-name">Nice-to-have</span>
+        <span class="group-count">3 reuse &middot; 2 adapt &middot; 2 build</span>
+      </div>
+      <div class="scroller"><table><tbody>
+        <tr>
+          <td class="c-cap">Guest list with RSVP tracking</td>
+          <td class="c-status"><span class="chip build">Build</span></td>
+          <td class="c-ev">No analogue. The patient portal gives you an invitee-facing shell to build into</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Seating chart planner</td>
+          <td class="c-status"><span class="chip build">Build</span></td>
+          <td class="c-ev">Entirely new, and the only item here that is substantial front-end work</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Client-facing budget tracker</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>PatientLedger</code> is a running client balance already exposed in the portal</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Multi-user roles with permission levels</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev">12 roles, 140+ permissions, per-tenant overrides, <code>authorize()</code> middleware. This is the single most valuable thing you already own</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Task / checklist manager per event with timelines</td>
+          <td class="c-status"><span class="chip adapt">Adapt</span></td>
+          <td class="c-ev"><code>PrescriptionTask</code> and <code>CareReminder</code> are dated task lists attached to a record</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Post-event feedback and review collection</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev"><code>Review</code> model with <code>ratingRefreshWorker</code> aggregating scores</td>
+        </tr>
+        <tr>
+          <td class="c-cap">Inventory for rental items &mdash; chairs, tents, lighting</td>
+          <td class="c-status"><span class="chip reuse">Reuse</span></td>
+          <td class="c-ev"><code>InventoryItem</code>, <code>InventoryTransaction</code>, <code>MaterialReservation</code>, low-stock alerts, purchase orders. <code>MaterialReservation</code> is already reserve-stock-against-a-booking</td>
+        </tr>
+      </tbody></table></div>
+    </div>
+
+  </div>
+
+  <section class="prose">
+    <h2>What the count leaves out</h2>
+    <p>The 42 above are the features in your spec. None of them include the platform underneath, which is usually the most expensive part of a system like this and is already built and running in production:</p>
+    <ul class="free">
+      <li>Multi-tenant isolation, database per client</li>
+      <li>JWT auth with refresh and session revocation</li>
+      <li>Role-based access control</li>
+      <li>Subscription and plan billing</li>
+      <li>Automated tenant provisioning</li>
+      <li>Background job queues (BullMQ)</li>
+      <li>Redis caching and rate limiting</li>
+      <li>Audit logging</li>
+      <li>Real-time updates (Socket.IO)</li>
+      <li>Global search</li>
+      <li>System health monitoring</li>
+      <li>Push notifications (Firebase)</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="callout">
+      <h3>The decision this audit does not make for you</h3>
+      <p>Everything above assumes you <strong>fork BestoClinic</strong> and rename its domain &mdash; appointment becomes event, patient becomes client, branch becomes venue, doctor becomes vendor. That is where the 12 Reuse and 20 Adapt come from.</p>
+      <p>The alternative is a fresh codebase that borrows only the infrastructure. That buys you a clean domain model with no clinical vocabulary left in the database, at the cost of rebuilding most of the 20 Adapt items from scratch.</p>
+      <p style="margin-bottom:0">A fork is faster to a working product. A rewrite is cleaner to maintain and easier to sell as its own thing. <strong>This is the one call worth making before any code is written</strong>, because it changes every estimate on this page.</p>
+    </div>
+  </section>
+
+  <section class="prose">
+    <h2>If you fork, build in this order</h2>
+    <p>Sequenced so nothing waits on anything above it, and so the parts your client sees first arrive first.</p>
+    <div class="queue">
+      <div class="queue-row"><span class="queue-rank">1</span><span class="queue-name">Domain rename</span><span class="queue-why">Appointment &rarr; Event, Patient &rarr; Client, Branch &rarr; Venue, Vendor stays. Everything else depends on this landing first</span></div>
+      <div class="queue-row"><span class="queue-rank">2</span><span class="queue-name">Venue fields</span><span class="queue-why">Capacity, pricing, amenities. Small, and packages cannot be priced without it</span></div>
+      <div class="queue-row"><span class="queue-rank">3</span><span class="queue-name">Vendor assignment</span><span class="queue-why">Join vendors to events and extend the existing conflict check to cover them</span></div>
+      <div class="queue-row"><span class="queue-rank">4</span><span class="queue-name">Packages &amp; add-ons</span><span class="queue-why">Reshape the plan builder into event packages</span></div>
+      <div class="queue-row"><span class="queue-rank">5</span><span class="queue-name">Communication log</span><span class="queue-why">Per-client thread for emails, calls and notes</span></div>
+      <div class="queue-row"><span class="queue-rank">6</span><span class="queue-name">SMS provider</span><span class="queue-why">Wire Twilio or MSG91 into the service that is already written and called</span></div>
+      <div class="queue-row"><span class="queue-rank">7</span><span class="queue-name">Object storage</span><span class="queue-why">S3 or equivalent, before any real contracts are uploaded to a local disk</span></div>
+      <div class="queue-row"><span class="queue-rank">8</span><span class="queue-name">Digital signature</span><span class="queue-why">Signature capture on the existing consent record</span></div>
+      <div class="queue-row"><span class="queue-rank">9</span><span class="queue-name">Guest list &amp; RSVP</span><span class="queue-why">New, but the client portal shell already exists to host it</span></div>
+      <div class="queue-row"><span class="queue-rank">10</span><span class="queue-name">Acquisition source</span><span class="queue-why">One field plus a report dimension</span></div>
+      <div class="queue-row"><span class="queue-rank">11</span><span class="queue-name">Seating chart</span><span class="queue-why">Last. The largest single build and the least load-bearing</span></div>
+      <div class="queue-row"><span class="queue-rank">12</span><span class="queue-name">Stripe / PayPal</span><span class="queue-why">Only when a client actually needs a gateway Razorpay does not cover</span></div>
+    </div>
+  </section>
+
+  <footer>
+    Counts derived by inspecting the BestoClinic repository directly &mdash; module and model listings, the stub registry at <code>src/config/stubs.js</code>, worker definitions, and declared dependencies. Items marked Build were confirmed absent rather than assumed.
+  </footer>
+
+</div>
+</body>
+</html>

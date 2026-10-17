@@ -367,6 +367,16 @@ async function updateConsultation(treatmentId, data, callerId, tenantSlug, calle
     throw ApiError.forbidden('You can only update your own treatment records');
   }
 
+  // A locked record is evidence and stops changing - including through this
+  // route, which is the one a doctor would otherwise reach for. Without this
+  // guard the lock proves nothing, because the record could still be rewritten
+  // after a complaint. Corrections go to POST /treatment-plans/sittings/:id/addenda.
+  if (record.locked) {
+    throw ApiError.badRequest(
+      'This record was signed off and can no longer be edited. Add an addendum instead.',
+    );
+  }
+
   // Strip immutable fields
   delete data.patient;
   delete data.doctor;
@@ -1032,6 +1042,9 @@ async function listConsultations(query, doctorId, tenantSlug, _callerId, _caller
       .populate('patient', 'name patientId phone gender dateOfBirth')
       .populate('doctor', 'name specialization')
       .populate('appointment', 'scheduledAt status type duration')
+      // Plan context so a day's list can say "Root canal - sitting 2 of 4"
+      // rather than leaving the reader to open each record to find out.
+      .populate('plan', 'title totalSittings status')
       .lean(),
     TreatmentRecord.countDocuments(filter),
     Appointment.find(apptFilterIP).distinct('_id'),

@@ -405,6 +405,13 @@ const extendTrialSchema = Joi.object({
   additionalDays: Joi.number().integer().min(1).max(90).required(),
 });
 
+/** Self-service profile edit for platform owners. See createPlatformUserSchema
+ *  for the create path - password is intentionally not editable here. */
+const updateMyPlatformProfileSchema = Joi.object({
+  name: Joi.string().trim().min(1).max(100),
+  email: Joi.string().email().lowercase().trim(),
+}).min(1);
+
 const createPlatformUserSchema = Joi.object({
   name: Joi.string().trim().max(100).required(),
   email: Joi.string().email().required(),
@@ -484,6 +491,7 @@ module.exports = {
   // Misc
   extendTrialSchema,
   createPlatformUserSchema,
+  updateMyPlatformProfileSchema,
   validatePromoCodeSchema,
   uploadLogoSchema,
 };

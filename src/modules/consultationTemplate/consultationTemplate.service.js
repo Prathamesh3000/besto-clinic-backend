@@ -1,104 +1,107 @@
 'use strict';
 
+/**
+ * Consultation templates — ported to the repository seam (Phase 3).
+ *
+ * One behaviour is worth naming because it is easy to lose in a port: a system
+ * template cannot be edited or deleted. That rule lived in the shape of the old
+ * code — load the document, inspect it, then decide — and a port that went
+ * straight to `updateById` would drop it silently. Templates would start being
+ * editable and nothing would fail.
+ *
+ * So the read before the write is deliberate here, not a leftover.
+ */
+
 const ApiError = require('../../utils/ApiError');
 const { parsePagination } = require('../../utils/pagination');
-const { getTenantConnection } = require('../../db/tenantConnectionManager');
+const { repo } = require('../../db/repository');
 
-async function listTemplates(query, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const ConsultationTemplate = conn.model('ConsultationTemplate');
+async function listTemplates(query) {
+  const templates = repo('ConsultationTemplate');
   const { skip, limit, page, sort } = parsePagination(query);
 
-  const filter = { deletedAt: null };
+  const filter = {};
   if (query.isActive !== undefined) {
     filter.isActive = query.isActive === 'true' || query.isActive === true;
   } else {
     filter.isActive = true;
   }
   if (query.category) filter.category = query.category;
-  if (query.search) {
-    const escaped = query.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    filter.$or = [
-      { name: { $regex: escaped, $options: 'i' } },
-      { code: { $regex: escaped, $options: 'i' } },
-    ];
-  }
 
-  const [items, total] = await Promise.all([
-    ConsultationTemplate.find(filter)
-      .sort(query.sort ? sort : { category: 1, name: 1 })
-      .skip(skip)
-      .limit(limit)
-      .lean(),
-    ConsultationTemplate.countDocuments(filter),
-  ]);
+  const { items, total } = await templates.find(filter, {
+    // Default order groups templates by category, which is how the picker
+    // renders them. Only an explicit ?sort overrides it.
+    sort: query.sort ? sort : { category: 1, name: 1 },
+    skip,
+    limit,
+    search: query.search,
+    searchFields: ['name', 'code'],
+  });
 
   return { items, total, page, limit };
 }
 
-async function getTemplateById(templateId, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const ConsultationTemplate = conn.model('ConsultationTemplate');
-
-  const template = await ConsultationTemplate.findById(templateId).lean();
+async function getTemplateById(templateId) {
+  const template = await repo('ConsultationTemplate').findById(templateId);
   if (!template) throw ApiError.notFound('Consultation template not found');
-
   return template;
 }
 
-async function createTemplate(data, callerId, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const ConsultationTemplate = conn.model('ConsultationTemplate');
+/**
+ * Codes are compared uppercased because the model uppercases on write.
+ * Comparing raw input would let "rct" through alongside an existing "RCT".
+ */
+async function _codeTaken(templates, code, excludeId) {
+  const existing = await templates.findOne({ code: String(code).toUpperCase() });
+  if (!existing) return false;
+  const id = String(existing._id || existing.id);
+  return !excludeId || id !== String(excludeId);
+}
 
-  // Check for duplicate code
-  const existing = await ConsultationTemplate.findOne({ code: data.code.toUpperCase() }).lean();
-  if (existing) throw ApiError.conflict('A template with this code already exists');
+async function createTemplate(data, callerId) {
+  const templates = repo('ConsultationTemplate');
 
-  const template = await ConsultationTemplate.create({
+  if (await _codeTaken(templates, data.code)) {
+    throw ApiError.conflict('A template with this code already exists');
+  }
+
+  return templates.create({
     ...data,
+    // Only seeding creates system templates; anything arriving through the API
+    // is a clinic's own, whatever the request body claims.
     isSystemTemplate: false,
     createdBy: callerId,
   });
-
-  return template;
 }
 
-async function updateTemplate(templateId, data, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const ConsultationTemplate = conn.model('ConsultationTemplate');
+async function updateTemplate(templateId, data) {
+  const templates = repo('ConsultationTemplate');
 
-  const template = await ConsultationTemplate.findById(templateId);
+  const template = await templates.findById(templateId);
   if (!template) throw ApiError.notFound('Consultation template not found');
-
-  // Prevent editing system templates
   if (template.isSystemTemplate) {
     throw ApiError.forbidden('System templates cannot be modified');
   }
 
-  // Check code uniqueness if code is changing
-  if (data.code && data.code.toUpperCase() !== template.code) {
-    const existing = await ConsultationTemplate.findOne({ code: data.code.toUpperCase(), _id: { $ne: templateId } }).lean();
-    if (existing) throw ApiError.conflict('A template with this code already exists');
+  if (data.code && String(data.code).toUpperCase() !== template.code) {
+    if (await _codeTaken(templates, data.code, templateId)) {
+      throw ApiError.conflict('A template with this code already exists');
+    }
   }
 
-  Object.assign(template, data);
-  await template.save();
-  return template;
+  return templates.updateById(templateId, data);
 }
 
-async function removeTemplate(templateId, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const ConsultationTemplate = conn.model('ConsultationTemplate');
+async function removeTemplate(templateId) {
+  const templates = repo('ConsultationTemplate');
 
-  const template = await ConsultationTemplate.findById(templateId);
+  const template = await templates.findById(templateId);
   if (!template) throw ApiError.notFound('Consultation template not found');
-
   if (template.isSystemTemplate) {
     throw ApiError.forbidden('System templates cannot be deleted');
   }
 
-  template.deletedAt = new Date();
-  await template.save();
+  await templates.softDeleteById(templateId);
 }
 
 module.exports = {

@@ -110,6 +110,82 @@ const treatmentRecordSchema = new mongoose.Schema(
     ],
 
     /** Consultation status */
+    /**
+     * The course this visit belongs to, when it is part of one.
+     *
+     * Optional by design: a one-off cleaning or extraction has no course, and
+     * forcing a plan onto every visit would add paperwork to routine work -
+     * which is how forms end up filled with junk.
+     *
+     * Named `plan` rather than `treatmentPlan` because that name is already the
+     * free-text plan notes for this single visit, written by the consultation
+     * form. Two different things; renaming the existing one would break the
+     * form and every record already stored.
+     */
+    plan: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'TreatmentPlan',
+      default: null,
+      index: true,
+    },
+
+    /** Which sitting of the plan this is. Derived, not typed by the doctor. */
+    sittingNumber: { type: Number, min: 1, default: null },
+
+    /**
+     * Whether the patient turned up. Defaults true because a record normally
+     * only exists for a visit that happened; a missed sitting is written
+     * explicitly so the gap is visible rather than merely absent.
+     */
+    patientAttended: { type: Boolean, default: true },
+
+    /**
+     * Pain the patient reported at this visit, 0-10.
+     *
+     * Kept on the visit as well as in `complaints` so a plain trend across
+     * sittings can be read without unpacking the complaint history - the
+     * question "was he still in pain after sitting three" should be one glance.
+     */
+    painLevel: { type: Number, min: 0, max: 10, default: null },
+
+    /** Complaints raised at or after this visit. Append-only. */
+    complaints: [
+      {
+        reportedAt: { type: Date, default: Date.now },
+        painLevel: { type: Number, min: 0, max: 10 },
+        symptoms: { type: String, trim: true, maxlength: 1000 },
+        followUpAction: {
+          type: String,
+          enum: ['reexamination', 'extra_sitting', 'medication', 'referral', 'none'],
+          default: 'none',
+        },
+        actionNotes: { type: String, trim: true, maxlength: 1000 },
+        recordedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        resolvedAt: { type: Date, default: null },
+      },
+    ],
+
+    /**
+     * Set once the visit is signed off. A locked record is never edited in
+     * place; corrections go into `addenda` below.
+     *
+     * This is what makes the record usable as evidence. Without it the honest
+     * answer to "could this have been changed after my client complained?" is
+     * yes, and the record proves nothing.
+     */
+    locked: { type: Boolean, default: false },
+    lockedAt: { type: Date, default: null },
+
+    /** Corrections made after locking, with author and reason. */
+    addenda: [
+      {
+        note: { type: String, required: true, trim: true, maxlength: 2000 },
+        reason: { type: String, trim: true, maxlength: 500 },
+        author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+
     status: {
       type: String,
       enum: ['in_progress', 'completed'],
@@ -191,10 +267,26 @@ treatmentRecordSchema.virtual('teethNormalized').get(function () {
   });
 });
 
+treatmentRecordSchema.index({ plan: 1, sittingNumber: 1 });
 treatmentRecordSchema.index({ patient: 1, createdAt: -1 });
 treatmentRecordSchema.index({ doctor: 1, createdAt: -1 });
 treatmentRecordSchema.index({ deletedAt: 1 });
-treatmentRecordSchema.index({ externalId: 1, externalSource: 1 }, { unique: true, sparse: true });
+// Unique only among records that actually carry an external id.
+//
+// This was { unique: true, sparse: true }, which does not do what it looks like.
+// A compound sparse index only skips a document when EVERY indexed field is
+// missing - but externalId declares `default: null`, so the field is present
+// with a null value and the document gets indexed as (null, null). The first
+// locally-created record indexed fine; the second collided with it, and the
+// clinic could not save a second consultation at all.
+//
+// partialFilterExpression indexes only documents where externalId is a string,
+// which is what sparse was meant to achieve. Matches Patient.js, which already
+// uses this pattern for the same pair of fields.
+treatmentRecordSchema.index(
+  { externalId: 1, externalSource: 1 },
+  { unique: true, partialFilterExpression: { externalId: { $type: 'string' } } },
+);
 
 treatmentRecordSchema.pre(/^find/, function () {
   if (!this.getQuery().deletedAt) {

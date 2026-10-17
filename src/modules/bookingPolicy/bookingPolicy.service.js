@@ -1,50 +1,45 @@
 'use strict';
 
-const { getTenantConnection } = require('../../db/tenantConnectionManager');
+/**
+ * Clinic booking policy — ported to the repository seam (Phase 3).
+ *
+ * A singleton: one document per clinic, created the first time anyone saves.
+ * That lifecycle is why the seam grew `upsertOne` — a find-then-create here
+ * would race with itself on first use, and two concurrent saves would leave two
+ * policy documents with no constraint to stop them.
+ *
+ * `getResolvedPolicy` is left alone. It delegates to `resolveBookingPolicy`,
+ * which is shared with the appointment module and caches through Redis; moving
+ * it would be a port of that utility rather than of this module.
+ */
+
+const { repo } = require('../../db/repository');
 const { resolveBookingPolicy, SYSTEM_DEFAULTS } = require('../../utils/resolveBookingPolicy');
 
 /**
- * Get the resolved (merged) booking policy for a clinic.
- * All fields are guaranteed non-null (system defaults fill gaps).
+ * The policy with system defaults filled in. Every field is non-null.
  */
 async function getResolvedPolicy(tenantSlug) {
   return resolveBookingPolicy(tenantSlug);
 }
 
 /**
- * Get the raw ClinicBookingPolicy document.
- * Null fields are preserved — useful for the settings UI to distinguish
- * "explicitly set" from "using default".
+ * The stored document, nulls intact.
+ *
+ * The settings screen needs to tell "explicitly set to 30 minutes" apart from
+ * "inheriting the default of 30 minutes", so this deliberately does not merge
+ * the defaults in — it returns them alongside instead.
  */
-async function getRawPolicy(tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const ClinicBookingPolicy = conn.model('ClinicBookingPolicy');
-  const doc = await ClinicBookingPolicy.findOne({}).lean();
-
-  // Return structured response with the raw values + system defaults for reference
+async function getRawPolicy() {
+  const doc = await repo('ClinicBookingPolicy').findOne({});
   return {
     policy: doc || {},
     systemDefaults: SYSTEM_DEFAULTS,
   };
 }
 
-/**
- * Upsert the clinic booking policy.
- * Creates the singleton doc if it doesn't exist, updates if it does.
- */
-async function updatePolicy(data, userId, tenantSlug) {
-  const conn = await getTenantConnection(tenantSlug);
-  const ClinicBookingPolicy = conn.model('ClinicBookingPolicy');
-
-  const update = { ...data, updatedBy: userId };
-
-  const policy = await ClinicBookingPolicy.findOneAndUpdate(
-    {},
-    { $set: update },
-    { new: true, upsert: true, runValidators: true },
-  );
-
-  return policy;
+async function updatePolicy(data, userId) {
+  return repo('ClinicBookingPolicy').upsertOne({}, { ...data, updatedBy: userId });
 }
 
 module.exports = { getResolvedPolicy, getRawPolicy, updatePolicy };

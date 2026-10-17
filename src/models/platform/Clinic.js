@@ -96,6 +96,30 @@ const clinicSchema = new mongoose.Schema(
     },
 
     /** MongoDB connection URI for this tenant's isolated database */
+    /**
+     * Which entities this clinic reads and writes from PostgreSQL.
+     *
+     * The migration cuts over one clinic at a time (plan phase 7). Before this,
+     * the only switch was the global `SQL_ENTITIES` environment variable, which
+     * moves every clinic together — a big-bang cutover, and the opposite of
+     * what a rehearsed rollback needs.
+     *
+     * Held on the clinic rather than in configuration so the state survives a
+     * restart, is visible to anyone reading the registry, and can be rolled
+     * back for one clinic without redeploying or disturbing the others.
+     *
+     * `cutoverAt` and `rolledBackAt` are kept rather than inferred from the
+     * list being empty: "never cut over" and "cut over and reverted" are
+     * different facts, and the second is the one worth knowing afterwards.
+     */
+    migration: {
+      sqlEntities: { type: [String], default: [] },
+      cutoverAt: { type: Date, default: null },
+      rolledBackAt: { type: Date, default: null },
+      rollbackReason: { type: String, trim: true, maxlength: 500 },
+      lastVerifiedAt: { type: Date, default: null },
+    },
+
     dbUri: {
       type: String,
       required: true,

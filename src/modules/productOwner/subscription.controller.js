@@ -94,6 +94,11 @@ exports.listPlatformUsers = async (_req, res) => {
   res.json(ApiResponse.success('Platform users retrieved', users));
 };
 
+exports.updateMyPlatformProfile = async (req, res) => {
+  const user = await service.updateMyPlatformProfile(req.user.userId, req.body);
+  res.json(ApiResponse.success('Profile updated', user));
+};
+
 exports.createPlatformUser = async (req, res) => {
   const user = await service.createPlatformUser(req.body);
   res.status(201).json(ApiResponse.created('Platform user created', user));

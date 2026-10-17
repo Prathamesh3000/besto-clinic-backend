@@ -8,15 +8,15 @@ data wins — that is the rule the profiling step exists to enforce.
 
 | | |
 |---|---:|
-| tables | 73 |
+| tables | 75 |
 | tables without primary key | 0 |
 | platform tables | 21 |
-| tenant tables | 52 |
+| tenant tables | 54 |
 | child tables | 3 |
 | junction tables | 6 |
-| columns | 1581 |
-| indexes | 453 |
-| foreign keys | 194 |
+| columns | 1626 |
+| indexes | 466 |
+| foreign keys | 200 |
 | foreign keys not valid | 7 |
 | foreign keys unresolved | 0 |
 | foreign keys cross schema | 0 |
@@ -24,7 +24,7 @@ data wins — that is the rule the profiling step exists to enforce.
 | undeclared columns | 12 |
 | unsupported indexes | 2 |
 | ttl indexes | 6 |
-| unprofiled tables | 0 |
+| unprofiled tables | 2 |
 | load failures | 0 |
 
 ## Columns where the data overruled the schema
@@ -97,3 +97,5 @@ Statutory. billing.service.js:1094 unwinds $items to build the HSN-wise GST summ
 Nullability for these follows the Mongoose schema, because no data contradicted it. Safe
 while the collections are empty; re-check after profiling a clinic that uses them.
 
+- `counters` (tenant/Counter)
+- `treatment_plans` (tenant/TreatmentPlan)

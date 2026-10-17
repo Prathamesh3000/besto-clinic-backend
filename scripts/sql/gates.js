@@ -47,14 +47,21 @@ const GATES = [
     id: 'CP-1', name: 'Data profile',
     verifies: 'All 74 collections profiled — presence, types, orphaned refs',
     cmd: ['node', 'scripts/sql/profile-mongo.js', '--verify'],
+    // 75 collections read from a remote Atlas cluster. It finishes inside the
+    // 120s default on its own and does not when the board runs it after other
+    // gates have been hammering the same cluster — and a gate that goes red
+    // from impatience teaches people to stop reading the board.
+    timeoutMs: 420_000,
   },
   {
     id: 'CP-2', name: 'DDL',
     verifies: 'Migrations up/down/up cleanly; every manifest object present; per-tenant roles',
     cmd: ['node', 'scripts/sql/verify-ddl.js'],
     // Runs the full up -> down -> up cycle in a child process, then compares every
-    // table, index, column and constraint against the manifest.
-    timeoutMs: 300_000,
+    // table, index, column and constraint against the manifest. The manifest
+    // rebuild inside it reads every model against the live cluster, so this is
+    // the other gate that suffers when the board queues them back to back.
+    timeoutMs: 720_000,
   },
   {
     id: 'CP-3', name: 'Isolation',
@@ -88,6 +95,39 @@ const GATES = [
     verifies: 'The live Mongo application still boots and passes its suite',
     cmd: ['node', 'scripts/sql/verify-no-regression.js'],
     timeoutMs: 600_000, // runs the whole Jest suite
+  },
+
+  /**
+   * CP-8 and CP-9 are not in the plan's original list. They were added because
+   * two things the plan treats as single line items turned out to carry most of
+   * the defect risk, and neither was covered by a gate.
+   *
+   * CP-8 is the aggregation port — the plan's own "highest defect risk". It
+   * needs `--fixtures` because several pipelines have nothing to compare
+   * against in a clinic with no invoices or completed scans, and a parity
+   * harness that skips those leaves the SQL unproven.
+   *
+   * CP-9 is the filter translation every ported module goes through. Its
+   * failure mode is the quiet one: a filter that selects slightly different
+   * rows returns a plausible answer.
+   */
+  {
+    id: 'CP-8', name: 'Aggregation parity',
+    verifies: 'Ported pipelines return identical rows from either database',
+    cmd: ['node', 'scripts/sql/verify-aggregations.js', '--fixtures'],
+    timeoutMs: 300_000, // seeds fixtures, runs the ETL, compares, tears down
+  },
+  {
+    id: 'CP-9', name: 'Filter parity',
+    verifies: 'The same Mongo filter selects the same rows from either database',
+    cmd: ['node', 'scripts/sql/verify-filters.js'],
+    timeoutMs: 300_000,
+  },
+  {
+    id: 'CP-10', name: 'Write parity',
+    verifies: 'updateOne, updateMany, insertMany and distinct agree across backends',
+    cmd: ['node', 'scripts/sql/verify-writes.js'],
+    timeoutMs: 300_000,
   },
 ];
 

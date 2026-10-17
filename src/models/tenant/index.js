@@ -13,6 +13,7 @@ module.exports = {
   Counter:               require('./Counter'),
   Appointment:           require('./Appointment'),
   TreatmentRecord:       require('./TreatmentRecord'),
+  TreatmentPlan:         require('./TreatmentPlan'),
   Invoice:               require('./Invoice'),
   Branch:                require('./Branch'),
   Department:            require('./Department'),

@@ -60,8 +60,21 @@ const testNotificationSchema = Joi.object({
   body: Joi.string().trim().max(500),
 });
 
+/**
+ * Self-service profile edit. Every field optional, but .min(1) rejects an empty
+ * body so a no-op PUT cannot silently "succeed" without changing anything.
+ * Password and role are deliberately absent: changing either through the
+ * profile route would bypass the password flow and the role hierarchy check.
+ */
+const updateProfileSchema = Joi.object({
+  name: Joi.string().trim().min(1).max(100),
+  email: Joi.string().email().lowercase().trim(),
+  phone: Joi.string().trim().max(20).allow('', null),
+}).min(1);
+
 module.exports = {
   registerSchema,
+  updateProfileSchema,
   loginSchema,
   refreshSchema,
   forgotPasswordSchema,

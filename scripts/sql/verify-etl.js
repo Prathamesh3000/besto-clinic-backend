@@ -140,12 +140,12 @@ async function spotValues(knex, db, scope, schema) {
     const docs = await db.collection(spec.collection).find({}).limit(SPOT_SAMPLE).toArray();
     if (!docs.length) continue;
 
-    const ids = docs.map((d) => transform.toObjectId(d._id)).filter(Boolean);
+    const ids = docs.map((d) => transform.toPrimaryKey(d._id)).filter(Boolean);
     const stored = await knex(`${schema}.${spec.table}`).whereIn('id', ids);
     const byId = Object.fromEntries(stored.map((r) => [String(r.id).trim(), r]));
 
     for (const doc of docs) {
-      const id = transform.toObjectId(doc._id);
+      const id = transform.toPrimaryKey(doc._id);
       const row = byId[id];
       if (!row) { diffs.push(`${spec.table}/${id}: row absent from PostgreSQL`); continue; }
 

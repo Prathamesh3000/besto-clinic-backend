@@ -48,6 +48,11 @@ exports.resetPassword = async (req, res) => {
   res.status(200).json(ApiResponse.success('Password reset successful — please login'));
 };
 
+exports.updateMe = async (req, res) => {
+  const user = await authService.updateProfile(req.user.userId, req.body, req.tenantSlug);
+  res.status(200).json(ApiResponse.success('Profile updated', user.toJSON()));
+};
+
 exports.me = async (req, res) => {
   const { getTenantModel } = require('../../db/dbManager');
   const { getRolePermissions } = require('../role/role.service');
