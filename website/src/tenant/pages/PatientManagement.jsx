@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Users, Plus, Search, Edit3, Trash2, Phone, Mail, Droplets,
   MapPin, ClipboardList, Clock, Pill, HeartPulse, CheckCircle2, XCircle,
@@ -489,6 +490,9 @@ export default function PatientManagement() {
             <button onClick={() => setBulkOpen(true)} className={btnGhost + ' flex items-center gap-1.5'}>
               <Upload className="h-4 w-4" /> Bulk Import
             </button>
+            <Link to="/clinic/new-patient" className={btnGhost + ' flex items-center gap-1.5'}>
+              <UserPlus className="h-4 w-4" /> New Patient
+            </Link>
             <button onClick={openCreateModal} className={btnPrimary + ' flex items-center gap-1.5'}>
               <Plus className="h-4 w-4" /> Add Patient
             </button>

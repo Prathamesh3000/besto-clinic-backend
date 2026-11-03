@@ -7,6 +7,8 @@ const { ROLE_PERMISSIONS, PERMISSIONS } = require('../../config/permissions');
 const { INVOICE_STATUS, PAYMENT_STATUS, VIDEO_SESSION_STATUS } = require('../../config/constants');
 const { logAccess } = require('../../utils/logAccess');
 const logger = require('../../utils/logger');
+const { createPatientSchema } = require('./patient.validator');
+const { validateBulkRow } = require('../../utils/bulkRows');
 
 /** Check if user has full (non-OWN) permission */
 function _hasFullAccess(user, permission) {
@@ -240,7 +242,9 @@ async function bulkCreatePatients(rows, user, tenantSlug) {
 
   for (let i = 0; i < rows.length; i++) {
     try {
-      const patient = await createPatient(rows[i], user, tenantSlug);
+      const checked = validateBulkRow(createPatientSchema, rows[i]);
+      if (checked.message) throw new Error(checked.message);
+      const patient = await createPatient(checked.value, user, tenantSlug);
       results.successCount++;
       results.created.push(patient);
     } catch (err) {

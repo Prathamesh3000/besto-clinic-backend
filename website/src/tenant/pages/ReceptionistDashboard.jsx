@@ -348,7 +348,7 @@ export default function ReceptionistDashboard() {
 
   const QUICK_ACTIONS = [
     { label: 'New Appointment', icon: CalendarDays, path: '/clinic/receptionist-appointments', iconBg: 'bg-secondary-50', iconText: 'text-secondary-600' },
-    { label: 'Register Patient', icon: UserPlus, path: '/clinic/receptionist-patients', iconBg: 'bg-primary-50', iconText: 'text-primary-600' },
+    { label: 'New Patient', icon: UserPlus, path: '/clinic/new-patient', iconBg: 'bg-primary-50', iconText: 'text-primary-600' },
     { label: 'Record Payment', icon: CreditCard, path: '/clinic/receptionist-billing', iconBg: 'bg-purple-50', iconText: 'text-purple-600' },
     { label: 'View Queue', icon: ListOrdered, path: '/clinic/receptionist-queue', iconBg: 'bg-amber-50', iconText: 'text-amber-600' },
   ];

@@ -1,12 +1,15 @@
 'use strict';
 
 const Joi = require('joi');
+const { bulkRowsSchema } = require('../../utils/bulkRows');
 
 const createPatientSchema = Joi.object({
   name: Joi.string().trim().min(2).max(100).required(),
   email: Joi.string().email().lowercase().trim(),
   phone: Joi.string().trim().min(10).max(15).required(),
   dateOfBirth: Joi.date().iso(),
+  age: Joi.number().integer().min(0).max(120),
+  referralSource: Joi.string().valid('self', 'google', 'friend_relative', 'doctor', 'social_media'),
   gender: Joi.string().valid('male', 'female', 'other', 'prefer_not_to_say'),
   bloodGroup: Joi.string().trim(),
   address: Joi.object({
@@ -47,8 +50,6 @@ const patientIdParamSchema = Joi.object({
   }),
 });
 
-const bulkCreatePatientSchema = Joi.object({
-  rows: Joi.array().items(createPatientSchema).min(1).max(500).required(),
-});
+const bulkCreatePatientSchema = bulkRowsSchema();
 
 module.exports = { createPatientSchema, updatePatientSchema, patientIdParamSchema, bulkCreatePatientSchema };

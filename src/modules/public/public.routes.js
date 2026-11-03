@@ -2209,4 +2209,7 @@ router.post(
   asyncHandler(jobPortalController.applyToJob),
 );
 
+// ─── New Patient Registration form (QR) ──────────────
+router.use('/patient-form', require('../patientRegistration/publicPatientForm.routes'));
+
 module.exports = router;

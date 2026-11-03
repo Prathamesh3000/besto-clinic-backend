@@ -36,6 +36,46 @@ function getInstance() {
   return _instance;
 }
 
+/**
+ * Whether the gateway is usable at all: SDK present and both keys configured.
+ *
+ * Callers should check this before creating an order. Without it a missing or
+ * placeholder key surfaces as a raw Razorpay 401 from deep inside the payment
+ * flow — and because the order call precedes the Payment insert, the attempt
+ * leaves no trace in the database at all.
+ *
+ * @returns {{ ok: boolean, reason?: string }}
+ */
+function checkConfig() {
+  if (!Razorpay) return { ok: false, reason: 'Razorpay SDK is not installed' };
+  const keyId = env.RAZORPAY_KEY_ID;
+  const keySecret = env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) return { ok: false, reason: 'RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET are not set' };
+  if (!/^rzp_(test|live)_[A-Za-z0-9]+$/.test(keyId)) {
+    return { ok: false, reason: 'RAZORPAY_KEY_ID is not a valid key id (expected rzp_test_… or rzp_live_…)' };
+  }
+  // Razorpay secrets are 24 chars; anything much shorter is a placeholder.
+  if (keySecret.length < 20) {
+    return { ok: false, reason: 'RAZORPAY_KEY_SECRET looks like a placeholder (too short)' };
+  }
+  return { ok: true };
+}
+
+/** True when the gateway is configured well enough to attempt a call. */
+function isConfigured() {
+  return checkConfig().ok;
+}
+
+/**
+ * Constant-time compare of two hex digests that tolerates a malformed input.
+ * crypto.timingSafeEqual throws a RangeError when the buffers differ in
+ * length, so a junk signature would surface as a 500 instead of "invalid".
+ */
+function _safeEqualHex(expected, actual) {
+  if (typeof actual !== 'string' || actual.length !== expected.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(expected, 'utf8'), Buffer.from(actual, 'utf8'));
+}
+
 /* ── Order creation ────────────────────────────────────────────────── */
 
 /**
@@ -106,7 +146,7 @@ function verifyPaymentLinkSignature(paymentLinkId, paymentLinkRefId, paymentLink
     .createHmac('sha256', env.RAZORPAY_KEY_SECRET)
     .update(body)
     .digest('hex');
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+  return _safeEqualHex(expected, signature);
 }
 
 /* ── Payment signature verification ────────────────────────────────── */
@@ -124,7 +164,7 @@ function verifyPaymentSignature(orderId, paymentId, signature) {
     .createHmac('sha256', env.RAZORPAY_KEY_SECRET)
     .update(body)
     .digest('hex');
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+  return _safeEqualHex(expected, signature);
 }
 
 /* ── Fetch a payment ───────────────────────────────────────────────── */
@@ -167,14 +207,20 @@ async function initiateRefund(paymentId, amount, notes = {}) {
  */
 function verifyWebhookSignature(body, signature, secret) {
   const webhookSecret = secret || env.RAZORPAY_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    logger.error('Razorpay webhook received but RAZORPAY_WEBHOOK_SECRET is not set — rejecting');
+    return false;
+  }
   const expected = crypto
     .createHmac('sha256', webhookSecret)
     .update(typeof body === 'string' ? body : body.toString())
     .digest('hex');
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+  return _safeEqualHex(expected, signature);
 }
 
 module.exports = {
+  checkConfig,
+  isConfigured,
   createOrder,
   createPaymentLink,
   verifyPaymentSignature,

@@ -327,7 +327,7 @@ export default function BulkUploads() {
             <p className="font-semibold text-neutral-700">File Format</p>
             <ul className="space-y-1 text-neutral-500">
               <li>&bull; CSV files only (.csv)</li>
-              <li>&bull; Maximum 500 rows per upload</li>
+              <li>&bull; Up to 5,000 rows per upload (sent in batches)</li>
               <li>&bull; Maximum file size: 5 MB</li>
               <li>&bull; First row must be column headers</li>
             </ul>

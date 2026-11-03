@@ -1,6 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
+const { bulkRowsSchema } = require('../../utils/bulkRows');
 
 // Role validation moved to service layer (reads from Role collection).
 // Joi only enforces format here; business validation is in staff.service.js.
@@ -53,12 +54,10 @@ const bulkStaffRowSchema = Joi.object({
   employeeId: Joi.string().trim(),
 });
 
-const bulkCreateStaffSchema = Joi.object({
-  rows: Joi.array().items(bulkStaffRowSchema).min(1).max(500).required(),
-});
+const bulkCreateStaffSchema = bulkRowsSchema();
 
 const changeRoleSchema = Joi.object({
   role: Joi.string().trim().lowercase().min(1).max(50).required(),
 });
 
-module.exports = { createStaffSchema, updateStaffSchema, staffIdParamSchema, bulkCreateStaffSchema, changeRoleSchema };
+module.exports = { bulkStaffRowSchema, createStaffSchema, updateStaffSchema, staffIdParamSchema, bulkCreateStaffSchema, changeRoleSchema };

@@ -2,6 +2,7 @@
 
 const { getTenantConnection } = require('../../db/tenantConnectionManager');
 const { INVOICE_STATUS, APPOINTMENT_STATUS } = require('../../config/constants');
+const { getNewPatientCounts } = require('../patientRegistration/patientRegistration.service');
 
 /**
  * Get aggregate dashboard stats for a clinic.
@@ -31,6 +32,7 @@ async function getClinicDashboard(tenantSlug) {
     todayAppointments,
     pendingInvoices,
     revenueResult,
+    newPatients,
   ] = await Promise.all([
     // Total active patients
     Patient.countDocuments({ deletedAt: null }),
@@ -64,6 +66,9 @@ async function getClinicDashboard(tenantSlug) {
         },
       },
     ]),
+
+    // New-patient registrations (today / this week / this month)
+    getNewPatientCounts(conn),
   ]);
 
   const revenueThisMonth = revenueResult.length > 0 ? revenueResult[0].total : 0;
@@ -73,6 +78,7 @@ async function getClinicDashboard(tenantSlug) {
     todayAppointments,
     pendingInvoices,
     revenueThisMonth,
+    newPatients,
   };
 }
 

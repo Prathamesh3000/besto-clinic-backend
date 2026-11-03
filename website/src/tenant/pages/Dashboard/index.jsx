@@ -17,6 +17,7 @@ import LiveQueueMonitor from './LiveQueueMonitor';
 import DoctorLeaderboard from './DoctorLeaderboard';
 import QuickActionsRow from './QuickActionsRow';
 import AlertsPanel from './AlertsPanel';
+import NewPatientsPanel from './NewPatientsPanel';
 import EmergencyIndicator from '../../components/EmergencyIndicator';
 import { emergencyBus } from '../../../lib/socket';
 
@@ -276,6 +277,11 @@ export default function Dashboard() {
           />
         </div>
       )}
+
+      {/* ── Row 1.7: New Patients KPIs (fails soft) ── */}
+      <div className="animate-[fadeUp_0.4s_ease-out_both]" style={{ animationDelay: '225ms' }}>
+        <NewPatientsPanel />
+      </div>
 
       {/* ── Row 2: Revenue Chart + Appointment Donut ─ */}
       <div

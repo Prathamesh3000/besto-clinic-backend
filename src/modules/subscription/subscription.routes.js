@@ -12,6 +12,8 @@ const {
   createSubscriptionSchema,
   updateSubscriptionSchema,
   webhookPayloadSchema,
+  selfServeQuoteSchema,
+  selfServeVerifySchema,
 } = require('./subscription.validator');
 
 // ── Tenant-authenticated routes (view own subscription) ──
@@ -21,6 +23,61 @@ router.get(
   authenticate(),
   authorize(PERMISSIONS.SUBSCRIPTION_READ),
   asyncHandler(ctrl.getCurrent),
+);
+
+// ── Clinic self-service: plan, usage, upgrade, renewal, add-ons ──
+// Declared before '/:id'-style routes; SUBSCRIPTION_PURCHASE is granted to the
+// clinic's own admins, unlike SUBSCRIPTION_MANAGE which stays platform-only.
+router.get(
+  '/overview',
+  tenantResolver(),
+  authenticate(),
+  authorize(PERMISSIONS.SUBSCRIPTION_READ),
+  asyncHandler(ctrl.getOverview),
+);
+
+router.post(
+  '/quote',
+  tenantResolver(),
+  authenticate(),
+  authorize(PERMISSIONS.SUBSCRIPTION_READ),
+  validate(selfServeQuoteSchema),
+  asyncHandler(ctrl.quote),
+);
+
+router.post(
+  '/upgrade/order',
+  tenantResolver(),
+  authenticate(),
+  authorize(PERMISSIONS.SUBSCRIPTION_PURCHASE),
+  validate(selfServeQuoteSchema),
+  asyncHandler(ctrl.createUpgradeOrder),
+);
+
+router.post(
+  '/upgrade/verify',
+  tenantResolver(),
+  authenticate(),
+  authorize(PERMISSIONS.SUBSCRIPTION_PURCHASE),
+  validate(selfServeVerifySchema),
+  asyncHandler(ctrl.verifyUpgrade),
+);
+
+router.post(
+  '/downgrade/schedule',
+  tenantResolver(),
+  authenticate(),
+  authorize(PERMISSIONS.SUBSCRIPTION_PURCHASE),
+  validate(selfServeQuoteSchema),
+  asyncHandler(ctrl.scheduleDowngrade),
+);
+
+router.delete(
+  '/downgrade/schedule',
+  tenantResolver(),
+  authenticate(),
+  authorize(PERMISSIONS.SUBSCRIPTION_PURCHASE),
+  asyncHandler(ctrl.cancelScheduledDowngrade),
 );
 
 // ── Platform-authenticated routes (manage subscriptions) ──

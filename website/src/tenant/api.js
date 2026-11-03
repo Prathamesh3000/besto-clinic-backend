@@ -234,6 +234,17 @@ export const getDashboard = () => request('/dashboard');
 
 // ─── Subscription ─────────────────────────────
 export const getSubscription = () => request('/subscriptions');
+export const getSubscriptionOverview = () => request('/subscriptions/overview');
+export const getSubscriptionQuote = (body) =>
+  request('/subscriptions/quote', { method: 'POST', body });
+export const createSubscriptionOrder = (body) =>
+  request('/subscriptions/upgrade/order', { method: 'POST', body });
+export const verifySubscriptionPayment = (body) =>
+  request('/subscriptions/upgrade/verify', { method: 'POST', body });
+export const scheduleSubscriptionDowngrade = (body) =>
+  request('/subscriptions/downgrade/schedule', { method: 'POST', body });
+export const cancelSubscriptionDowngrade = () =>
+  request('/subscriptions/downgrade/schedule', { method: 'DELETE' });
 
 // ─── Branches ──────────────────────────────────
 export const listBranches = (params) => request(`/branches${qs(params)}`);
@@ -241,7 +252,31 @@ export const getBranch = (id) => request(`/branches/${id}`);
 export const createBranch = (data) => request('/branches', { method: 'POST', body: data });
 export const updateBranch = (id, data) => request(`/branches/${id}`, { method: 'PUT', body: data });
 export const deleteBranch = (id) => request(`/branches/${id}`, { method: 'DELETE' });
-export const bulkImportBranches = (rows) => request('/branches/bulk', { method: 'POST', body: { rows } });
+// Bulk endpoints accept at most 500 rows per request, so larger files go up in
+// chunks and the per-row results are merged back into one report. `row` in each error
+// is the 1-based position in the array passed in; a chunk that fails outright is
+// reported with row 0 and counted against every row in it.
+const BULK_CHUNK = 500;
+const bulkImport = async (path, rows) => {
+  const merged = { totalReceived: rows.length, successCount: 0, errorCount: 0, errors: [], created: [] };
+  for (let start = 0; start < rows.length; start += BULK_CHUNK) {
+    const chunk = rows.slice(start, start + BULK_CHUNK);
+    try {
+      const res = await request(path, { method: 'POST', body: { rows: chunk } });
+      const data = res?.data ?? res;
+      merged.successCount += data.successCount || 0;
+      merged.errorCount += data.errorCount || 0;
+      merged.created.push(...(data.created || []));
+      merged.errors.push(...(data.errors || []).map((e) => ({ ...e, row: e.row ? e.row + start : e.row })));
+    } catch (err) {
+      merged.errorCount += chunk.length;
+      merged.errors.push({ row: 0, message: `Rows ${start + 1}-${start + chunk.length} were not imported: ${err.message}` });
+    }
+  }
+  return { data: merged };
+};
+
+export const bulkImportBranches = (rows) => bulkImport('/branches/bulk', rows);
 
 // ─── Departments ───────────────────────────────
 export const listDepartments = (params) => request(`/departments${qs(params)}`);
@@ -249,7 +284,7 @@ export const getDepartment = (id) => request(`/departments/${id}`);
 export const createDepartment = (data) => request('/departments', { method: 'POST', body: data });
 export const updateDepartment = (id, data) => request(`/departments/${id}`, { method: 'PUT', body: data });
 export const deleteDepartment = (id) => request(`/departments/${id}`, { method: 'DELETE' });
-export const bulkImportDepartments = (rows) => request('/departments/bulk', { method: 'POST', body: { rows } });
+export const bulkImportDepartments = (rows) => bulkImport('/departments/bulk', rows);
 
 // ─── Doctors ───────────────────────────────────
 export const listDoctors = (params) => request(`/doctors${qs(params)}`);
@@ -257,7 +292,7 @@ export const getDoctor = (id) => request(`/doctors/${id}`);
 export const createDoctor = (data) => request('/doctors', { method: 'POST', body: data });
 export const updateDoctor = (id, data) => request(`/doctors/${id}`, { method: 'PUT', body: data });
 export const deleteDoctor = (id) => request(`/doctors/${id}`, { method: 'DELETE' });
-export const bulkImportDoctors = (rows) => request('/doctors/bulk', { method: 'POST', body: { rows } });
+export const bulkImportDoctors = (rows) => bulkImport('/doctors/bulk', rows);
 
 // ─── Staff ─────────────────────────────────────
 export const listStaff = (params) => request(`/staff${qs(params)}`);
@@ -266,7 +301,7 @@ export const createStaffMember = (data) => request('/staff', { method: 'POST', b
 export const updateStaffMember = (id, data) => request(`/staff/${id}`, { method: 'PUT', body: data });
 export const deleteStaffMember = (id) => request(`/staff/${id}`, { method: 'DELETE' });
 export const changeStaffRole = (id, role) => request(`/staff/${id}/role`, { method: 'PUT', body: { role } });
-export const bulkImportStaff = (rows) => request('/staff/bulk', { method: 'POST', body: { rows } });
+export const bulkImportStaff = (rows) => bulkImport('/staff/bulk', rows);
 
 // ─── Patients ──────────────────────────────────
 export const listPatients = (params) => request(`/patients${qs(params)}`);
@@ -274,7 +309,7 @@ export const getPatient = (id) => request(`/patients/${id}`);
 export const createPatient = (data) => request('/patients', { method: 'POST', body: data });
 export const updatePatient = (id, data) => request(`/patients/${id}`, { method: 'PUT', body: data });
 export const deletePatient = (id) => request(`/patients/${id}`, { method: 'DELETE' });
-export const bulkImportPatients = (rows) => request('/patients/bulk', { method: 'POST', body: { rows } });
+export const bulkImportPatients = (rows) => bulkImport('/patients/bulk', rows);
 
 // ─── Appointments ──────────────────────────────
 export const listAppointments = (params) => request(`/appointments${qs(params)}`);
@@ -482,7 +517,7 @@ export const restockInventoryItem = (id, data) => request(`/inventory/${id}/rest
 export const getLowStockItems = (params) => request(`/inventory/low-stock${qs(params)}`);
 export const getExpiringItems = (params) => request(`/inventory/expiring${qs(params)}`);
 export const getInventoryReports = (params) => request(`/inventory/reports${qs(params)}`);
-export const bulkImportInventory = (rows) => request('/inventory/bulk', { method: 'POST', body: { rows } });
+export const bulkImportInventory = (rows) => bulkImport('/inventory/bulk', rows);
 
 // ─── Analytics Dashboard ──────────────────────
 export const getAnalyticsSummary = (params) => request(`/analytics/summary${qs(params)}`);
@@ -621,3 +656,13 @@ export const cancelPurchaseOrder  = (id) => request(`/purchase-orders/orders/${i
 // ─── Global Search ──────────────────────────────────────────
 export const globalSearch = (q, signal) =>
   request(`/global-search/tenant?q=${encodeURIComponent(q)}&limit=5`, { signal });
+
+// ─── Patient Registration Form ──────────────────────────────
+export const getPatientForm = () => request('/patient-form');
+export const updatePatientForm = (data) => request('/patient-form', { method: 'PUT', body: data });
+export const regeneratePatientFormQr = () => request('/patient-form/qr/regenerate', { method: 'POST' });
+export const togglePatientFormQr = (enabled) => request('/patient-form/qr/toggle', { method: 'POST', body: { enabled } });
+export const submitPatientRegistration = (data) => request('/patient-registrations', { method: 'POST', body: data });
+export const listPatientRegistrations = (params) => request(`/patient-registrations${qs(params)}`);
+export const getPatientRegistration = (id) => request(`/patient-registrations/${id}`);
+export const getPatientRegistrationStats = () => request('/patient-registrations/stats');
