@@ -189,10 +189,13 @@ export default function Appointments() {
     };
   }, []);
 
-  // Sync branch filter
+  // Sync branch filter. The branch dropdown only exists when there is more than one
+  // branch, so with a single branch there is nothing to filter by: applying it here
+  // would be an invisible filter that hides appointments carrying no (or another)
+  // branch. Choosing "All Branches" must also clear it.
   useEffect(() => {
-    if (selectedBranch) setFilters((f) => ({ ...f, branch: selectedBranch }));
-  }, [selectedBranch]);
+    setFilters((f) => ({ ...f, branch: branches.length > 1 ? selectedBranch : '' }));
+  }, [selectedBranch, branches.length]);
 
   // Handlers
   const handleSlotClick = ({ date, startTime }) => {

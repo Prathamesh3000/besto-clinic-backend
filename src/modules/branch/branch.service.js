@@ -6,6 +6,8 @@ const { parsePagination } = require('../../utils/pagination');
 const { getTenantConnection } = require('../../db/tenantConnectionManager');
 const FeaturedDoctor = require('../../models/platform/FeaturedDoctor');
 const logger = require('../../utils/logger');
+const { validateBulkRow, bulkRowError } = require('../../utils/bulkRows');
+const { createBranchSchema } = require('./branch.validator');
 
 async function listBranches(query, tenantSlug) {
   const conn = await getTenantConnection(tenantSlug);
@@ -138,14 +140,19 @@ async function deleteBranch(id, tenantSlug) {
 async function bulkCreateBranches(rows, tenantSlug) {
   const results = { totalReceived: rows.length, successCount: 0, errorCount: 0, errors: [], created: [] };
 
+  // Validate every row on its own so one bad row is reported against its line
+  // instead of rejecting the whole batch (the route only checks the payload shape).
+  const checked = rows.map((r) => validateBulkRow(createBranchSchema, r));
+
   for (let i = 0; i < rows.length; i++) {
     try {
-      const branch = await createBranch(rows[i], tenantSlug);
+      if (checked[i].message) throw new Error(checked[i].message);
+      const branch = await createBranch(checked[i].value, tenantSlug);
       results.successCount++;
       results.created.push(branch);
     } catch (err) {
       results.errorCount++;
-      results.errors.push({ row: i + 1, message: err.message || 'Unknown error' });
+      results.errors.push({ row: i + 1, message: bulkRowError(err, `Branch code ${checked[i].value?.code} already exists`) });
     }
   }
 

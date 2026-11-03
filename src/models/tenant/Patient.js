@@ -30,6 +30,8 @@ const patientSchema = new mongoose.Schema(
       trim: true,
     },
     dateOfBirth: Date,
+    /** Age in years as written on the registration form (optional; DOB may be unknown) */
+    age: { type: Number, min: 0, max: 120 },
     gender: {
       type: String,
       enum: ['male', 'female', 'other', 'prefer_not_to_say'],
@@ -76,6 +78,20 @@ const patientSchema = new mongoose.Schema(
     /** Whether guardian receives duplicate push notifications for this dependent */
     guardianNotifications: {
       enabled: { type: Boolean, default: true },
+    },
+
+    /** Registration-form metadata (all optional so pre-existing records stay valid) */
+    referralSource: {
+      type: String,
+      enum: ['self', 'google', 'friend_relative', 'doctor', 'social_media'],
+    },
+    registrationSource: {
+      type: String,
+      enum: ['reception', 'qr', 'app', 'import', 'legacy'],
+    },
+    registeredBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
 
     /** Assigned primary doctor */

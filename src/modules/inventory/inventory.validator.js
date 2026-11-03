@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const { INVENTORY_CATEGORY } = require('../../config/constants');
+const { bulkRowsSchema } = require('../../utils/bulkRows');
 
 const objectId = Joi.string().hex().length(24);
 
@@ -74,9 +75,7 @@ const bulkItemRowSchema = Joi.object({
   branchCode: Joi.string().trim(),
 });
 
-const bulkCreateItemsSchema = Joi.object({
-  rows: Joi.array().items(bulkItemRowSchema).min(1).max(500).required(),
-});
+const bulkCreateItemsSchema = bulkRowsSchema();
 
 const listQuerySchema = Joi.object({
   branch: objectId,
@@ -89,6 +88,7 @@ const listQuerySchema = Joi.object({
 });
 
 module.exports = {
+  bulkItemRowSchema,
   idParamSchema,
   createItemSchema,
   updateItemSchema,

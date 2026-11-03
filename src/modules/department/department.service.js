@@ -34,6 +34,8 @@
 const ApiError = require('../../utils/ApiError');
 const { parsePagination } = require('../../utils/pagination');
 const { repo } = require('../../db/repository');
+const { validateBulkRow, bulkRowError } = require('../../utils/bulkRows');
+const { bulkDepartmentRowSchema } = require('./department.validator');
 
 /** Populated exactly as before, so responses are unchanged either side of the port. */
 const WITH_REFS = [
@@ -100,8 +102,12 @@ async function bulkCreateDepartments(rows) {
     totalReceived: rows.length, successCount: 0, errorCount: 0, errors: [], created: [],
   };
 
+  // Validate every row on its own so one bad row is reported against its line
+  // instead of rejecting the whole batch (the route only checks the payload shape).
+  const checked = rows.map((r) => validateBulkRow(bulkDepartmentRowSchema, r));
+
   // Pre-resolve branch codes to ids in one query rather than per row.
-  const branchCodes = [...new Set(rows.map((r) => r.branchCode).filter(Boolean))];
+  const branchCodes = [...new Set(checked.map((c) => c.value?.branchCode).filter(Boolean))];
   const branchMap = {};
   if (branchCodes.length > 0) {
     const { items } = await branches.find({ code: branchCodes }, { limit: branchCodes.length });
@@ -110,7 +116,8 @@ async function bulkCreateDepartments(rows) {
 
   for (let i = 0; i < rows.length; i += 1) {
     try {
-      const row = { ...rows[i] };
+      if (checked[i].message) throw new Error(checked[i].message);
+      const row = { ...checked[i].value };
       if (row.branchCode && !row.branch) {
         const resolved = branchMap[row.branchCode.toUpperCase()] || branchMap[row.branchCode];
         if (!resolved) throw new Error(`Branch code "${row.branchCode}" not found`);
@@ -123,7 +130,10 @@ async function bulkCreateDepartments(rows) {
       results.created.push(dept);
     } catch (err) {
       results.errorCount += 1;
-      results.errors.push({ row: i + 1, message: err.message || 'Unknown error' });
+      results.errors.push({
+        row: i + 1,
+        message: bulkRowError(err, `Department code ${checked[i].value?.code} already exists in this branch`),
+      });
     }
   }
 

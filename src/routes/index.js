@@ -59,6 +59,10 @@ router.use('/departments',    require('../modules/department/department.routes')
 router.use('/holidays',        require('../modules/holiday/holiday.routes'));
 router.use('/booking-policy',  require('../modules/bookingPolicy/bookingPolicy.routes'));
 
+// ── New Patient Registration form ───────────────
+router.use('/patient-form',          require('../modules/patientForm/patientForm.routes'));
+router.use('/patient-registrations', require('../modules/patientRegistration/patientRegistration.routes'));
+
 // ── Doctor & Staff management ────────────────────
 router.use('/doctors',        require('../modules/doctor/doctor.routes'));
 router.use('/staff',          require('../modules/staff/staff.routes'));

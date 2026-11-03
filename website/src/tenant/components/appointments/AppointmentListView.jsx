@@ -87,9 +87,11 @@ function FilterBar({ filters, onChange, doctors }) {
       </div>
 
       {/* Clear */}
-      {Object.values(filters).some(Boolean) && (
+      {/* Only the filters this bar shows count; `branch` is set by the page's branch
+          selector, so it neither triggers Clear nor is wiped by it. */}
+      {['search', 'doctor', 'status', 'type', 'source', 'from', 'to'].some((k) => filters[k]) && (
         <button
-          onClick={() => onChange({ search: '', doctor: '', status: '', type: '', source: '', from: '', to: '' })}
+          onClick={() => onChange({ ...filters, search: '', doctor: '', status: '', type: '', source: '', from: '', to: '' })}
           className="flex items-center gap-1 px-3 py-2 text-xs font-medium text-neutral-500 hover:text-red-600 transition-colors"
         >
           <X className="h-3.5 w-3.5" /> Clear

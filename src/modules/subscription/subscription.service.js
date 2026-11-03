@@ -108,8 +108,28 @@ async function _syncToClinic(clinicId, subscription, plan) {
 async function getCurrentSubscription(slug) {
   const clinic = await _findClinic(slug);
   const subscription = await _findActiveSubscription(clinic._id);
-  if (!subscription) throw ApiError.notFound('No active subscription found');
-  return subscription;
+  if (subscription) return subscription;
+
+  // Clinics provisioned before the Subscription collection existed — and any
+  // restored from a platform-registry repair — carry their plan on the Clinic
+  // document alone. selfServe.getOverview() already treats that as the source of
+  // truth; without the same fallback here this endpoint answered 404 for every
+  // role, including super_admin, on a perfectly healthy clinic.
+  const legacy = clinic.subscription?.plan;
+  if (!legacy) throw ApiError.notFound('No active subscription found');
+
+  return {
+    clinic: clinic._id,
+    plan: legacy,
+    status: clinic.subscription.status || SUBSCRIPTION_STATUS.ACTIVE,
+    billingCycle: clinic.subscription.billingCycle || 'monthly',
+    amount: clinic.subscription.amount ?? null,
+    currentPeriodEnd: clinic.subscription.currentPeriodEnd || null,
+    trialEnd: clinic.subscription.trialEndsAt || null,
+    // Flags the shape as reconstructed, so a caller can tell it apart from a
+    // real Subscription document (no _id, no lifecycle history).
+    isLegacy: true,
+  };
 }
 
 /**
@@ -652,7 +672,14 @@ async function handleWebhook(event, payload) {
  */
 async function processSubscriptionLifecycle() {
   const now = new Date();
-  const results = { expiredTrials: 0, suspendedGracePeriod: 0, appliedDowngrades: 0, deactivatedPromotions: 0, errors: [] };
+  const results = {
+    expiredTrials: 0,
+    lapsedToGrace: 0,
+    suspendedGracePeriod: 0,
+    appliedDowngrades: 0,
+    deactivatedPromotions: 0,
+    errors: [],
+  };
 
   // 1. Expire trials
   const expiredTrials = await Subscription.find({
@@ -686,7 +713,54 @@ async function processSubscriptionLifecycle() {
     }
   }
 
-  // 2. Suspend grace_period (and legacy past_due) subscriptions past deadline
+  // 2. Active subscriptions whose billing period has ended → grace period.
+  //
+  // Nothing used to make this transition: the worker expired trials and
+  // suspended subscriptions *already* in grace, but only a Razorpay
+  // payment-failure webhook ever set grace in the first place. With no
+  // recurring billing configured, an active plan simply ran past its period end
+  // forever, fully featured and unbilled. The state machine has always allowed
+  // active → grace_period; this is the step that uses it.
+  const lapsed = await Subscription.find({
+    status: SUBSCRIPTION_STATUS.ACTIVE,
+    currentPeriodEnd: { $ne: null, $lte: now },
+  });
+
+  for (const sub of lapsed) {
+    try {
+      sub.transition(
+        SUBSCRIPTION_STATUS.GRACE_PERIOD,
+        'Billing period ended without renewal',
+        'cron',
+      );
+      // Suspension is handled by the next step once this deadline passes, so
+      // the clinic keeps working for GRACE_PERIOD_DAYS and gets warned first.
+      sub.gracePeriodEndsAt = new Date(now.getTime() + GRACE_PERIOD_DAYS * 24 * 60 * 60 * 1000);
+      await sub.save();
+
+      const lapsedClinic = await Clinic.findByIdAndUpdate(
+        sub.clinic,
+        { 'subscription.status': SUBSCRIPTION_STATUS.GRACE_PERIOD },
+        { new: true },
+      ).select('slug');
+
+      if (lapsedClinic?.slug) {
+        const { invalidateSubscriptionCache } = require('../../middleware/featureGuard');
+        await invalidateSubscriptionCache(lapsedClinic.slug);
+      }
+
+      results.lapsedToGrace += 1;
+      logger.warn(
+        'Subscription lapsed into grace for clinic %s — period ended %s',
+        sub.clinic, sub.currentPeriodEnd?.toISOString(),
+      );
+    } catch (err) {
+      results.errors.push({ subscriptionId: sub._id, error: err.message });
+      logger.error('Failed to lapse subscription %s: %s', sub._id, err.message);
+    }
+  }
+
+  // 3. Suspend grace_period (and legacy past_due) subscriptions past deadline
   const gracePeriodSubs = await Subscription.find({
     status: { $in: [SUBSCRIPTION_STATUS.GRACE_PERIOD, SUBSCRIPTION_STATUS_LEGACY.PAST_DUE] },
     $or: [
@@ -801,6 +875,8 @@ async function processSubscriptionLifecycle() {
 }
 
 module.exports = {
+  /** Exposed so the clinic-facing self-serve flow applies features identically. */
+  syncSubscriptionToClinic: _syncToClinic,
   getCurrentSubscription,
   createSubscription,
   activateSubscription,

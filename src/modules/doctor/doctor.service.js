@@ -5,6 +5,8 @@ const ApiError = require('../../utils/ApiError');
 const { parsePagination } = require('../../utils/pagination');
 const { getTenantConnection } = require('../../db/tenantConnectionManager');
 const { syncUserDirectory } = require('../auth/auth.service');
+const { validateBulkRow, bulkRowError } = require('../../utils/bulkRows');
+const { bulkDoctorRowSchema } = require('./doctor.validator');
 
 /** Escape special regex characters to prevent ReDoS / regex injection. */
 function _escapeRegex(str) {
@@ -156,8 +158,12 @@ async function bulkCreateDoctors(rows, tenantSlug) {
   const Branch = conn.model('Branch');
   const results = { totalReceived: rows.length, successCount: 0, errorCount: 0, errors: [], created: [] };
 
+  // Validate every row on its own so one bad row is reported against its line
+  // instead of rejecting the whole batch (the route only checks the payload shape).
+  const checked = rows.map((r) => validateBulkRow(bulkDoctorRowSchema, r));
+
   // Pre-resolve branchCodes to ObjectIDs
-  const branchCodes = [...new Set(rows.map((r) => r.branchCode).filter(Boolean))];
+  const branchCodes = [...new Set(checked.map((c) => c.value?.branchCode).filter(Boolean))];
   const branchMap = {};
   if (branchCodes.length > 0) {
     const branches = await Branch.find({ code: { $in: branchCodes }, deletedAt: null });
@@ -166,7 +172,8 @@ async function bulkCreateDoctors(rows, tenantSlug) {
 
   for (let i = 0; i < rows.length; i++) {
     try {
-      const row = { ...rows[i] };
+      if (checked[i].message) throw new Error(checked[i].message);
+      const row = { ...checked[i].value };
       if (row.branchCode && !row.branch) {
         const resolved = branchMap[row.branchCode.toUpperCase()] || branchMap[row.branchCode];
         if (!resolved) throw new Error(`Branch code "${row.branchCode}" not found`);
@@ -179,7 +186,7 @@ async function bulkCreateDoctors(rows, tenantSlug) {
       results.created.push(doctor);
     } catch (err) {
       results.errorCount++;
-      results.errors.push({ row: i + 1, message: err.message || 'Unknown error' });
+      results.errors.push({ row: i + 1, message: bulkRowError(err, 'Email or employee ID already registered') });
     }
   }
 

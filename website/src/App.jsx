@@ -50,6 +50,7 @@ import PatientManagement from './tenant/pages/PatientManagement';
 import Appointments from './tenant/pages/Appointments';
 import QueueManagement from './tenant/pages/QueueManagement';
 import Billing from './tenant/pages/Billing';
+import Subscription from './tenant/pages/Subscription';
 import Payroll from './tenant/pages/Payroll';
 
 import Notifications from './tenant/pages/Notifications';
@@ -77,6 +78,9 @@ import BranchMonitor from './tenant/pages/BranchMonitor';
 import ClinicQRCode from './tenant/pages/QRCode';
 import ClinicSettings from './tenant/pages/ClinicSettings';
 import BookingPolicySettings from './tenant/pages/BookingPolicySettings';
+import PatientFormBuilder from './tenant/pages/PatientFormBuilder';
+import NewPatient from './tenant/pages/NewPatient';
+import NewPatients from './tenant/pages/NewPatients';
 import JobPortalDashboard from './tenant/pages/JobPortalDashboard';
 import CreateJobPosting from './tenant/pages/CreateJobPosting';
 import ApplicantsTable from './tenant/pages/ApplicantsTable';
@@ -250,6 +254,7 @@ export default function App() {
             <Route path="inventory" element={<PermissionRoute requiredPermissions={['inventory:read']}><InventoryManagement /></PermissionRoute>} />
             <Route path="purchase-orders" element={<PermissionRoute requiredPermissions={['purchaseOrder:read']}><PurchaseOrders /></PermissionRoute>} />
             <Route path="billing" element={<PermissionRoute requiredPermissions={['invoice:read']}><Billing /></PermissionRoute>} />
+            <Route path="subscription" element={<PermissionRoute requiredPermissions={['subscription:read']}><Subscription /></PermissionRoute>} />
             <Route path="insurance" element={<PermissionRoute requiredPermissions={['insurance:read']}><InsuranceManagement /></PermissionRoute>} />
             <Route path="payroll" element={<PermissionRoute requiredPermissions={['payroll:read']}><Payroll /></PermissionRoute>} />
 
@@ -304,6 +309,9 @@ export default function App() {
             <Route path="qr-code" element={<ClinicQRCode />} />
             <Route path="settings" element={<PermissionRoute requiredPermissions={['clinic:update']}><ClinicSettings /></PermissionRoute>} />
             <Route path="booking-policy" element={<PermissionRoute requiredPermissions={['clinic:update']}><BookingPolicySettings /></PermissionRoute>} />
+            <Route path="patient-form" element={<PermissionRoute requiredPermissions={['clinic:update']}><PatientFormBuilder /></PermissionRoute>} />
+            <Route path="new-patient" element={<PermissionRoute requiredPermissions={['patient:create']}><NewPatient /></PermissionRoute>} />
+            <Route path="new-patients" element={<PermissionRoute requiredPermissions={['patient:read']}><NewPatients /></PermissionRoute>} />
             {/* Job Portal */}
             <Route path="jobs" element={<PermissionRoute requiredPermissions={['job:read']}><JobPortalDashboard /></PermissionRoute>} />
             <Route path="jobs/new" element={<PermissionRoute requiredPermissions={['job:create']}><CreateJobPosting /></PermissionRoute>} />

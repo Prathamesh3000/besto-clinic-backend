@@ -64,6 +64,10 @@ module.exports = {
   ClinicHoliday:          require('./ClinicHoliday'),
   ClinicBookingPolicy:    require('./ClinicBookingPolicy'),
 
+  // ── New Patient Registration form ─────────────
+  PatientFormConfig:      require('./PatientFormConfig'),
+  PatientRegistration:    require('./PatientRegistration'),
+
   // ── Calendar Feeds ───────────────────────────
   CalendarFeed:           require('./CalendarFeed'),
 

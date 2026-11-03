@@ -107,9 +107,12 @@ const PERMISSIONS = Object.freeze({
   CLINIC_READ: 'clinic:read',
   CLINIC_UPDATE: 'clinic:update',
 
-  // ── Subscriptions (platform) ──────────────────
+  // ── Subscriptions ─────────────────────────────
   SUBSCRIPTION_READ: 'subscription:read',
+  /** Platform-only: change or cancel any clinic's plan. */
   SUBSCRIPTION_MANAGE: 'subscription:manage',
+  /** Clinic-side: buy an upgrade, renewal or add-on for your own clinic. */
+  SUBSCRIPTION_PURCHASE: 'subscription:purchase',
 
   // ── Platform (Product Owner) ────────────────
   PLAN_READ: 'plan:read',
@@ -267,7 +270,7 @@ const ROLE_PERMISSIONS = Object.freeze({
     PERMISSIONS.EMERGENCY_CREATE, PERMISSIONS.EMERGENCY_READ, PERMISSIONS.EMERGENCY_UPDATE,
     PERMISSIONS.INTEGRATION_VIEW_DATA,
     PERMISSIONS.CLINIC_READ, PERMISSIONS.CLINIC_UPDATE,
-    PERMISSIONS.SUBSCRIPTION_READ,
+    PERMISSIONS.SUBSCRIPTION_READ, PERMISSIONS.SUBSCRIPTION_PURCHASE,
     PERMISSIONS.INTEGRATION_READ, PERMISSIONS.INTEGRATION_MANAGE,
     PERMISSIONS.DASHBOARD_VIEW, PERMISSIONS.REPORT_GENERATE,
     PERMISSIONS.PAYMENT_CREATE, PERMISSIONS.PAYMENT_READ, PERMISSIONS.PAYMENT_READ_OWN, PERMISSIONS.PAYMENT_REFUND,

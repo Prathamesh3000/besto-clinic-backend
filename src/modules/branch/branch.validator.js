@@ -1,6 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
+const { bulkRowsSchema } = require('../../utils/bulkRows');
 
 const WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
@@ -43,8 +44,6 @@ const branchIdParamSchema = Joi.object({
   }),
 });
 
-const bulkCreateBranchSchema = Joi.object({
-  rows: Joi.array().items(createBranchSchema).min(1).max(500).required(),
-});
+const bulkCreateBranchSchema = bulkRowsSchema();
 
 module.exports = { createBranchSchema, updateBranchSchema, branchIdParamSchema, bulkCreateBranchSchema };

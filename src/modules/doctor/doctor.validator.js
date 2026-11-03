@@ -1,6 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
+const { bulkRowsSchema } = require('../../utils/bulkRows');
 
 const createDoctorSchema = Joi.object({
   name: Joi.string().trim().min(2).max(100).required(),
@@ -71,8 +72,6 @@ const bulkDoctorRowSchema = Joi.object({
   employeeId: Joi.string().trim(),
 });
 
-const bulkCreateDoctorSchema = Joi.object({
-  rows: Joi.array().items(bulkDoctorRowSchema).min(1).max(500).required(),
-});
+const bulkCreateDoctorSchema = bulkRowsSchema();
 
-module.exports = { createDoctorSchema, updateDoctorSchema, doctorIdParamSchema, bulkCreateDoctorSchema };
+module.exports = { bulkDoctorRowSchema, createDoctorSchema, updateDoctorSchema, doctorIdParamSchema, bulkCreateDoctorSchema };

@@ -3,6 +3,8 @@
 const ApiError = require('../../utils/ApiError');
 const { parsePagination } = require('../../utils/pagination');
 const { getTenantConnection } = require('../../db/tenantConnectionManager');
+const { validateBulkRow, bulkRowError } = require('../../utils/bulkRows');
+const { bulkItemRowSchema } = require('./inventory.validator');
 
 async function createItem(data, tenantSlug, userId) {
   const conn = await getTenantConnection(tenantSlug);
@@ -247,8 +249,12 @@ async function bulkCreateItems(rows, tenantSlug, userId) {
   const Branch = conn.model('Branch');
   const results = { totalReceived: rows.length, successCount: 0, errorCount: 0, errors: [], created: [] };
 
+  // Validate every row on its own so one bad row is reported against its line
+  // instead of rejecting the whole batch (the route only checks the payload shape).
+  const checked = rows.map((r) => validateBulkRow(bulkItemRowSchema, r));
+
   // Pre-resolve branchCodes to ObjectIDs
-  const branchCodes = [...new Set(rows.map((r) => r.branchCode).filter(Boolean))];
+  const branchCodes = [...new Set(checked.map((c) => c.value?.branchCode).filter(Boolean))];
   const branchMap = {};
   if (branchCodes.length > 0) {
     const branches = await Branch.find({ code: { $in: branchCodes }, deletedAt: null });
@@ -257,7 +263,8 @@ async function bulkCreateItems(rows, tenantSlug, userId) {
 
   for (let i = 0; i < rows.length; i++) {
     try {
-      const row = { ...rows[i] };
+      if (checked[i].message) throw new Error(checked[i].message);
+      const row = { ...checked[i].value };
       // Resolve branchCode → branch ObjectId
       if (row.branchCode && !row.branch) {
         const resolved = branchMap[row.branchCode.toUpperCase()] || branchMap[row.branchCode];
@@ -273,7 +280,7 @@ async function bulkCreateItems(rows, tenantSlug, userId) {
       results.created.push(item);
     } catch (err) {
       results.errorCount++;
-      results.errors.push({ row: i + 1, message: err.message || 'Unknown error' });
+      results.errors.push({ row: i + 1, message: bulkRowError(err, `Item code ${checked[i].value?.code} already exists`) });
     }
   }
 

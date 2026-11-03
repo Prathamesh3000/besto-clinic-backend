@@ -9,6 +9,7 @@ import { GlobalSearchOverlay, GlobalSearchTrigger, useGlobalSearch } from '../co
 import { getTenantSearchConfig } from './globalSearchConfig';
 import { ToastProvider } from './ToastContext';
 import { DoctorIncomingCallOverlay } from './components/DoctorIncomingCallOverlay';
+import SubscriptionBanner from './components/SubscriptionBanner';
 import { PresenceToggle } from './components/PresenceToggle';
 import { EmergencyDock } from './components/EmergencyDock';
 import { ActiveCallPill } from '../lib/telemedicine/ActiveCallPill';
@@ -18,7 +19,7 @@ import {
   Wallet, BarChart3, Menu, ChevronLeft, ChevronDown, LogOut, Settings,
   Shield, Zap, UserCog, Activity, Video, PieChart, Layers,
   Package, ClipboardCheck, AlertTriangle, QrCode, HeartPulse, Bell, FileText, Clock, RotateCcw,
-  CalendarX2, CalendarRange, CalendarClock, Briefcase, Upload, ShoppingCart,
+  CalendarX2, CalendarRange, CalendarClock, Briefcase, Upload, ShoppingCart, Sparkles, UserPlus,
 } from 'lucide-react';
 
 const DEDICATED_ROLES = ['doctor', 'receptionist', 'support_staff', 'billing_officer', 'accountant', 'hr_payroll_manager', 'it_support'];
@@ -50,6 +51,7 @@ const navGroups = [
       { to: '/clinic/doctors', icon: Stethoscope, label: 'Doctors', excludeRoles: DEDICATED_ROLES, perm: 'user:read' },
       { to: '/clinic/staff', icon: UserCog, label: 'Staff', excludeRoles: DEDICATED_ROLES, perm: 'user:read' },
       { to: '/clinic/patients', icon: Users, label: 'Patients', excludeRoles: DEDICATED_ROLES, perm: 'patient:read' },
+      { to: '/clinic/new-patients', icon: UserPlus, label: 'New Patients', excludeRoles: DEDICATED_ROLES, perm: 'patient:read' },
       { to: '/clinic/bulk-uploads', icon: Upload, label: 'Bulk Uploads', excludeRoles: DEDICATED_ROLES, perm: 'user:create' },
     ],
   },
@@ -72,6 +74,7 @@ const navGroups = [
       { to: '/clinic/receptionist-appointments', icon: CalendarDays, label: 'Appointments', roles: ['receptionist'] },
       { to: '/clinic/doctor-availability', icon: Activity, label: 'Availability', roles: ['receptionist'] },
       { to: '/clinic/receptionist-patients', icon: Users, label: 'Patients', roles: ['receptionist'] },
+      { to: '/clinic/new-patient', icon: UserPlus, label: 'New Patient', roles: ['receptionist'], perm: 'patient:create' },
       { to: '/clinic/receptionist-queue', icon: Zap, label: 'Queue', roles: ['receptionist'] },
       { to: '/clinic/receptionist-billing', icon: CreditCard, label: 'Billing', roles: ['receptionist'] },
       { to: '/clinic/receptionist-notifications', icon: Bell, label: 'Notifications', roles: ['receptionist'] },
@@ -156,6 +159,7 @@ const navGroups = [
       { to: '/clinic/revenue', icon: BarChart3, label: 'Revenue', excludeRoles: DEDICATED_ROLES, perm: 'revenueReport:view' },
       { to: '/clinic/payroll', icon: Wallet, label: 'Payroll', excludeRoles: DEDICATED_ROLES, perm: 'payroll:read' },
       { to: '/clinic/insurance', icon: Shield, label: 'Insurance', excludeRoles: DEDICATED_ROLES, perm: 'insurance:read' },
+      { to: '/clinic/subscription', icon: Sparkles, label: 'Plan & Billing', excludeRoles: DEDICATED_ROLES, perm: 'subscription:read' },
     ],
   },
   // ─── Admin: System ────────────────────────────────
@@ -171,6 +175,7 @@ const navGroups = [
       { to: '/clinic/reports', icon: BarChart3, label: 'Reports', excludeRoles: DEDICATED_ROLES, perm: 'report:generate' },
       { to: '/clinic/settings', icon: Settings, label: 'Settings', excludeRoles: DEDICATED_ROLES, perm: 'clinic:update' },
       { to: '/clinic/booking-policy', icon: ClipboardCheck, label: 'Booking Policy', excludeRoles: DEDICATED_ROLES, perm: 'clinic:update' },
+      { to: '/clinic/patient-form', icon: FileText, label: 'Patient Form', excludeRoles: DEDICATED_ROLES, perm: 'clinic:update' },
     ],
   },
 ];
@@ -610,6 +615,7 @@ export default function TenantLayout() {
         {/* Page content */}
         <main className="flex-1 overflow-y-auto p-6">
           <ToastProvider>
+            <SubscriptionBanner />
             <ErrorBoundary>
               <Outlet />
             </ErrorBoundary>

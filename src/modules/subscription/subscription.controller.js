@@ -1,6 +1,7 @@
 'use strict';
 
 const subscriptionService = require('./subscription.service');
+const selfServe = require('./selfServe.service');
 const { verifyWebhookSignature } = require('../../services/payment.service');
 const ApiResponse = require('../../utils/ApiResponse');
 const ApiError = require('../../utils/ApiError');
@@ -24,6 +25,38 @@ exports.changePlan = async (req, res) => {
 exports.cancel = async (req, res) => {
   const subscription = await subscriptionService.cancelSubscription(req.tenantSlug, req.body.cancelReason);
   res.json(ApiResponse.success('Subscription cancelled', subscription));
+};
+
+/* ── Clinic self-service ───────────────────────────────────────────── */
+
+exports.getOverview = async (req, res) => {
+  const data = await selfServe.getOverview(req.tenantSlug);
+  res.json(ApiResponse.success('Subscription overview retrieved', data));
+};
+
+exports.quote = async (req, res) => {
+  const data = await selfServe.quote(req.tenantSlug, req.body);
+  res.json(ApiResponse.success('Quote generated', data));
+};
+
+exports.createUpgradeOrder = async (req, res) => {
+  const data = await selfServe.createOrder(req.tenantSlug, req.body);
+  res.status(201).json(ApiResponse.created('Payment order created', data));
+};
+
+exports.verifyUpgrade = async (req, res) => {
+  const data = await selfServe.verifyAndApply(req.tenantSlug, req.body, req.user);
+  res.json(ApiResponse.success('Subscription updated', data));
+};
+
+exports.scheduleDowngrade = async (req, res) => {
+  const data = await selfServe.scheduleDowngrade(req.tenantSlug, req.body);
+  res.json(ApiResponse.success('Downgrade scheduled for the end of the current period', data));
+};
+
+exports.cancelScheduledDowngrade = async (req, res) => {
+  const data = await selfServe.cancelScheduledDowngrade(req.tenantSlug);
+  res.json(ApiResponse.success('Scheduled change cancelled', data));
 };
 
 exports.webhook = async (req, res) => {
